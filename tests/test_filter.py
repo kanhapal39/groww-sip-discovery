@@ -210,3 +210,19 @@ def test_socket_timeout_becomes_transient_error(monkeypatch) -> None:
     monkeypatch.setattr("urllib.request.urlopen", slow)
     with pytest.raises(TransientError):
         GroqClient("k", "https://example.invalid", "m", {}).complete([{"role": "user", "content": "x"}])
+
+
+def test_auto_resume_waits_out_network_outages(tmp_path) -> None:
+    from pipeline.filter import OUTAGE_WAIT_SECONDS, TransientError
+
+    errors = [TransientError("dns")] * 7
+    summary, store, sleeps = run([rec("a")], FakeClient(errors=errors), tmp_path, auto_resume=True)
+    assert summary.stopped == "complete" and "a" in store
+    assert OUTAGE_WAIT_SECONDS in sleeps
+
+
+def test_without_auto_resume_repeated_network_errors_stop(tmp_path) -> None:
+    from pipeline.filter import TransientError
+
+    summary, _, _ = run([rec("a")], FakeClient(errors=[TransientError("dns")] * 7), tmp_path)
+    assert summary.stopped.startswith("repeated errors")

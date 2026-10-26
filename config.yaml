@@ -176,6 +176,8 @@ pipeline:
 research:
   # Research assistant (research/answer.py). Answers use only Golden Dataset records.
   answer_model: openai/gpt-oss-120b
+  # Tried in order when a model is rate-limited (each has its own Groq daily allowance).
+  answer_fallback_models: [openai/gpt-oss-20b, qwen/qwen3.8-27b]
   reasoning_effort: low
   max_completion_tokens: 1500
   retrieve_limit: 40

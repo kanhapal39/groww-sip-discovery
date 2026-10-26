@@ -100,21 +100,55 @@ def _secret(name: str) -> str | None:
         return None
 
 
-@st.cache_data(show_spinner=False, max_entries=200)
+@st.cache_resource(show_spinner=False)
+def _answer_store() -> dict[tuple[str, str], dict[str, Any]]:
+    """Shared across sessions; holds only successful or final results, never errors."""
+    return {}
+
+
 def answer(question: str, version: str) -> dict[str, Any]:
-    """Cached per (question, dataset version) so reruns never call the model twice."""
-    from pipeline.filter import GroqClient
+    """Answer once per (question, dataset version). Errors are not cached, so a retry can succeed."""
+    store = _answer_store()
+    key = (question, version)
+    if key in store:
+        return store[key]
+    result = _generate(question, version)
+    if result["status"] != "error":
+        if len(store) > 200:
+            store.pop(next(iter(store)))
+        store[key] = result
+    return result
+
+
+def _generate(question: str, version: str) -> dict[str, Any]:
+    from pipeline.filter import GroqClient, RateLimited
     from research.answer import answer_question
 
     cfg = config()
     settings = cfg["research"]
-    key = _secret(cfg["llm"]["auth_env_var"])
-    complete = None
-    if key:
-        client = GroqClient(key, cfg["llm"]["base_url"], settings["answer_model"], {**cfg["llm"], **settings}, timeout=90)
-        complete = client.complete
-    result = answer_question(question, paths()["db"], complete, settings, total_public=len(rows()))
-    result["model"] = settings["answer_model"] if complete else None
+    api_key = _secret(cfg["llm"]["auth_env_var"])
+    models = [settings["answer_model"], *settings.get("answer_fallback_models", [])]
+    used: dict[str, Any] = {}
+
+    def complete(messages: list[dict[str, str]]) -> Any:
+        """Try each model in turn; move on only when a model is rate-limited."""
+        last: Exception | None = None
+        for model in models:
+            try:
+                response = GroqClient(api_key, cfg["llm"]["base_url"], model, {**cfg["llm"], **settings}, timeout=90).complete(messages)
+                used["model"] = model
+                return response
+            except RateLimited as exc:
+                last = exc
+                used.setdefault("waits", []).append(exc.wait_seconds)
+        raise last or RuntimeError("no answer model configured")
+
+    result = answer_question(question, paths()["db"], complete if api_key else None, settings, total_public=len(rows()))
+    result["model"] = used.get("model")
+    if result["status"] == "error" and used.get("waits"):
+        minutes = max(1, round(min(used["waits"]) / 60))
+        result["message"] = (f"The research assistant is busy: every answer model has reached its free usage limit. "
+                             f"Try again in about {minutes} minute(s). Matching evidence is shown below.")
     result["dataset_version"] = version
     return result
 

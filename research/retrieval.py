@@ -102,6 +102,8 @@ def search(db_path: Path, question: str, limit: int = 12, public_only: bool = Tr
             continue
         for c in BOOL_COLUMNS:
             row[c] = None if row[c] is None else bool(row[c])
+        if row.get("year") is not None:
+            row["year"] = int(row["year"])
         ranked.append({**(public_view(row) if public_only else row), "score": round(score, 3), "matched_tags": matched,
                        "term_coverage": round(coverage, 2)})
     ranked.sort(key=lambda r: (-r["score"], r["record_id"]))

@@ -39,6 +39,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROMPT_VERSION = "filter-v1"
 LABELS = ("yes", "no", "unsure")
 MAX_TRANSIENT_RETRIES = 5
+OUTAGE_WAIT_SECONDS = 300
 MAX_ITEM_ATTEMPTS = 2
 
 SYSTEM_PROMPT = """You label short texts for research on why Indian investors start, continue, pause, reduce or stop SIPs (Systematic Investment Plans in mutual funds).
@@ -374,7 +375,13 @@ def call_with_retries(
         except TransientError as exc:
             transient += 1
             if transient > MAX_TRANSIENT_RETRIES:
-                return f"repeated errors: {exc}"
+                if not auto_resume:
+                    return f"repeated errors: {exc}"
+                # Long jobs outlive network outages (e.g. the machine sleeping): wait and keep trying.
+                log(f"Repeated network errors ({exc}); waiting {OUTAGE_WAIT_SECONDS // 60} min")
+                sleep(OUTAGE_WAIT_SECONDS)
+                transient = 0
+                continue
             sleep(2**transient)
 
 
