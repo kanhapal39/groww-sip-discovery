@@ -473,3 +473,21 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | human_correction | none |
 | known_limitations | Retrieval check: the five suggested questions find 12–30 strongly matching records; off-topic controls ("crypto staking", "gold vs silver") fall below the 3-record minimum and get the insufficiency message. No HTTP API, scheduler or multi-user auth. Headless screenshots only captured Streamlit's loading skeleton, so the layout has not been visually reviewed. Opportunity definitions and codebook v3 are drafts by Claude Code |
 | evidence | `app/`, `research/`, `data/processed/research.db`, `data/processed/quality_metrics.json` |
+
+## Stage 9 — Deployment (decision records)
+
+### 9.1 Public GitHub repository for Streamlit Community Cloud
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-26 |
+| stage | deployment |
+| actor | human (user instructed a PUBLIC repo `groww-sip-discovery` and Streamlit Community Cloud); Claude Code |
+| decision | Dashboard now reads only `data/export/` (`golden_public.jsonl`, `quality_metrics.json`, written by `python -m research.build`) and builds its index in a temp folder; secrets read from `st.secrets`, then environment, then `.env`. `requirements.txt` holds only the four dashboard packages, pinned (streamlit 1.50.0, pandas 2.3.3, altair 5.5.0, PyYAML 6.0.3); pipeline packages moved to `requirements-pipeline.txt`. `.gitignore` excludes `.env`, AGENTS.md, data/raw, data/processed, data/manual, data/review, logs and databases. Commits use the GitHub noreply address |
+| before_count | not applicable |
+| after_count | Repository https://github.com/kanhapal39/groww-sip-discovery (public): 75 paths; data/ contains only data/export (300 public Golden rows and quality metrics) |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | none |
+| known_limitations | Clean-clone test (fresh `git clone`, no `.env`, Python 3.12.15, only requirements.txt): all five pages render; clicking a suggested question shows evidence and "answer model is not configured"; peak memory 166 MB in Streamlit's test runner (a live server adds its own overhead). Secrets check over tracked files, full history and all git objects: YOUTUBE_API_KEY, GROQ_API_KEY, APIFY_TOKEN all pass. The public repo exposes the 300 exported rows (Play Store review and Reddit text, tags, source links; no usernames or reviewer names) and all project documentation, including the accepted terms-of-service risks |
+| evidence | `.gitignore`, `requirements.txt`, `app/data.py`, `research/build.py` |
