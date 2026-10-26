@@ -103,7 +103,7 @@ def render_summary(rows: list[dict]) -> None:
     golden = q.get("golden", {})
     years = sorted({r["year"] for r in rows if r.get("year")})
     period_options = ["All time"] + [str(y) for y in reversed(years)]
-    period = st.segmented_control("Period (by publication date)", period_options, default="All time", key="period")
+    period = st.radio("Period (by publication date)", period_options, index=0, horizontal=True, key="period")
     in_period = rows if period in (None, "All time") else [r for r in rows if str(r.get("year")) == period]
 
     c = st.columns(5 if data.is_admin() else 4)
