@@ -1,0 +1,211 @@
+# SIP Discovery Engine — runtime configuration
+# Safe to commit. Secrets belong in .env (gitignored), never here.
+
+llm:
+  # Provider switched from NVIDIA NIM to Groq on 2026-10-26 (user decision;
+  # docs/evidence_log_notes.md §4.2). Groq is OpenAI-compatible.
+  provider: groq
+  # Model chosen by the user; confirmed available to this account via
+  # GET /openai/v1/models on 2026-10-26.
+  model_id: openai/gpt-oss-20b
+  base_url: https://api.groq.com/openai/v1
+  # Key is read from .env at runtime. Never committed.
+  auth_env_var: GROQ_API_KEY
+  api_interface: openai_compatible
+  temperature: 0.0
+  json_mode_supported: true
+
+collection:
+  # Approved capped pilots: play_store (docs/source_access_plan.md §1c) and
+  # youtube (§5a). All other sources remain pending.
+  sources: [play_store, youtube]
+  rate_limit_per_minute: null
+  respect_robots_txt: true
+  play_store:
+    lang: en
+    country: in
+    max_reviews_per_app: 30000
+    pause_seconds_between_apps: 2
+    # Package IDs of third-party investment apps. IDs not found on the
+    # Play Store are skipped and logged at run time.
+    apps:
+      - com.nextbillion.groww       # Groww
+      - com.zerodha.kite3           # Zerodha Kite
+      - com.paytmmoney              # Paytm Money
+      - com.smartspends             # ET Money
+      - in.upstox.app               # Upstox
+    # Case-insensitive whole-word/phrase matches. A review is kept if any
+    # keyword appears in its text.
+    keywords: &sip_keywords
+      - sip
+      - sips
+      - systematic investment
+      - mutual fund
+      - mutual funds
+      - mf
+      - autopay
+      - auto pay
+      - auto-pay
+      - e-mandate
+      - step up
+      - step-up
+      - instalment
+      - installment
+      - nav
+      - redeem
+      - redemption
+      - lumpsum
+      - lump sum
+      - elss
+      - index fund
+  youtube:
+    # Official YouTube Data API v3, user-approved pilot (§5a, 2026-10-26).
+    # Key is read from .env; never put it here.
+    api_key_env_var: YOUTUBE_API_KEY
+    # Manually selected by the user on 2026-10-26.
+    videos:
+      - https://www.youtube.com/watch?v=oIAQsjJEwj8
+      - https://www.youtube.com/watch?v=dC77fLBOjAI
+      - https://www.youtube.com/watch?v=NHUOwhZE1pk
+      - https://www.youtube.com/watch?v=LI13bQPh5cc
+      - https://www.youtube.com/watch?v=T-nmNeW8AM4
+      - https://www.youtube.com/watch?v=03sHxxl9Z-I
+    # Split evenly across videos; top-level comments only.
+    max_comments_total: 200
+    # Hard stop at 40% of the default 10,000 units/day (user decision).
+    max_quota_units: 4000
+    order: relevance
+    # Non-Authorized Data may be stored at most 30 days (Developer Policies §III.E.4.d).
+    retention_days: 30
+    keywords: *sip_keywords
+
+  reddit:
+    # Apify actor, pay per event (docs/source_access_plan.md §6a, user decision
+    # 2026-10-26, Reddit terms risk accepted). Token read from .env.
+    actor_id: automation-lab~reddit-scraper
+    token_env_vars: [APIFY_TOKEN]
+    # Hard cap on total spend across all runs (ledger: data/raw/reddit_apify_ledger.json).
+    budget_usd: 3.50
+    memory_mbytes: 512
+    timeout_secs: 600
+    min_year: 2021
+    subreddits: [IndiaInvestments, mutualfunds, personalfinanceindia]
+    queries: [stopped my SIP, paused SIP, SIP autopay failed, SIP mandate, first SIP negative, should I stop SIP, SIP irregular income]
+    test: {query: stopped my SIP, subreddit: IndiaInvestments, max_posts: 5, comments_per_post: 5}
+    # Step 1: 21 searches (3 subreddits x 7 queries); ~150 posts expected after the 2021+ filter and dedupe.
+    search: {max_posts_per_search: 10}
+    # Step 2 (free): title must match one of these, and title or body a SIP/MF keyword.
+    shortlist_title_terms: [stop, stops, stopped, stopping, pause, paused, pausing, cancel, cancelled, canceled,
+      autopay, auto pay, auto-pay, mandate, mandates, e-mandate, fail, failed, failing, first sip, negative, loss, losses]
+    # Step 3: manual thread URLs (one per line) are fetched before the shortlist.
+    manual_threads_file: data/manual/reddit_threads.txt
+    comments: {per_post: 15, depth: 2}
+
+pipeline:
+  cleaning:
+    # Rule-based, no AI (pipeline/clean.py). Dedupe runs before the length filter.
+    # Texts under min_words words are dropped unless they contain a keyword below.
+    min_words: 6
+    # rapidfuzz ratio (0-100) on punctuation-free text; only texts with at
+    # least min_words words are compared for near-duplicates.
+    near_duplicate_threshold: 95
+    keywords: *sip_keywords
+    sample_seed: 42
+  relevance:
+    # AI relevance filter (pipeline/filter.py). Labels: yes / no / unsure.
+    # YouTube is excluded: sending comment text to an external AI is unresolved
+    # (docs/source_access_plan.md §5a).
+    # reddit added 2026-10-26 by user decision (source_access_plan §6a); YouTube still excluded (§5a).
+    allowed_sources: [play_store, reddit]
+    batch_size: 25
+    max_text_words: 150
+    max_context_words: 25
+    max_reason_words: 10
+    reasoning_effort: low
+    max_completion_tokens: 4000
+    # Groq Developer-plan base limits for openai/gpt-oss-20b
+    # (console.groq.com/docs/rate-limits, read 2026-10-26). The headers report
+    # RPD and TPM only, so TPD comes from here and from 429 messages.
+    daily_token_limit: 200000
+    requests_per_day: 1000
+    full_run_first_year: 2021
+    pilot_size: 100
+    sample_seed: 42
+  tagging:
+    # LLM tagging (pipeline/tag.py). Input: filter results marked yes/unsure.
+    codebook_path: codebook.yaml
+    confidence_threshold: 0.8
+    # First model = default. Parallel full runs split items by a stable hash
+    # (--shard i/n); each model keeps its own results and usage files.
+    # Both have separate Groq allowances (30 RPM, 1K RPD, 8K TPM, 200K TPD each,
+    # console.groq.com/docs/rate-limits, read 2026-10-26).
+    models:
+      - {model_id: openai/gpt-oss-120b, results_file: tag_results.jsonl, usage_file: tag_usage.jsonl}
+      # qwen: reasoning off and 10 per request. With reasoning "low" it used ~885 tokens/item and
+      # 20-item replies were rejected as invalid JSON (agreement check, 2026-10-26).
+      - {model_id: qwen/qwen3.8-27b, results_file: tag_results_qwen.jsonl, usage_file: tag_usage_qwen.jsonl, batch_size: 10, reasoning_effort: none}
+    model_id: openai/gpt-oss-120b
+    agreement_size: 30
+    # Full runs start only if every core field agrees at least this often (user chose option A).
+    agreement_core_fields: [behavior, lapse_type, trigger]
+    agreement_threshold_pct: 70
+    # Skip priority items that mention no SIP/mutual-fund keyword (mostly stock "loss" reviews).
+    priority_requires_sip_keyword: true
+    # Tagged first, without waiting for the filter (user decision 2026-10-26).
+    # Whole-word, case-insensitive. "band" is Hindi for stopped/closed.
+    priority_terms: [stop, stops, stopped, stopping, pause, pauses, paused, pausing, cancel, cancels, cancelled,
+      canceled, cancelling, canceling, cancellation, band, skip, skips, skipped, skipping, fail, fails, failed,
+      failing, failure, bounce, bounces, bounced, mandate, mandates, e-mandate, autopay, auto pay, auto-pay,
+      loss, losses, negative, red, redeem, redeems, redeemed, redeeming, redemption, redemptions]
+    batch_size: 20
+    max_text_words: 200
+    max_context_words: 25
+    max_reason_words: 12
+    reasoning_effort: low
+    max_completion_tokens: 3500
+    # Evidence quotes whose closest span in the text scores below this are hidden.
+    quote_min_score: 80
+    # Groq Developer-plan base limits for openai/gpt-oss-120b
+    # (console.groq.com/docs/rate-limits, read 2026-10-26): 30 RPM, 1K RPD,
+    # 8K TPM, 200K TPD — a separate allowance from the filter's 20b model.
+    daily_token_limit: 200000
+    requests_per_day: 1000
+    pilot_size: 50
+    sample_seed: 42
+
+research:
+  # Research assistant (research/answer.py). Answers use only Golden Dataset records.
+  answer_model: openai/gpt-oss-120b
+  reasoning_effort: low
+  max_completion_tokens: 1500
+  retrieve_limit: 40
+  # Evidence sent to the model and shown to the user.
+  max_evidence: 12
+  max_record_words: 90
+  # Fewer strongly matching records than this -> insufficiency message, no model call.
+  min_records: 3
+  # A record matches strongly if it matches a question tag or contains this share of the question's words.
+  min_term_coverage: 0.6
+  # Findings on fewer records are labelled "small sample".
+  small_sample: 10
+  # "Emerging" compares records published from this year onward with earlier ones.
+  recent_from_year: 2025
+  # Admin access to review notes, failures and logs (password in .env).
+  admin_password_env: ADMIN_PASSWORD
+
+golden_dataset:
+  # Path for human-labeled Golden Dataset candidates (gitignored).
+  manual_path: data/manual/
+  approval_required: true
+
+dashboard:
+  tool: streamlit
+  port: 8501
+
+paths:
+  raw: data/raw/
+  manual: data/manual/
+  processed: data/processed/
+  export: data/export/
+  review: data/review/
+  logs: logs/

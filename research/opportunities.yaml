@@ -1,0 +1,116 @@
+# Product opportunity definitions.
+#
+# Each opportunity is a HUMAN-AUTHORED hypothesis (problem, metric, intervention,
+# experiment are qualitative judgements written for this project, not findings).
+# It is only displayed when enough Golden Dataset records match its `match`
+# rules; the evidence counts, shares, sources and quotes are computed from data.
+# A record matches if ANY listed field has ANY listed value.
+#
+# Draft written by Claude Code on 2026-10-26 from codebook v3; needs review by
+# the product team before it is used for prioritisation.
+
+min_records: 5
+
+opportunities:
+  - id: mandate_reliability
+    title: Make SIP mandates and AutoPay reliable and transparent
+    match:
+      unmet_need: [easy_mandate_control]
+      in_app_pain: [mandate_autopay]
+      trigger: [mandate_or_payment]
+    problem: Investors report instalments failing or not starting because of mandate, AutoPay or UPI problems, often without a clear reason.
+    business_metric: Instalment success rate; share of lapses that are involuntary
+    intervention: Pre-debit mandate and balance checks, plain-language failure reasons, and a one-tap retry or switch to another payment method.
+    experiment: A/B test a pre-debit check and reminder against the current flow; compare instalment success over two cycles.
+
+  - id: flexible_sip
+    title: Let investors pause, skip or change a SIP instead of cancelling
+    match:
+      unmet_need: [flexible_sip]
+      in_app_pain: [sip_management]
+    problem: Investors report being unable to pause, skip, modify or step up a SIP in the app, or finding it hard to do.
+    business_metric: Cancellation rate; share of cancellations that used pause first; 90-day SIP retention
+    intervention: Offer pause, skip and amount change at the start of the cancellation flow.
+    experiment: Show a pause option inside the cancel flow for half of users; compare 90-day retention.
+
+  - id: returns_clarity
+    title: Explain returns, NAV and XIRR, especially in the first year
+    match:
+      unmet_need: [clear_returns_view]
+      in_app_pain: [returns_nav_confusion]
+    problem: Investors report confusion about the returns, NAV or XIRR shown, including negative early returns.
+    business_metric: Returns-related support contacts; stop rate in the first 12 months
+    intervention: Contextual explainers for XIRR and early negative returns, with the fund's historical range.
+    experiment: Show an explainer when a holding's return turns negative; compare first-year stop rate.
+
+  - id: market_fall_reassurance
+    title: Support investors during market falls
+    match:
+      trigger: [market_or_returns]
+    restrict_behavior: [pause_sip, reduce_sip, stop_sip]
+    problem: Investors report pausing, reducing or stopping SIPs after market falls or poor returns.
+    business_metric: Stop and pause rate during drawdowns
+    intervention: Drawdown context (what past falls looked like for SIP investors) before a pause or stop is confirmed.
+    experiment: Show drawdown context in the pause/stop flow during a market fall; compare completion of the stop.
+
+  - id: redemption_speed
+    title: Make redemptions and withdrawals fast and trackable
+    match:
+      unmet_need: [fast_redemption]
+      in_app_pain: [redemption_withdrawal]
+    problem: Investors report slow, unclear or failed redemptions and withdrawals.
+    business_metric: Redemption-related support contacts; time from redemption to bank credit
+    intervention: A redemption status tracker with an expected credit date.
+    experiment: Add the tracker for half of redemptions; compare support contacts per redemption.
+
+  - id: responsive_support
+    title: Make support reachable and effective
+    match:
+      unmet_need: [responsive_support]
+      trigger: [support]
+    problem: Investors report slow or unhelpful customer support when something goes wrong.
+    business_metric: First response time; resolution rate; CSAT
+    intervention: In-app ticket status and faster routing for payment and redemption issues.
+    experiment: Route payment and redemption tickets to a priority queue; compare resolution time.
+
+  - id: beginner_guidance
+    title: Help first-time investors choose a fund and start
+    match:
+      unmet_need: [fund_guidance]
+      in_app_pain: [fund_selection]
+      tenure: [new_under_1y]
+    problem: New investors report not knowing which fund to choose or how to begin.
+    business_metric: First-SIP conversion; first-year continuation
+    intervention: Goal-based starter choices with plain explanations.
+    experiment: Offer a guided first-SIP flow to new users; compare first-SIP conversion.
+
+  - id: fee_transparency
+    title: Make fees and charges clear up front
+    match:
+      unmet_need: [lower_fees]
+      in_app_pain: [fees_charges]
+      trigger: [fees_or_charges]
+    problem: Investors report unexpected or unclear fees, charges or subscriptions.
+    business_metric: Fee-related complaints; churn after the first charge
+    intervention: Show all charges before confirmation and in each statement.
+    experiment: Add a pre-confirmation charges summary; compare fee complaints.
+
+  - id: portfolio_tracking
+    title: Show complete and correct holdings, including external funds
+    match:
+      unmet_need: [external_tracking]
+      in_app_pain: [portfolio_display]
+    problem: Investors report missing, wrong or stale holdings, including funds held elsewhere.
+    business_metric: Portfolio-data complaints; weekly active use of the portfolio screen
+    intervention: Reliable external-portfolio import with a visible last-updated time.
+    experiment: Show last-updated time and a refresh action; compare data complaints.
+
+  - id: app_reliability
+    title: Fix app failures in core investing flows
+    match:
+      unmet_need: [reliable_app]
+      in_app_pain: [app_bug]
+    problem: Investors report crashes, login failures or errors in core flows.
+    business_metric: Crash-free sessions; failed transaction rate
+    intervention: Prioritise stability of login, SIP setup and redemption flows.
+    experiment: Release-gate core flows on crash-free rate; compare complaints after each release.

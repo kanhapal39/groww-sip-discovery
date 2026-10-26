@@ -1,0 +1,37 @@
+# Secrets and credentials
+.env
+.env.local
+*.env
+.streamlit/secrets.toml
+secrets/
+credentials/
+
+# Local agent instructions (kept off GitHub)
+AGENTS.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env/
+
+# Data: private. Only data/export/ (public dashboard inputs) is committed.
+data/raw/
+data/manual/
+data/processed/
+data/review/
+*.log
+*.pid
+*.db
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

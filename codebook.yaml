@@ -1,0 +1,260 @@
+# SIP Discovery Engine — behavior tag codebook
+# Defines investor behavior labels and tagging schema.
+# Editable. Changes require re-review of tagged records.
+#
+# Version 2 (2026-10-26): added `fields`, one per research question in
+# docs/project_brief.md. DRAFT — proposed by Claude Code from the user's
+# research questions; needs human review before tags are used as findings.
+# Every field has short codes (used in compact model output) mapped back to
+# full names. "unclear" means the text gives nothing for that field.
+
+version: 3
+
+# Rules applied to every item (v3, 2026-10-26). Added after the inter-model
+# check (docs/evidence_log_notes.md §5.3) showed the models split on these cases.
+rules:
+  - "Wanting, asking for, or being unable to do something is not doing it. \"Can't pause my SIP\" is not pause_sip: tag the SIP's actual state and put the problem in in_app_pain and unmet_need."
+  - "behavior: start/continue/pause/reduce/stop/increase only for a SIP action the text reports. If the text only shows an existing SIP that was not changed, use continue_sip. Use other for a mutual fund action that is not a SIP action (lumpsum buy, redemption, fund switch). Use unclear when the text reports no SIP or mutual fund action at all (only praise, complaints or feature requests)."
+  - "Missed or failed instalments the investor did not choose count as pause_sip with lapse_type involuntary."
+  - "lapse_type: no_lapse unless the text reports a SIP pause, reduction or stop, a redemption, or moving SIPs to another app. Use unclear only when such a lapse is reported but the text does not say how."
+  - "trigger: the cause the text names. A failed mandate, autopay, UPI or payment is mandate_or_payment even if the app showed an error. An app error with no payment involved is app_bug_or_ux. An option that does not exist is missing_feature. unclear when no cause is named."
+
+sip_behavior_tags:
+  - id: start_sip
+    label: "Started SIP"
+    definition: "Investor reports beginning a new Systematic Investment Plan."
+    examples: []
+  - id: continue_sip
+    label: "Continued SIP"
+    definition: "Investor reports keeping an existing SIP active without changes."
+    examples: []
+  - id: pause_sip
+    label: "Paused SIP"
+    definition: "Investor reports temporarily stopping SIP installments."
+    examples: []
+  - id: reduce_sip
+    label: "Reduced SIP"
+    definition: "Investor reports lowering the SIP installment amount."
+    examples: []
+  - id: stop_sip
+    label: "Stopped SIP"
+    definition: "Investor reports cancelling or fully exiting a SIP."
+    examples: []
+
+# Tagging fields. `code` is the key in model output; each value's `code` is
+# what the model returns. Single choice per field.
+fields:
+  - id: behavior
+    code: bh
+    question: "Which SIP behaviour does the text report?"
+    values:
+      - {id: start_sip, code: st, definition: "Began a new SIP or is about to start one."}
+      - {id: continue_sip, code: co, definition: "Keeps an existing SIP running, or has a running SIP that was not changed."}
+      - {id: pause_sip, code: pa, definition: "Temporarily stopped, skipped or missed instalments."}
+      - {id: reduce_sip, code: rd, definition: "Lowered the instalment amount."}
+      - {id: stop_sip, code: sp, definition: "Cancelled a SIP or exited fully."}
+      - {id: increase_sip, code: in, definition: "Raised the amount or used step-up/top-up."}
+      - {id: other, code: ot, definition: "A mutual fund action that is not a SIP action (lumpsum buy, redemption, fund switch)."}
+      - {id: unclear, code: u, definition: "No SIP or mutual fund action reported (only praise, complaints or requests)."}
+
+  - id: lapse_type
+    code: lt
+    question: "If an SIP was paused, reduced or stopped, how?"
+    values:
+      - {id: deliberate, code: de, definition: "Investor chose to pause, reduce or stop."}
+      - {id: involuntary, code: iv, definition: "Instalment failed or was missed without the investor choosing it (mandate, payment, app failure)."}
+      - {id: platform_switch, code: ps, definition: "Moved SIPs to another app or platform."}
+      - {id: redemption, code: rm, definition: "Withdrew or redeemed the invested money."}
+      - {id: no_lapse, code: na, definition: "No pause, reduction or stop is reported (use this, not u, when the text mentions no lapse)."}
+      - {id: unclear, code: u, definition: "A lapse is reported but the text gives nothing about how."}
+
+  - id: trigger
+    code: tr
+    question: "What caused the behaviour or problem?"
+    values:
+      - {id: market_or_returns, code: mr, definition: "Market fall, low or negative returns."}
+      - {id: money_need_or_income, code: mn, definition: "Needed the money, income changed, job loss."}
+      - {id: mandate_or_payment, code: mp, definition: "Mandate, autopay, UPI or payment problem."}
+      - {id: app_bug_or_ux, code: ab, definition: "App error, crash, confusing screens."}
+      - {id: fees_or_charges, code: fc, definition: "Fees, subscription, charges, exit load."}
+      - {id: support, code: cs, definition: "Customer support slow or unhelpful."}
+      - {id: trust_or_fraud_fear, code: tf, definition: "Fear of fraud, distrust of the platform."}
+      - {id: advice_or_influence, code: ai, definition: "Someone or some content advised it."}
+      - {id: goal_or_life_event, code: gl, definition: "Goal reached, marriage, child, retirement, emergency."}
+      - {id: kyc_or_regulation, code: ky, definition: "KYC, nominee, documentation, regulation."}
+      - {id: missing_feature, code: mf, definition: "A needed feature is absent."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: expectation
+    code: ex
+    question: "Why did they start or invest, and what did they expect?"
+    values:
+      - {id: wealth_growth, code: wg, definition: "Grow wealth or get good returns over time."}
+      - {id: specific_goal, code: sg, definition: "Save for a goal (house, child, retirement)."}
+      - {id: tax_saving, code: tx, definition: "Save tax (ELSS)."}
+      - {id: discipline_habit, code: dh, definition: "Build a saving habit or discipline."}
+      - {id: quick_returns, code: qr, definition: "Expected fast or guaranteed gains."}
+      - {id: safety, code: sf, definition: "Wanted a safe place for money."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: checking
+    code: ck
+    question: "What do they check once invested?"
+    values:
+      - {id: returns_or_nav, code: rn, definition: "Returns, NAV, XIRR, gains."}
+      - {id: portfolio_value, code: pv, definition: "Portfolio or holdings value."}
+      - {id: transaction_status, code: ts, definition: "Whether an instalment, order or redemption went through."}
+      - {id: fund_comparison, code: fq, definition: "Compares funds or fund performance."}
+      - {id: statements_or_tax, code: sx, definition: "Statements, tax proofs, capital gains reports."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: check_frequency
+    code: cf
+    question: "How often do they check?"
+    values:
+      - {id: daily, code: d, definition: "Daily or more often."}
+      - {id: weekly, code: w, definition: "About weekly."}
+      - {id: monthly, code: m, definition: "About monthly or at each instalment."}
+      - {id: rarely, code: r, definition: "Rarely or only when something goes wrong."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: in_app_pain
+    code: pn
+    question: "What confuses or worries them inside the app?"
+    values:
+      - {id: returns_nav_confusion, code: rc, definition: "Does not understand returns, NAV or gains shown."}
+      - {id: mandate_autopay, code: ma, definition: "Setting up, changing or cancelling a mandate or autopay."}
+      - {id: redemption_withdrawal, code: rw, definition: "Redeeming or withdrawing money."}
+      - {id: portfolio_display, code: pd, definition: "Holdings, external funds or data missing or wrong."}
+      - {id: fees_charges, code: fe, definition: "Unclear or unexpected fees and charges."}
+      - {id: kyc_onboarding, code: ko, definition: "KYC, sign-up, bank linking, nominee."}
+      - {id: fund_selection, code: fs, definition: "Does not know which fund to pick."}
+      - {id: sip_management, code: sm, definition: "Pausing, modifying, stepping up or stopping a SIP in the app."}
+      - {id: app_bug, code: bg, definition: "Crash, login, loading or other app failure."}
+      # Not "no": the model returned it as the boolean False (pilot 2026-10-26).
+      - {id: none, code: nn, definition: "Text reports no confusion or worry."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: emotion
+    code: em
+    question: "What feeling does the text express?"
+    values:
+      - {id: worry_fear, code: wf, definition: "Worried, scared, anxious."}
+      - {id: frustration, code: fr, definition: "Angry, annoyed, fed up."}
+      - {id: confusion, code: cn, definition: "Confused, unsure, lost."}
+      - {id: satisfaction, code: sa, definition: "Happy, satisfied, relieved."}
+      - {id: distrust, code: dt, definition: "Suspects fraud or does not trust the platform."}
+      - {id: neutral, code: ne, definition: "No clear feeling."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: outside_action
+    code: oa
+    question: "What did they do outside the app when unsure?"
+    values:
+      - {id: contacted_support, code: su, definition: "Emailed, called or raised tickets with the company."}
+      - {id: asked_others, code: ak, definition: "Asked family, friends, an advisor or an online community."}
+      - {id: consumed_media, code: md, definition: "Watched videos or read content."}
+      - {id: switched_platform, code: sw, definition: "Moved or plans to move to another app."}
+      - {id: escalated, code: es, definition: "Complained to SEBI, AMFI, bank or a regulator."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: tenure
+    code: te
+    question: "How long have they been investing?"
+    values:
+      - {id: new_under_1y, code: n, definition: "New investor or under one year."}
+      - {id: one_to_three_years, code: m, definition: "About 1 to 3 years."}
+      - {id: over_three_years, code: l, definition: "More than 3 years."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: income_stability
+    code: is
+    question: "Segment: how stable is their income?"
+    values:
+      - {id: stable_salaried, code: ss, definition: "Salaried or regular income."}
+      - {id: irregular_or_self_employed, code: ir, definition: "Business, freelance or irregular income."}
+      - {id: student_or_no_income, code: sn, definition: "Student, homemaker or no income."}
+      - {id: income_shock, code: ic, definition: "Lost job or income fell."}
+      - {id: retired, code: rt, definition: "Retired."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: age_band
+    code: ag
+    question: "Segment: age band."
+    values:
+      - {id: under_25, code: a1, definition: "Under 25, student, first job."}
+      - {id: age_25_40, code: a2, definition: "25 to 40."}
+      - {id: age_40_60, code: a3, definition: "40 to 60."}
+      - {id: over_60, code: a4, definition: "Over 60 or retired."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: money_source
+    code: ms
+    question: "Segment: where does the invested money come from?"
+    values:
+      - {id: salary, code: sl, definition: "Monthly salary."}
+      - {id: savings, code: sv, definition: "Existing savings."}
+      - {id: business_income, code: bi, definition: "Business or freelance income."}
+      - {id: family_money, code: fm, definition: "Parents, spouse or other family."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: influencer
+    code: if
+    question: "Segment: who influenced them?"
+    values:
+      - {id: self, code: se, definition: "Own decision or research."}
+      - {id: family_friends, code: ff, definition: "Family, friends or colleagues."}
+      - {id: social_media, code: sm, definition: "YouTube, finfluencers, social media."}
+      - {id: platform, code: pl, definition: "The app, its ads or recommendations."}
+      - {id: advisor, code: av, definition: "Financial advisor or distributor."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+  - id: unmet_need
+    code: un
+    question: "What need is not met?"
+    values:
+      - {id: clear_returns_view, code: rv, definition: "Clear view of returns, XIRR, NAV history."}
+      - {id: easy_mandate_control, code: mc, definition: "Easy mandate, autopay or manual payment control."}
+      - {id: flexible_sip, code: fx, definition: "Pause, skip, modify, step-up SIPs easily."}
+      - {id: fast_redemption, code: fr, definition: "Faster or simpler withdrawals."}
+      - {id: responsive_support, code: rs, definition: "Reachable, helpful support."}
+      - {id: fund_guidance, code: fg, definition: "Help choosing funds, beginner education."}
+      - {id: lower_fees, code: lf, definition: "Lower or transparent fees."}
+      - {id: external_tracking, code: et, definition: "Track funds held elsewhere."}
+      - {id: reliable_app, code: ra, definition: "App that works without bugs."}
+      - {id: other, code: ot, definition: "A need not listed here."}
+      - {id: unclear, code: u, definition: "Text gives nothing."}
+
+tag_fields:
+  - field: record_id
+    type: string
+    required: true
+  - field: behavior_tag_id
+    type: string
+    required: true
+    allowed_values: [start_sip, continue_sip, pause_sip, reduce_sip, stop_sip]
+  - field: confidence_score
+    type: float
+    required: true
+    range: [0.0, 1.0]
+  - field: evidence_quote
+    type: string
+    required: false
+    note: "Verbatim quote from source; never invented."
+  - field: is_hypothesis
+    type: boolean
+    required: true
+    note: "true if the tag is an inference, not directly observed."
+  - field: source_url
+    type: string
+    required: true
+  - field: collected_at
+    type: string
+    required: true
+    format: iso8601
+
+review_statuses:
+  - pending
+  - approved
+  - rejected
+  - needs_revision
