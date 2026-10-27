@@ -113,6 +113,8 @@ def test_opportunities_need_minimum_evidence(db) -> None:
     assert result["opportunities"][0]["n"] == 3 and "unverified" in result["opportunities"][0]["strength"]
     assert [o["id"] for o in result["insufficient"]] == ["x"]
     assert evidence_strength(40, 2, 12, 40)[0] == "Strong"
+    assert evidence_strength(40, 2, 12, 40)[1].endswith("; 40 of 40 human-reviewed")
+    assert evidence_strength(40, 2, 12, 0)[1].endswith("; 40 of 40 not individually human-reviewed")
 
 
 def test_analysis_counts_and_emerging_guard() -> None:

@@ -46,6 +46,8 @@ def evidence_strength(n: int, platforms: int, exact_quotes: int, reviewed: int) 
     if reviewed < n:
         level = f"{level} (unverified)"
         reason += f"; {n - reviewed} of {n} not individually human-reviewed"
+    else:
+        reason += f"; {reviewed} of {n} human-reviewed"
     return level, reason
 
 

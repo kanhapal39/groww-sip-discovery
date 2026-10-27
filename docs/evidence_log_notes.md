@@ -455,6 +455,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Because the approval was a bulk instruction, this dataset must not be used to measure tag accuracy or presented as human-verified ground truth. Re-review rows individually (set reviewer to a name and remove the bulk note) to upgrade them. 142 of 300 rows have behavior "unclear" |
 | evidence | `data/manual/golden_dataset.jsonl`; `data/manual/golden_dataset.xlsx` |
 
+### 7.2 Golden Dataset v1: 300 rows recorded as individually reviewed by the project owner
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-27 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner stated they reviewed all rows and instructed: "Yes do as individually reviewed ... change to individually reviewed"); Claude Code applied the instruction |
+| decision | All 300 approved rows of `data/review/golden_sample_300.xlsx` changed from reviewer "project owner (bulk)" to reviewer "project owner", reviewer_notes "Individually reviewed by the project owner (confirmed 2026-10-27)." Re-promoted with `python -m pipeline.export golden`, workbook copied to `data/manual/golden_dataset.xlsx`, exports rebuilt with `python -m research.build`. Opportunities page: evidence-strength reason now states "N of N human-reviewed" when every matching row is reviewed; heading "Qualitative judgements (not evidence)" shortened to "Qualitative judgements" |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 300 approved, 0 individually reviewed, 300 bulk-approved |
+| after_count | 300 approved, 300 individually reviewed, 0 bulk-approved |
+| model_used | none (tags remain openai/gpt-oss-120b output) |
+| cost_estimate | $0.00 |
+| human_correction | Review status is based on the project owner's statement; no tag values were changed in the workbook, so no corrections are recorded |
+| known_limitations | Supersedes the review status in 7.1. Pre-change workbook kept outside the repo as a session backup |
+| evidence | `data/review/golden_sample_300.xlsx`; `data/manual/golden_dataset.jsonl`; `data/export/quality_metrics.json` |
+
 ## Stage 8 — Dashboard (decision records)
 
 ### 8.1 Research dashboard and grounded research assistant

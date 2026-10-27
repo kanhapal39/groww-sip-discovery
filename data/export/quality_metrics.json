@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-26T08:44:21.965629+00:00",
+  "built_at": "2026-10-27T03:16:30.163778+00:00",
   "raw": {
     "play_store": {
       "records": 151000,
@@ -57,33 +57,34 @@
   },
   "clean_total": 62878,
   "filter": {
-    "labelled": 2550,
+    "labelled": 4150,
     "labels": {
-      "no": 1764,
-      "yes": 638,
-      "unsure": 148
+      "no": 2922,
+      "yes": 993,
+      "unsure": 235
     },
     "errors": 0,
-    "rescued": 147,
+    "rescued": 230,
     "by_source": {
-      "play_store": 2550
+      "play_store": 4135,
+      "reddit": 15
     }
   },
   "tagging": {
-    "tagged": 711,
-    "ok": 704,
-    "failed": 7,
+    "tagged": 1189,
+    "ok": 1181,
+    "failed": 8,
     "by_model": {
-      "openai/gpt-oss-120b": 434,
-      "qwen/qwen3.8-27b": 277
+      "openai/gpt-oss-120b": 705,
+      "qwen/qwen3.8-27b": 484
     },
     "quote_status": {
-      "exact": 500,
-      "repaired": 19,
-      "none": 174,
-      "hidden": 11
+      "exact": 928,
+      "repaired": 37,
+      "none": 194,
+      "hidden": 22
     },
-    "reason_flags": 87,
+    "reason_flags": 99,
     "failures": [
       {
         "record_id": "4a04c0c8-2586-5129-8d9c-270d5fab8e1c",
@@ -118,6 +119,11 @@
       {
         "record_id": "ccb4651d-e604-576b-940f-201c9358d68b",
         "error": "too large: HTTP 429: Request too large for model `qwen/qwen3.8-27b` in organization `org_01m5v68dzsea2rr6k4a17qtf9e` service tier `on_demand` on output tokens per minute (OTPM): Limit 1000, Requested 1840. The r",
+        "model": "qwen/qwen3.8-27b"
+      },
+      {
+        "record_id": "9e6619e9-2dac-5b7f-a527-a8a835998019",
+        "error": "too large: HTTP 429: Request too large for model `qwen/qwen3.8-27b` in organization `org_01m5v68dzsea2rr6k4a17qtf9e` service tier `on_demand` on output tokens per minute (OTPM): Limit 1000, Requested 1904. The r",
         "model": "qwen/qwen3.8-27b"
       }
     ],
@@ -253,6 +259,131 @@
         "score": 97.5
       },
       {
+        "record_id": "ef3aa7f3-04cf-5d88-be08-f451b841043a",
+        "status": "repaired",
+        "score": 90.9
+      },
+      {
+        "record_id": "b02bc3f4-b952-5c33-893e-5776891a2726",
+        "status": "hidden",
+        "score": 74.7
+      },
+      {
+        "record_id": "25ad48f7-cbd6-5189-9c38-e5b4f590fdd5",
+        "status": "hidden",
+        "score": 67.5
+      },
+      {
+        "record_id": "70f74243-0215-5d51-914e-a8c2198f19ba",
+        "status": "hidden",
+        "score": 76.5
+      },
+      {
+        "record_id": "eff36a51-25ff-51ae-bde1-747820c6af54",
+        "status": "hidden",
+        "score": 66.7
+      },
+      {
+        "record_id": "e9db7447-a60f-565c-8eae-3f73a127cd73",
+        "status": "repaired",
+        "score": 97.8
+      },
+      {
+        "record_id": "79012d36-8988-52e2-8677-dea4550c731e",
+        "status": "hidden",
+        "score": 72.3
+      },
+      {
+        "record_id": "a0690d7a-8aab-553e-86ed-d9fc4f525f08",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "2ceec04f-b2e7-5d10-953a-8aca0002d369",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "08af4aaa-0fee-5b3b-85e3-c6e61279d016",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "e555cf49-542a-5d33-a286-a9f74a34ebf6",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "d1b744d7-bf3a-52bc-bc56-cab72ec67fb5",
+        "status": "repaired",
+        "score": 83.7
+      },
+      {
+        "record_id": "950639c8-55fb-501c-b62f-e64bc42b2df4",
+        "status": "repaired",
+        "score": 89.3
+      },
+      {
+        "record_id": "d16e9c86-17f5-51af-b9e7-5677f69696a3",
+        "status": "repaired",
+        "score": 91.7
+      },
+      {
+        "record_id": "79413675-b710-5417-85e2-f33e624dd709",
+        "status": "hidden",
+        "score": 69.2
+      },
+      {
+        "record_id": "292c19ec-a60f-55e4-89fc-7374c0eabdcf",
+        "status": "hidden",
+        "score": 79.5
+      },
+      {
+        "record_id": "529242d8-95c1-5f40-acd0-f72724a2a445",
+        "status": "repaired",
+        "score": 82.4
+      },
+      {
+        "record_id": "05568f52-2629-5c6e-aaf7-0b99a52f5167",
+        "status": "hidden",
+        "score": 66.7
+      },
+      {
+        "record_id": "fc78f8fa-7885-5720-bf54-eea9d6b28dd5",
+        "status": "hidden",
+        "score": 79.5
+      },
+      {
+        "record_id": "d9b732c7-e063-5262-ba16-f73b2889a0fb",
+        "status": "hidden",
+        "score": 71.1
+      },
+      {
+        "record_id": "50be221b-8962-5ecf-b802-e4aebabc3879",
+        "status": "hidden",
+        "score": 70.7
+      },
+      {
+        "record_id": "0f6d2650-6286-5548-9bb7-e3fc1276d525",
+        "status": "repaired",
+        "score": 98.9
+      },
+      {
+        "record_id": "add9c588-3251-55d5-ad2e-cd07784267f9",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "f905dfc7-2d42-5ea7-9292-c37c908251fa",
+        "status": "repaired",
+        "score": 87.0
+      },
+      {
+        "record_id": "05d2c1ba-2a26-5566-be13-eac397cd8bc1",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
         "record_id": "5a3469de-ca06-57c3-b2fb-18dde76c8ef1",
         "status": "repaired",
         "score": 97.3
@@ -271,6 +402,26 @@
         "record_id": "b7c65802-fded-5a29-b707-52e6ff3d4d20",
         "status": "repaired",
         "score": 100.0
+      },
+      {
+        "record_id": "b752db8e-aa21-5318-891e-6a8589eb7b6d",
+        "status": "repaired",
+        "score": 97.7
+      },
+      {
+        "record_id": "f0b27dbc-974a-563b-812e-adc809f98d99",
+        "status": "repaired",
+        "score": 98.0
+      },
+      {
+        "record_id": "50a821c8-6c3c-5180-8cc2-5206d5db6e60",
+        "status": "repaired",
+        "score": 97.2
+      },
+      {
+        "record_id": "5e5f0e45-6b07-5b94-b5ef-4b0649e138f6",
+        "status": "repaired",
+        "score": 98.6
       }
     ]
   },
@@ -280,8 +431,8 @@
       "play_store": 195,
       "reddit": 105
     },
-    "individually_reviewed": 0,
-    "bulk_approved": 300,
+    "individually_reviewed": 300,
+    "bulk_approved": 0,
     "missing_provenance": 0,
     "exact_quotes": 215,
     "review_workbook": "golden_sample_300.xlsx",
@@ -407,5 +558,5 @@
     },
     "small_sample": 30
   },
-  "golden_version": "707e2fba1bfc"
+  "golden_version": "ff2f8baeafdf"
 }

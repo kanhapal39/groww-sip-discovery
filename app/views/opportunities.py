@@ -42,7 +42,7 @@ def render() -> None:
                         + f" · {o['exact_quotes']} verbatim quotes · {o['strength_reason']}")
             seg = ", ".join(f"{ui.nice(k)} {v}" for k, v in (o["segment"] or {}).items()) or "unknown for all matching records"
             st.markdown(f"**Investor segment (tenure, where stated):** {seg}")
-            st.markdown("**Qualitative judgements (not evidence):**")
+            st.markdown("**Qualitative judgements:**")
             st.markdown(f"- Potential business metric: {o['business_metric']}\n- Proposed intervention: {o['intervention']}\n- Suggested experiment: {o['experiment']}")
             st.markdown("**Validation gaps:**\n" + "\n".join(f"- {g}" for g in o["validation_gaps"]))
             rules = "; ".join(f"{f} ∈ {{{', '.join(v)}}}" for f, v in (o["match"] or {}).items())
