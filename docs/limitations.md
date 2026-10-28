@@ -11,7 +11,7 @@
 - Play Store: newest 30,000 reviews per app, so recent years dominate and apps reach different years back.
 - Reddit: keyword searches and a title-keyword shortlist, deliberately skewed to stopping, pausing and payment problems.
 - Public reviews over-represent people with problems. Nothing here measures how common a behaviour is among investors.
-- Golden Dataset: 300 rows sampled across source × behaviour (296 after 4 were rejected as not relevant); not a random sample.
+- Golden Dataset: 300 rows sampled across source × behaviour (296 after 4 were rejected as not relevant), plus 116 rows selected because the writer says they are new to investing (2026-10-28). Not a random sample; new investors are deliberately over-represented.
 
 ## Classification
 
@@ -25,7 +25,9 @@
 
 All rows are recorded as individually reviewed by the project owner (evidence log §7.2). That review corrected no tags; 45 corrections on 27 records were applied later (D-3 and the 20-record labelled set, 2026-10-28). The other tags are the model's output, and the 20-record check suggests pain and need tags are often wrong (`docs/ai_eval_test_report.md` §9). The dataset is not independent ground truth.
 
-Only 5 rows carry the new-investor tenure tag (after the D-3 corrections). 116 more candidates are tagged and await review (D-8). Questions about first-time investors therefore usually return the insufficient-evidence message.
+94 rows carry the new-investor tenure tag: 5 from the original sample and 89 from the 116 bulk-approved D-8 rows, whose tags were not reviewed row by row. Most of those 89 are short app reviews with no SIP action or stated need.
+
+**Beginner guidance count is inflated.** The opportunity matches any record tagged `tenure=new_under_1y`, so it rose from 11 to 100 records when the D-8 rows were added. Only 7 of the 100 state a fund-choice need or pain. Its priority reflects how many people said they were new, not evidence of the problem (decision pending; `docs/ai_eval_implementation_audit.md` D-10). Questions about first-time investors therefore usually return the insufficient-evidence message.
 
 ## Research assistant
 

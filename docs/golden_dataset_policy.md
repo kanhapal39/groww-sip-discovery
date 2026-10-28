@@ -21,7 +21,7 @@ The sample workbook is never overwritten once any row has been reviewed (unless 
 - **No tag was corrected in that review.**
 - **2026-10-28: 26 tag corrections on 16 records applied** on the owner's decision (D-3; `data/review/proposed_tag_corrections_20261028.csv`; evidence log §8.5). Each corrected row's reviewer note lists the old and new value.
 - **2026-10-28: 19 corrections on 11 rows** from the adjudicated 20-record labelled set, and **4 rows rejected** as not relevant to SIP behaviour (evidence log §8.6). Every other tag is still the model's output.
-- **Pending:** `data/review/new_investor_candidates_20261028.xlsx`, 116 tagged rows stating a new investor (D-8, §8.8). None is approved; approved rows must be added to `golden_sample_300.xlsx` before promotion.
+- **2026-10-28: 116 new-investor rows bulk-approved** (D-8; evidence log §8.8, §8.9). The owner approved them without row-by-row review, so reviewer is "project owner (bulk)" and the dashboard counts them as bulk-approved. They were appended to `golden_sample_300.xlsx`, which now holds 416 rows (412 approved, 4 rejected); the file name is kept because `pipeline.export golden` reads it. These rows were selected by phrase, not sampled, so the dataset is no longer balanced across source × behaviour.
 - Consequence: the dataset can be used to explore and cite evidence. It is not independent ground truth and cannot measure tagging accuracy; that is done with the labelled set in `docs/ai_eval_ground_truth_template.md`.
 
 ## Upgrading a row to verified

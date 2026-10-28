@@ -610,6 +610,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Most candidates are short app reviews with no SIP action or problem. 7 were marked not relevant by the filter, 100 were never filtered. Phrase selection misses new investors who do not say so in these words |
 | evidence | `data/review/new_investor_candidates_20261028.xlsx`; `data/processed/tag_usage.jsonl`; `docs/ai_eval_test_report.md` §11 |
 
+### 8.9 D-8 candidates bulk-approved into the Golden Dataset
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner, replying to the request to review the 116 candidates: "Approve"; the workbook had not been edited); Claude Code (applied the instruction) |
+| decision | All 116 rows of `data/review/new_investor_candidates_20261028.xlsx` set to approved with reviewer "project owner (bulk)" and a note that they were not reviewed row by row; tags unchanged. Appended to `data/review/golden_sample_300.xlsx` (now 416 rows: 412 approved, 4 rejected); copied to `data/manual/golden_dataset.xlsx`; promoted with `python -m pipeline.export golden`; exports rebuilt (version 8cb9938292e6) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 296 approved; tenure new_under_1y 5; beginner_guidance 11 |
+| after_count | 412 approved; tenure new_under_1y 94; beginner_guidance 100 (priority 101.0, rank 2); mandate_reliability 72; app_reliability 41; responsive_support 25; redemption_speed 29; fee_transparency 11 |
+| model_used | none (tags from 8.8) |
+| cost_estimate | $0.00 |
+| human_correction | none; bulk approval |
+| known_limitations | Bulk approval: these rows must not be used to measure tag accuracy. 7 were marked not relevant by the filter and 21 have tenure unclear. Rows were phrase-selected, so new investors are over-represented. beginner_guidance counts tenure alone (D-10 open). Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §12; `docs/ai_eval_implementation_audit.md` D-8, D-10 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

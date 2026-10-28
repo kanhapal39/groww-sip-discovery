@@ -254,3 +254,22 @@ Replaying the 4 saved answers from §8 offline (no model call):
 | one_to_three_years | 1 |
 
 108 of the 115 have behaviour `unclear` and 91 have in_app_pain `none`. Most are short app reviews ("I'm new to investing, nice app") that state a tenure but no SIP action or problem. `data/review/new_investor_candidates_20261028.xlsx` holds 116 rows (115 plus 1 tagged earlier), all **pending**. Nothing was added to the Golden Dataset.
+
+## 12. New-investor rows added (D-8 approval, 2026-10-28)
+
+The project owner approved all 116 tagged candidates with one instruction ("Approve"), without editing the workbook. They are recorded as **bulk-approved** (reviewer "project owner (bulk)"), so answers citing them say they were not reviewed row by row.
+
+| | Before | After |
+|---|---|---|
+| Public Golden rows | 296 | 412 |
+| tenure = new_under_1y | 5 | 94 |
+| beginner_guidance | 11 (priority 12.0) | **100 (priority 101.0)** |
+| mandate_reliability | 68 (109.0) | 72 (113.0) |
+| app_reliability | 27 (19.5) | 41 (26.5) |
+| responsive_support | 15 (10.0) | 25 (15.0) |
+| redemption_speed | 26 (16.0) | 29 (17.5) |
+| fee_transparency | 9 (6.5) | 11 (7.5) |
+
+Retrieval probe (no model): the Case C question ("first-time SIP investors … setting up their first SIP") now has **6** strong matches, above the 3-record threshold, so it would be answered instead of abstaining. "Why do first-time investors discontinue SIPs after 12 months?" still has 0. All 167 tests pass.
+
+**HIGH: beginner_guidance is inflated by its matching rule.** 89 of its 100 records match only on the tenure tag; only 7 state a fund-choice need or pain, and none of those 7 is a new row. It now ranks second by a measure of how many writers said they were new, not by evidence that new investors struggle to choose a fund. Decision D-10 is open. The rows also skew the dataset: 116 of 412 were selected by phrase, not sampled.
