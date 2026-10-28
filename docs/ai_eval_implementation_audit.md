@@ -75,7 +75,7 @@ Result columns: **Before** = state of `main` at `0d11e77`; **After** = state on 
 
 | # | Document says | Code or data shows | Type |
 |---|---|---|---|
-| G-1 | Edge 19 and the audit brief: "Insufficient evidence in the Golden Dataset to answer this question reliably." | `research/answer.py:INSUFFICIENT_MESSAGE` = "The Golden Dataset does not contain enough evidence to answer this question reliably." | Wording only; the abstention behaviour is equivalent and is verified (R-20). **Not changed: decision D-1** |
+| G-1 | Edge 19 and the audit brief: "Insufficient evidence in the Golden Dataset to answer this question reliably." | `research/answer.py:INSUFFICIENT_MESSAGE` = "The Golden Dataset does not contain enough evidence to answer this question reliably." | Wording only; the abstention behaviour is equivalent and is verified (R-20). **Resolved 2026-10-28 (D-1): the code's wording is the intended copy** |
 | G-2 | `README.md` status table, `docs/golden_dataset_policy.md` "Current state", `docs/implementation_plan.md` Stage 7, `docs/limitations.md` "Golden Dataset": all 300 rows bulk-approved | Evidence log §7.2 (2026-10-27) and the data: 300 rows recorded as individually reviewed by the project owner | Documentation is stale. Not edited here; listed for the owner |
 | G-3 | `docs/evidence_validation.md` "What is not validated": "no individually reviewed Golden rows exist yet" | Same as G-2 | Stale. The point that tag accuracy is unmeasured still holds |
 | G-4 | Eval Case A/B tables: "Human-reviewed records 66 of 66", "43 of 43" | True as review status. But per §7.2 no tags were corrected, and the records the Eval document itself flags as mis-tagged (Cases 1–3) are among the approved rows with their original tags | "Human-reviewed" means approved as-is; it is not independent ground truth |
@@ -86,13 +86,20 @@ Result columns: **Before** = state of `main` at `0d11e77`; **After** = state on 
 
 ## 5. Decisions needed from the product owner
 
-- **D-1 — insufficient-evidence wording (G-1).** Which text is the intended user-facing copy? The code was left as it is. If the document's wording is chosen, change `INSUFFICIENT_MESSAGE`; the tests import the constant, so no test text changes.
+*Updated 2026-10-28: the project owner decided D-1 and D-7, and asked to see the D-3 proposal first.*
+
+- **D-1 — insufficient-evidence wording (G-1). DECIDED 2026-10-28:** keep the code's wording, "The Golden Dataset does not contain enough evidence to answer this question reliably." The Edge Cases document's Edge Case 19 text is superseded; noted in an addendum to that document.
 - **D-2 — opportunity definitions.** `research/opportunities.yaml` is a draft by Claude Code, including the new `hold_out` and `breakdown` rules. It needs product review before scores are used to prioritise.
-- **D-3 — tag corrections.** The review recorded no corrections. Known mis-tags include `a140a1f6` (AutoPay setup tagged flexible_sip), `a7c2a38b` (cancel-with-profit tagged flexible_sip and trigger support) and `5a343cb7` (tenure inferred). They should be corrected in `data/review/golden_sample_300.xlsx` by a reviewer, then promoted with `python -m pipeline.export golden`. Claude Code did not edit the dataset.
+- **D-3 — tag corrections. PROPOSED 2026-10-28, awaiting decision:** 26 changes on 16 records in `data/review/proposed_tag_corrections_20261028.csv`. Each proposal cites the record text and the codebook rule. If all are accepted: new-investor tenure tags 10 → 5; flexible_sip 39 → 38 records (0 held out); redemption_speed 27 → 28; beginner_guidance 16 → 11. The review recorded no corrections. Known mis-tags include `a140a1f6` (AutoPay setup tagged flexible_sip), `a7c2a38b` (cancel-with-profit tagged flexible_sip and trigger support) and `5a343cb7` (tenure inferred). They should be corrected in `data/review/golden_sample_300.xlsx` by a reviewer, then promoted with `python -m pipeline.export golden`. Claude Code did not edit the dataset.
 - **D-4 — codebook.** Add a value or field separating explicit pause/skip/edit requests from cancellation friction, so this no longer rests on keyword rules.
 - **D-5 — evidence strength.** Decide whether short (under 5-word) or repaired quotes should count towards "Strong".
 - **D-6 — priority.** Keep ranking by evidence volume (now stated on the page), or add a manually scored impact/effort input.
-- **D-7 — segment filter.** Questions naming first-time or beginner investors now answer only from records tagged `tenure=new_under_1y`; in the current data they usually abstain. Confirm this is the desired behaviour.
+- **D-7 — segment filter. DECIDED 2026-10-28:** keep it, and tag tenure where the text supports it.
+  - Tenure was re-checked by rule and by reading: only 5 public records state that the writer is new to investing. Five of the current 10 new-investor tags are unsupported; corrections are included in D-3.
+  - Among the 62,878 cleaned records, 123 contain explicit new-investor phrases (115 Play Store, 8 Reddit), and only 1 of them is already tagged.
+  - Adding them would need Groq tagging plus the owner's review: **a separate decision, D-8**.
+- **D-8 — more first-time-investor evidence.** Tag the 123 candidate records and add them to a review workbook for approval, or accept that first-time questions abstain.
+- **D-9 — generation-level checks.** The live check (test report §8) found 2 of 4 summaries overgeneralising. Candidate fixes: a segment-word check and a frequency-word check. Both would remove more model text from what users see.
 
 ## 6. Evaluation evidence available today
 

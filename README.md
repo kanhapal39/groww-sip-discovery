@@ -12,7 +12,8 @@ The project distinguishes observed evidence from hypotheses and must not invent 
 | Cleaning | Done: 62,878 clean records |
 | Relevance filter | Running in the background (partial) |
 | Tagging | Running in the background (gpt-oss-120b and qwen3.8-27b, Reddit first) |
-| Golden Dataset | 300 rows, **bulk-approved without row-by-row review** |
+| Golden Dataset | 300 rows, recorded as individually reviewed by the project owner on 2026-10-27 (evidence log §7.2). No tag corrections recorded yet; 26 proposed corrections await the owner's decision |
+| AI evaluation | Audit and edge-case tests done (`docs/ai_eval_test_report.md`). 20-record labelled set drawn, **not yet labelled**, so no accuracy figures exist |
 | Dashboard | Five pages implemented; tested locally |
 
 See `docs/evidence_log_notes.md` for every decision and count.
@@ -45,6 +46,8 @@ Overview (question box, five suggested questions, evidence summaries) · Investo
 ## Documentation
 
 `docs/architecture.md`, `docs/implementation_plan.md`, `docs/data_dictionary.md`, `docs/golden_dataset_policy.md`, `docs/evidence_validation.md`, `docs/limitations.md`, `docs/deployment.md`, `docs/source_access_plan.md`, `docs/evidence_log_notes.md`.
+
+AI evaluation: `docs/ai_evaluation_documentation.md`, `docs/edge_cases_and_failure_modes.md`, `docs/ai_eval_implementation_audit.md`, `docs/ai_eval_test_report.md`, `docs/ai_eval_ground_truth_template.md`.
 
 ## LLM provider
 

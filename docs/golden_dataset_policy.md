@@ -14,11 +14,13 @@ The Golden Dataset is the set of tagged records a human reviewer has approved. I
 
 The sample workbook is never overwritten once any row has been reviewed (unless `--force`).
 
-## Current state (2026-10-26)
+## Current state (2026-10-28)
 
 - 300 rows, all tagged by `openai/gpt-oss-120b` (tag-v4, codebook v3 draft).
-- **All 300 were bulk-approved by the project owner without row-by-row review** (evidence log §7.1). Each row carries reviewer "project owner (bulk)" and a note saying so. The dashboard shows "0 individually validated" and labels every finding "(unverified)".
-- Consequence: the dataset can be used to explore and cite evidence, but must not be presented as human-verified ground truth or used to measure tagging accuracy.
+- First bulk-approved on 2026-10-26 (evidence log §7.1). On 2026-10-27 all 300 were **recorded as individually reviewed** by the project owner, on the owner's statement (§7.2). Reviewer is "project owner"; the dashboard counts them as individually reviewed.
+- **No tag was corrected in that review.** Every tag is still the model's output, including records the AI Evaluation document identifies as mis-tagged.
+- 26 tag corrections on 16 records were proposed on 2026-10-28 (`data/review/proposed_tag_corrections_20261028.csv`) and await the owner's decision.
+- Consequence: the dataset can be used to explore and cite evidence. It is not independent ground truth and cannot measure tagging accuracy; that needs the labelled set in `docs/ai_eval_ground_truth_template.md`.
 
 ## Upgrading a row to verified
 

@@ -508,6 +508,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | No independently labelled ground truth, so no accuracy, precision or recall reported (template `docs/ai_eval_ground_truth_template.md`). Model-dependent behaviour untested. The suggested question on starting a SIP still shows records that describe no problem (tag-only matches). Opportunity rules remain drafts by Claude Code |
 | evidence | `docs/ai_eval_implementation_audit.md`, `docs/ai_eval_test_report.md`, `tests/test_ai_eval_edge_cases.py` |
 
+### 8.3 Owner decisions, live answer check, correction proposal and labelling sample
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | evaluation |
+| actor | human (project owner: "D-1 … In the code now", "D-7 … Then Tag them", "D-3 … Prepare the list and show me first", "Give the 20 records I will check", Groq run "Go ahead", stale docs "OK"); Claude Code (execution) |
+| decision | D-1: keep the code's insufficient-evidence wording. D-7: keep the segment filter. Approved Groq run: the 5 suggested questions, once each (approval recorded here per AGENTS.md rule 6). Proposed 26 tag corrections on 16 records (`data/review/proposed_tag_corrections_20261028.csv`), **not applied**. Drew the 20-record labelling sample (seed 20261028, 22 records excluded; `research/ground_truth.py`; `data/review/ground_truth_20.xlsx`). Updated stale review-status text in README, golden_dataset_policy, implementation_plan, limitations and evidence_validation |
+| prompt_version | answer-v2 |
+| before_count | 0 live answers with answer-v2 |
+| after_count | 5 questions: 4 answered (17 points, 31 citations), 1 abstained by the model |
+| model_used | openai/gpt-oss-120b (4 calls); openai/gpt-oss-20b (1 call, after a 120b rate limit) |
+| cost_estimate | $0.00 (free tier). 8,537 tokens recorded for 4 calls; 1 call's usage was not recorded (bug fixed in `research/answer.py`) |
+| human_correction | none yet; corrections await the owner's accept/reject |
+| known_limitations | Support of points was judged by Claude Code (9 supported, 7 partly, 1 not; 5 of 31 citations did not support their point; 2 of 4 summaries overgeneralised), not by a person. No labels exist yet for the 20-record set |
+| evidence | `data/processed/answer_eval_20261028.jsonl`, `docs/ai_eval_test_report.md` §8, `docs/ai_eval_ground_truth_template.md` |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

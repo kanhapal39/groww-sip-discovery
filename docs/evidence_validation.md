@@ -26,6 +26,6 @@ Checks that run in code, where they run, and what they do.
 
 ## What is not validated
 
-- Tag accuracy against human labels: no individually reviewed Golden rows exist yet.
-- Answer summaries can still paraphrase loosely (e.g. "often"); counts shown next to answers are computed in code.
+- Tag accuracy against human labels: rows are recorded as reviewed, but no tag was corrected and no independent labels exist yet (`docs/ai_eval_ground_truth_template.md`).
+- Whether a cited record supports a paraphrased point is not checked in code. Answer summaries can still overgeneralise ("mainly", "new investors often"; observed 2026-10-28). Counts shown next to answers are computed in code.
 - Language detection and date estimates for Reddit (ID-based windows) are rules, not verified labels.

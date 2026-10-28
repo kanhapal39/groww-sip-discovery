@@ -22,11 +22,14 @@
 
 ## Golden Dataset
 
-All 300 rows were bulk-approved without row-by-row review. Findings are labelled "(unverified)".
+All 300 rows are recorded as individually reviewed by the project owner (evidence log §7.2), but no tag was corrected. Known mis-tags remain (`docs/ai_eval_implementation_audit.md` D-3). The dataset is not independent ground truth.
+
+Only 5 to 10 rows carry the new-investor tenure tag, depending on the pending corrections. Questions about first-time investors therefore usually return the insufficient-evidence message.
 
 ## Research assistant
 
-- Retrieval is keyword and tag based; relevant records using different wording can be missed.
+- Retrieval is keyword and tag based; relevant records using different wording can be missed. A matching tag alone still makes a record evidence.
+- Answer points can cite records that only partly support them. In the 2026-10-28 live check, 8 of 17 points were partly or not supported, and 2 of 4 summaries claimed frequency or a segment the records did not show (`docs/ai_eval_test_report.md` §8). That check was by Claude Code, not by a person.
 - Answers depend on Groq availability and free-tier limits; when unavailable, the matching evidence is still shown.
 - About 1,800 tokens per new question (cached per question and dataset version).
 

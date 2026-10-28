@@ -144,3 +144,44 @@ Duplicates removed: 0.
 4. **Tag errors remain in the data.** The known mis-tags are approved and uncorrected (decision D-3). The hold-out rule limits their effect on one opportunity only.
 5. **Rule heuristics.** The impact-claim and quote checks are regular expressions. They can miss paraphrased predictions, and they could remove a legitimate statement that uses "would reduce … stop". Removed statements are shown on the page, so this is visible rather than silent.
 6. **Retrieval is still keyword and tag based** (no semantic search). Tag-only matches still count as strong.
+
+## 8. Live answer check (2026-10-28, approved by the project owner)
+
+**What ran.** Each of the five suggested dashboard questions was asked once, through `research.answer.answer_question` with prompt `answer-v2` and the dashboard's model fallback. Raw results are in `data/processed/answer_eval_20261028.jsonl` (gitignored). Recorded usage: **8,537 tokens** for the 4 answered calls. The returns call's usage was not recorded (fixed below), so the true total is somewhat higher. Models: `openai/gpt-oss-120b` for questions 1–4; question 5 fell back to `openai/gpt-oss-20b` after a rate limit.
+
+**Who judged support.** Claude Code read each point against the full text of the records it cites. **This is an AI review, not human ground truth.** The project owner should confirm or overrule it.
+
+| Question | Status | Points | Supported | Partly supported | Not supported | Removed by code checks | Summary problem |
+|---|---|---|---|---|---|---|---|
+| Why do investors pause or stop their SIPs? | answered | 5 | 1 | 4 | 0 | 0 | "**mainly** because of…": a frequency claim the sample cannot support |
+| Why do AutoPay payments fail? | answered | 4 | 3 | 1 | 0 | 0 | — |
+| What do investors say about returns in the first year? | insufficient (model judged the 12 records off-topic) | — | — | — | — | 0 | — |
+| How do investors react to a market crash? | answered | 3 | 2 | 1 | 0 | 0 | — |
+| What problems do investors face when starting a SIP? | answered | 5 | 3 | 1 | 1 | 0 | "**New investors often** struggle…": the question did not ask about new investors and the records do not show frequency |
+| **Total** | 4 answered, 1 abstained | **17** | **9** | **7** | **1** | **0** | **2 of 4** summaries overgeneralise |
+
+**Citation problems** (a cited record does not support the point), 5 of 31 citations:
+- **Q1 point 3, `1f63bed6`:** an IPO amount-block mandate, not a SIP mandate.
+- **Q1 point 3, `99a2b9e0`:** an order-allotment delay, not a mandate failure.
+- **Q1 point 4, `b445c5f5`:** about the SEBI overseas-investment limit, not market expectations.
+- **Q1 point 5, `602cf3cd`:** advice to another person, not the writer's own stop.
+- **Q5 point 2, `5a343cb7`:** "wish I could start Sip…" states no difficulty.
+
+**Basis labels:**
+- Q2 point 3 is marked `stated` but adds an inference ("indicating systemic issues").
+- Q5 point 1 is marked `inferred` but adds "a common challenge".
+
+**What worked:**
+- Every point cited at least one record.
+- No invented quotes or statistics.
+- No impact predictions.
+- One question abstained on the model's own judgement.
+- The market-crash answer separated differing reactions (EC13).
+
+**What the code checks cannot catch.** Partial support, generalisation ("mainly", "often", "common") and segment wording added by the model. These are EC17, EC21 and EC22 at generation level.
+
+Two candidate fixes; neither is implemented, and both need the owner's go-ahead because they change what users see:
+- **Segment check:** remove statements naming an investor segment the question did not ask about.
+- **Frequency check:** flag frequency words in summaries.
+
+**Bug found and fixed.** When the model judged the evidence insufficient, its token usage was dropped from the result, so quota use was under-reported. It is now returned (`test_model_saying_insufficient_is_respected`).

@@ -15,7 +15,17 @@ The AI Evaluation document (§11) calls for "an independently labelled set of 20
 4. **Compare after labelling.** Fill the "Engine output" columns only after every label is final. Then compute agreement per field, never one combined accuracy.
 5. **Record disagreements and corrections.** If the comparison leads to a tag correction, make it in the review workbook and promote it with `python -m pipeline.export golden`. Log it in `docs/evidence_log_notes.md` (AGENTS.md rule 7).
 
-Selection command: `PENDING` · Seed: `PENDING` · Labeller: `PENDING` · Labelling date: `PENDING`
+**Sample drawn 2026-10-28** (records chosen; still unlabelled):
+
+```
+python -m research.ground_truth sample --size 20 --seed 20261028 --exclude a140a1f6,0b1dfb99,c43684df,14d55029,a7c2a38b,e45241db,fafe30aa,af1bc5ab,5a343cb7,602cf3cd,3e6b0142,3b8e232b,67dec2e7,0b020206,b302ef12,55c5855a,266e1942,4f94b6b3,226d8804,a08aa8f0,27ca76cd,a2f5f709
+```
+
+- **Pool:** the 300 rows in `data/export/golden_public.jsonl`.
+- **Excluded:** 22 records. These are the known-failure records plus every record in the tag-correction proposal shown to the project owner on 2026-10-28; the owner saw their AI tags, so labelling them would not be independent.
+- **Output:** `data/review/ground_truth_20.xlsx` (gitignored). Its `about` sheet repeats the seed and command. `python -m research.ground_truth compare` computes the agreement figures in §5.
+
+Labeller: `PENDING` · Labelling date: `PENDING`
 
 ## 2. Labelling sheet (filled before comparison)
 

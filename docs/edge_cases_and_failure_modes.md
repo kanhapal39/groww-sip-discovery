@@ -286,3 +286,7 @@ The engine should be considered reliable for this use case only after testing de
 - Presents product recommendations as hypotheses unless their impact has been validated.
 
 **Final note:** This catalogue defines how the engine can fail and how to test those failures. It does not claim that all 20 cases have been executed or that the engine has passed or failed each test. Actual results must be recorded after running the tests against the current system.
+
+---
+
+*Addendum, 2026-10-28 (not part of the original document).* **Edge Case 19 wording:** the project owner decided that the user-facing insufficient-evidence message is the one already in the code: "The Golden Dataset does not contain enough evidence to answer this question reliably." The required behaviour (abstain without inventing an explanation) is unchanged and is tested in `tests/test_ai_eval_edge_cases.py`. Results for every edge case are in `docs/ai_eval_test_report.md`.
