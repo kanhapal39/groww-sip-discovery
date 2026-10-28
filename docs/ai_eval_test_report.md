@@ -222,3 +222,35 @@ The project owner accepted 25 of the 26 proposed corrections. #23 (`b302ef12`, t
 New-investor tenure tags: 10 → 5. Retrieval probe (no model): "returns in the first year" 32 → 26 strong matches; "first-time investors discontinue after 12 months" 1 → 0. Other probe questions kept the same counts. All 165 tests pass.
 
 The 20 labelled records (§9) were not touched by these corrections; they were excluded from the D-3 list.
+
+## 11. Labelled-set corrections, D-9 checks and D-8 tagging (2026-10-28)
+
+**Corrections from the labelled set (owner decision).** The 20-record final labels were applied to the Golden Dataset: 19 changes on 11 records. The other 5 confirmed errors were on records now rejected. The 4 records judged not relevant (`020df9f9`, `d2ff3587`, `009c1dbe`, `d3a3a2f7`) were rejected, leaving 296 public rows.
+
+| Opportunity | n before | n after | Priority before | Priority after |
+|---|---|---|---|---|
+| mandate_reliability | 66 | 68 | 107.0 | 109.0 |
+| flexible_sip | 38 | 40 | 56.0 | 58.0 |
+| redemption_speed | 28 | 26 | 17.5 | 16.0 |
+| responsive_support | 14 | 15 | 9.0 | 10.0 |
+| returns_clarity | 7 | 8 | 8.0 | 9.0 |
+| app_reliability | 27 | 27 | 19.0 | 19.5 |
+
+**D-9: two answer checks (code, no model calls).** Tests: `test_ec21_investor_groups_need_a_basis_in_question_or_records`, `test_ec22_frequency_words_are_flagged_not_removed`. 167 tests pass.
+- **Investor groups:** a point or summary naming a group (new or first-time, salaried, students, young, older, women, experienced…) is removed unless the question or its cited records mention that group.
+- **Frequency words:** "mainly", "often", "common" and similar are flagged in the first limitation note; the text is kept.
+
+Replaying the 4 saved answers from §8 offline (no model call):
+- Flagged: Q1 summary ("mainly"), Q2 point 1 ("often"), Q5 summary ("often") and Q5 point 1 ("common").
+- Removed: none. Q5's "New investors often struggle…" passed the group check because 2 of its 12 records are from self-described beginners ("I am a beginner", "I'm a novice investor"). The check catches groups with no basis at all; it cannot tell "two records" from "investors in general", which is what the frequency flag is for.
+
+**D-8: new-investor candidates tagged (Groq, approved).** 123 cleaned records contain an explicit new-investor phrase. 5 are already in the Golden Dataset and 8 were already tagged. The remaining 115 were tagged with `openai/gpt-oss-120b` (tag-v4): 6 requests, **34,984 tokens**, 0 failures.
+
+| Tenure tag given (115 newly tagged) | Count |
+|---|---|
+| new_under_1y | 89 |
+| unclear | 21 |
+| over_three_years | 4 |
+| one_to_three_years | 1 |
+
+108 of the 115 have behaviour `unclear` and 91 have in_app_pain `none`. Most are short app reviews ("I'm new to investing, nice app") that state a tenure but no SIP action or problem. `data/review/new_investor_candidates_20261028.xlsx` holds 116 rows (115 plus 1 tagged earlier), all **pending**. Nothing was added to the Golden Dataset.

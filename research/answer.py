@@ -8,12 +8,15 @@
 3. Otherwise ask the LLM to summarise ONLY those records, citing them as R1..Rn
    and marking each point as stated in the evidence or inferred.
 4. Drop any point that cites no valid record, quotes text that is not in the
-   records it cites, gives a percentage the cited records do not contain, or
-   claims a product change will improve outcomes. Removed statements are
+   records it cites, gives a percentage the cited records do not contain,
+   names an investor group that neither the question nor the cited records
+   mention, or claims a product change will improve outcomes. Removed statements are
    returned with the reason, so the page can say what was removed. Quotes and
    links shown to users come from the stored records, never from the model's text.
 
 Coverage figures and limitations are computed in code, not by the model.
+Frequency words in the model's text ("mainly", "often") are not removed but
+are flagged in the limitations, since the records cannot show how common anything is.
 """
 
 from __future__ import annotations
@@ -57,6 +60,21 @@ IMPACT_CLAIM = re.compile(
     r"(improve|increase|boost|raise|reduce|lower|prevent|cut|drive|lift)\w*\b.*\b(retention|continuation|churn|cancellation|lapse|stop)",
     re.IGNORECASE)
 SHORT_QUOTE_WORDS = 5
+# Investor groups a statement may only name if the question or the cited records do (EC21).
+SEGMENT_CLAIMS: tuple[re.Pattern[str], ...] = tuple(re.compile(p, re.IGNORECASE) for p in (
+    r"\bfirst.?time (sip |mutual fund |mf )?(investors?|users?|buyers?)\b|\bnew (sip )?investors?\b|\bnew to (investing|sips?|mutual funds?)\b|\bbeginners?\b|\bnovices?\b|\bnewbies?\b",
+    r"\bsalaried\b",
+    r"\bself.?employed\b|\bfreelancers?\b|\bbusiness owners?\b",
+    r"\bstudents?\b",
+    r"\byoung(er)? (investors?|people|users?|adults?)\b|\bmillennials?\b|\bgen ?z\b",
+    r"\bolder (investors?|people|users?)\b|\bretirees?\b|\bretired\b|\bsenior citizens?\b",
+    r"\bwomen\b|\bfemale investors?\b",
+    r"\bexperienced investors?\b|\blong.?term investors?\b|\bseasoned investors?\b",
+))
+# Words that claim how common something is (EC22); flagged, not removed.
+FREQUENCY_WORDS = re.compile(
+    r"\b(mainly|mostly|most|majority|often|frequently|commonly|common|typically|usually|generally|"
+    r"primarily|predominantly|widespread|widely|many|numerous|the norm)\b", re.IGNORECASE)
 
 
 def strong_matches(ranked: list[dict[str, Any]], min_coverage: float, min_term_hits: int = 2) -> list[dict[str, Any]]:
@@ -149,9 +167,13 @@ def parse_model_json(content: str) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
-def unsupported(text: str, sources: list[str]) -> str | None:
+def unsupported(text: str, sources: list[str], question: str = "") -> str | None:
     """Why ``text`` is not supported by the ``sources`` texts, or None if no check fails."""
     haystack = text_key(" ".join(sources))
+    for pattern in SEGMENT_CLAIMS:
+        named = pattern.search(text)
+        if named and not pattern.search(question) and not any(pattern.search(s) for s in sources):
+            return f"names an investor group (\"{named.group(0)}\") that the question and cited records do not mention"
     for quote in QUOTED.findall(text):
         if len(quote.split()) >= 3 and text_key(quote) not in haystack:
             return f"quotes words not found in the cited records: \"{quote.strip()}\""
@@ -164,8 +186,13 @@ def unsupported(text: str, sources: list[str]) -> str | None:
     return None
 
 
+def frequency_words(texts: list[str]) -> list[str]:
+    """Distinct frequency words (lower-case, in order of first use) in ``texts``."""
+    return list(dict.fromkeys(m.lower() for t in texts for m in FREQUENCY_WORDS.findall(t or "")))
+
+
 def validate_points(payload: dict[str, Any], n_records: int, evidence: list[dict[str, Any]] | None = None,
-                    removed: list[dict[str, str]] | None = None) -> list[dict[str, Any]]:
+                    removed: list[dict[str, str]] | None = None, question: str = "") -> list[dict[str, Any]]:
     """Keep points that cite at least one existing record; normalise basis.
 
     With ``evidence``, a point is also dropped when ``unsupported`` finds a problem against the records it cites.
@@ -186,7 +213,7 @@ def validate_points(payload: dict[str, Any], n_records: int, evidence: list[dict
                 removed.append({"text": text, "reason": "cites no record in the evidence"})
             continue
         if evidence is not None:
-            reason = unsupported(text, [evidence[i - 1].get("text") or "" for i in set(refs)])
+            reason = unsupported(text, [evidence[i - 1].get("text") or "" for i in set(refs)], question)
             if reason:
                 if removed is not None:
                     removed.append({"text": text, "reason": reason})
@@ -228,7 +255,7 @@ def answer_question(
     if payload is None:
         return {**base, "status": "error", "message": "The model reply could not be read. Matching evidence is shown below."}
     removed: list[dict[str, str]] = []
-    points = validate_points(payload, len(evidence), evidence, removed)
+    points = validate_points(payload, len(evidence), evidence, removed, question)
     usage = getattr(response, "usage", {}) or {}
     if not payload.get("sufficient", True) or not points:
         return {**base, "status": "insufficient", "message": INSUFFICIENT_MESSAGE, "removed": removed,
@@ -236,9 +263,14 @@ def answer_question(
                 "tokens": usage.get("total_tokens")}
     summary = str(payload.get("summary") or "").strip()
     # The summary cites nothing, so it is checked against all evidence shown.
-    reason = unsupported(summary, [r.get("text") or "" for r in evidence]) if summary else None
+    reason = unsupported(summary, [r.get("text") or "" for r in evidence], question) if summary else None
     if reason:
         removed.append({"text": summary, "reason": f"summary {reason}"})
         summary = ""
-    return {**base, "status": "answered", "summary": summary, "points": points, "removed": removed,
+    notes = list(base["limitations"])
+    frequency = frequency_words([summary, *(p["text"] for p in points)])
+    if frequency:
+        notes.insert(0, f"The answer uses words about how common something is ({', '.join(frequency)}). These records are a "
+                        f"selected sample of {len(evidence)}; they show that a situation occurs, not how often.")
+    return {**base, "status": "answered", "summary": summary, "points": points, "removed": removed, "limitations": notes,
             "gaps": payload.get("gaps"), "tokens": usage.get("total_tokens")}

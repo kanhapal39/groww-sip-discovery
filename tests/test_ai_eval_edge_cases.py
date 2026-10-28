@@ -245,6 +245,33 @@ def test_ec22_answers_state_sample_is_not_representative(tmp_path) -> None:
 
 # --- D. Safe failure and reliability ------------------------------------------------------------------
 
+def test_ec21_investor_groups_need_a_basis_in_question_or_records(tmp_path) -> None:
+    db = make_db(tmp_path, [golden(k, f"Autopay mandate failed {k}", trigger="mandate_or_payment") for k in ("a", "b", "c")])
+    reply = {"sufficient": True, "summary": "New investors struggle with AutoPay.",
+             "points": [{"text": "Salaried users see mandate failures", "basis": "inferred", "records": ["R1"]},
+                        {"text": "Mandates fail", "basis": "stated", "records": ["R2"]}]}
+    result = answer_question("Why do AutoPay payments fail?", db, fake_model(reply), SETTINGS, 3)
+    assert [p["text"] for p in result["points"]] == ["Mandates fail"] and result["summary"] == ""
+    assert [r["reason"].split("(")[0] for r in result["removed"]] == [
+        "names an investor group ", "summary names an investor group "]
+    # Allowed when the question asks about the group, or the cited record mentions it.
+    assert unsupported("Beginners report mandate failures", ["mandate failed"], "Why do beginners stop SIPs?") is None
+    assert unsupported("A first-time investor could not set up AutoPay", ["I am a first time investor, autopay failed"]) is None
+    assert unsupported("The SIP failed the first time", ["mandate failed"]) is None
+
+
+def test_ec22_frequency_words_are_flagged_not_removed(tmp_path) -> None:
+    db = make_db(tmp_path, [golden(k, f"Autopay mandate failed {k}", trigger="mandate_or_payment") for k in ("a", "b", "c")])
+    reply = {"sufficient": True, "summary": "Payments mainly fail at mandate setup.",
+             "points": [{"text": "Mandates often fail", "basis": "stated", "records": ["R1"]}]}
+    result = answer_question("Why do AutoPay payments fail?", db, fake_model(reply), SETTINGS, 3)
+    assert result["summary"] and result["points"] and not result["removed"]
+    assert result["limitations"][0].startswith("The answer uses words about how common something is (mainly, often)")
+    plain = answer_question("Why do AutoPay payments fail?", db, fake_model({**reply, "summary": "Mandates fail.",
+                                                                                   "points": [{"text": "Mandates fail", "records": ["R1"]}]}), SETTINGS, 3)
+    assert not any("how common" in n for n in plain["limitations"])
+
+
 def test_ec24_ec25_abstains_on_the_edge_case_doc_question(case_c_db) -> None:
     model = fake_model({"sufficient": True, "summary": "s", "points": [{"text": "t", "basis": "stated", "records": ["R1"]}]})
     result = answer_question("Why do first-time investors discontinue SIPs after 12 months?", case_c_db, model, SETTINGS, 5)

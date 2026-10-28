@@ -16,10 +16,12 @@ The sample workbook is never overwritten once any row has been reviewed (unless 
 
 ## Current state (2026-10-28)
 
-- 300 rows, all tagged by `openai/gpt-oss-120b` (tag-v4, codebook v3 draft).
+- 296 approved rows (300 sampled; 4 rejected on 2026-10-28 as not relevant), all tagged by `openai/gpt-oss-120b` (tag-v4, codebook v3 draft).
 - First bulk-approved on 2026-10-26 (evidence log §7.1). On 2026-10-27 all 300 were **recorded as individually reviewed** by the project owner, on the owner's statement (§7.2). Reviewer is "project owner"; the dashboard counts them as individually reviewed.
 - **No tag was corrected in that review.**
-- **2026-10-28: 26 tag corrections on 16 records applied** on the owner's decision (D-3; `data/review/proposed_tag_corrections_20261028.csv`; evidence log §8.5). Each corrected row's reviewer note lists the old and new value. Every other tag is still the model's output.
+- **2026-10-28: 26 tag corrections on 16 records applied** on the owner's decision (D-3; `data/review/proposed_tag_corrections_20261028.csv`; evidence log §8.5). Each corrected row's reviewer note lists the old and new value.
+- **2026-10-28: 19 corrections on 11 rows** from the adjudicated 20-record labelled set, and **4 rows rejected** as not relevant to SIP behaviour (evidence log §8.6). Every other tag is still the model's output.
+- **Pending:** `data/review/new_investor_candidates_20261028.xlsx`, 116 tagged rows stating a new investor (D-8, §8.8). None is approved; approved rows must be added to `golden_sample_300.xlsx` before promotion.
 - Consequence: the dataset can be used to explore and cite evidence. It is not independent ground truth and cannot measure tagging accuracy; that is done with the labelled set in `docs/ai_eval_ground_truth_template.md`.
 
 ## Upgrading a row to verified

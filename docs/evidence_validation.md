@@ -22,10 +22,12 @@ Checks that run in code, where they run, and what they do.
 | Impact predictions | `research/answer.py unsupported` (`IMPACT_CLAIM`) | Statements that a change will improve or reduce retention, continuation or cancellation are removed and listed as removed |
 | Duplicates in counts | `research/analysis.py dedupe`; `research/store.py build_database` | Same record ID or same text counted once in answers and opportunities; the index keeps the first row per ID |
 | Mis-tagged opportunity evidence | `research/opportunities.py held_out`; `opportunities.yaml hold_out` | Flexible-SIP records tagged `in_app_pain=mandate_autopay` are not counted and are listed for review |
+| Investor groups in answers | `research/answer.py SEGMENT_CLAIMS`, `unsupported` | A point or summary naming an investor group (new/first-time, salaried, students, young, older, women, experienced…) that neither the question nor its cited records mention is removed and listed as removed |
+| Frequency claims in answers | `research/answer.py FREQUENCY_WORDS`, `frequency_words` | Words such as "mainly", "often", "common" in an answer are not removed; the first limitation note names them and says the records cannot show frequency |
 | Malformed Golden file | `research/store.py load_golden` | A malformed line stops the build with its line number; it is never skipped |
 
 ## What is not validated
 
 - Tag accuracy beyond a 20-record sample. On 20 owner-adjudicated records the engine was right on behavior 17, in_app_pain 10, unmet_need 9, tenure 20, theme 10 (`docs/ai_eval_ground_truth_template.md` §6). Golden rows are recorded as reviewed, but no tag has been corrected.
-- Whether a cited record supports a paraphrased point is not checked in code. Answer summaries can still overgeneralise ("mainly", "new investors often"; observed 2026-10-28). Counts shown next to answers are computed in code.
+- Whether a cited record supports a paraphrased point is not checked in code. An investor group mentioned by even one cited record passes the segment check, so a summary can still generalise from a few records ("New investors often…" passed it on 2026-10-28 because 2 of 12 records were from self-described beginners; its "often" is flagged). Counts shown next to answers are computed in code.
 - Language detection and date estimates for Reddit (ID-based windows) are rules, not verified labels.

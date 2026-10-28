@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-28T14:13:51.122782+00:00",
+  "built_at": "2026-10-28T14:32:38.216781+00:00",
   "raw": {
     "play_store": {
       "records": 151000,
@@ -71,20 +71,20 @@
     }
   },
   "tagging": {
-    "tagged": 1377,
-    "ok": 1369,
+    "tagged": 1492,
+    "ok": 1484,
     "failed": 8,
     "by_model": {
-      "openai/gpt-oss-120b": 893,
+      "openai/gpt-oss-120b": 1008,
       "qwen/qwen3.8-27b": 484
     },
     "quote_status": {
-      "exact": 1080,
-      "repaired": 47,
-      "none": 209,
-      "hidden": 33
+      "exact": 1165,
+      "repaired": 49,
+      "none": 235,
+      "hidden": 35
     },
-    "reason_flags": 106,
+    "reason_flags": 109,
     "failures": [
       {
         "record_id": "4a04c0c8-2586-5129-8d9c-270d5fab8e1c",
@@ -489,6 +489,26 @@
         "score": 79.3
       },
       {
+        "record_id": "12f0c7fd-e1fc-59a9-a8ad-2ff56023ac3b",
+        "status": "hidden",
+        "score": 71.4
+      },
+      {
+        "record_id": "aea846bc-8476-529a-9baf-06ec5dc46b00",
+        "status": "hidden",
+        "score": 67.6
+      },
+      {
+        "record_id": "afa2f91b-c962-56bb-a8b1-3f25325fabc1",
+        "status": "repaired",
+        "score": 81.9
+      },
+      {
+        "record_id": "177fd570-e394-501c-be95-255c0bdd33c7",
+        "status": "repaired",
+        "score": 96.8
+      },
+      {
         "record_id": "5a3469de-ca06-57c3-b2fb-18dde76c8ef1",
         "status": "repaired",
         "score": 97.3
@@ -531,18 +551,19 @@
     ]
   },
   "golden": {
-    "records": 300,
+    "records": 296,
     "by_source": {
-      "play_store": 195,
+      "play_store": 191,
       "reddit": 105
     },
-    "individually_reviewed": 300,
+    "individually_reviewed": 296,
     "bulk_approved": 0,
     "missing_provenance": 0,
-    "exact_quotes": 215,
+    "exact_quotes": 211,
     "review_workbook": "golden_sample_300.xlsx",
     "review_statuses": {
-      "approved": 300
+      "approved": 296,
+      "rejected": 4
     }
   },
   "collection_runs": [
@@ -663,5 +684,5 @@
     },
     "small_sample": 30
   },
-  "golden_version": "09688fa131d3"
+  "golden_version": "3dd98c8d691b"
 }

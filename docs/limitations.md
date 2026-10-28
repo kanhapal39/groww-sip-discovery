@@ -11,7 +11,7 @@
 - Play Store: newest 30,000 reviews per app, so recent years dominate and apps reach different years back.
 - Reddit: keyword searches and a title-keyword shortlist, deliberately skewed to stopping, pausing and payment problems.
 - Public reviews over-represent people with problems. Nothing here measures how common a behaviour is among investors.
-- Golden Dataset: 300 rows balanced across source × behaviour; not a random sample.
+- Golden Dataset: 300 rows sampled across source × behaviour (296 after 4 were rejected as not relevant); not a random sample.
 
 ## Classification
 
@@ -23,9 +23,9 @@
 
 ## Golden Dataset
 
-All 300 rows are recorded as individually reviewed by the project owner (evidence log §7.2). That review corrected no tags; 26 corrections on 16 known mis-tagged records were applied later (D-3, 2026-10-28). The other tags are the model's output, and the 20-record check suggests pain and need tags are often wrong (`docs/ai_eval_test_report.md` §9). The dataset is not independent ground truth.
+All rows are recorded as individually reviewed by the project owner (evidence log §7.2). That review corrected no tags; 45 corrections on 27 records were applied later (D-3 and the 20-record labelled set, 2026-10-28). The other tags are the model's output, and the 20-record check suggests pain and need tags are often wrong (`docs/ai_eval_test_report.md` §9). The dataset is not independent ground truth.
 
-Only 5 rows carry the new-investor tenure tag (after the D-3 corrections). Questions about first-time investors therefore usually return the insufficient-evidence message.
+Only 5 rows carry the new-investor tenure tag (after the D-3 corrections). 116 more candidates are tagged and await review (D-8). Questions about first-time investors therefore usually return the insufficient-evidence message.
 
 ## Research assistant
 

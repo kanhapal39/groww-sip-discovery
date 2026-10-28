@@ -559,6 +559,57 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Corrections cover only the known mis-tagged records. Errors confirmed in the 20-record labelled set (`docs/ai_eval_ground_truth_template.md` §6.2) and the 4 records judged not relevant are not corrected; they await a decision. Pre-change workbook and exports kept outside the repo as a session backup. The rebuild also refreshed `quality_metrics.json` with filter and tagging results that finished on 2026-10-27 after its last build (filter labelled 4,150 → 4,175; tagged 1,189 → 1,377); no new job was run |
 | evidence | `data/review/proposed_tag_corrections_20261028.csv`; `docs/ai_eval_test_report.md` §10; `docs/ai_eval_implementation_audit.md` D-3 |
 
+### 8.6 Labelled-set corrections and 4 rows rejected
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "1. Part B … Yes", "2. … Revome them"); Claude Code (applied the decision) |
+| decision | Final labels of the 20-record set (`data/review/ground_truth_20_final.csv`) written over the engine's behavior, in_app_pain, unmet_need and tenure tags where they differed: 19 changes on 11 rows. `020df9f9`, `d2ff3587`, `009c1dbe`, `d3a3a2f7` set to review_status "rejected" (not relevant to SIP behaviour). Reviewer notes record old -> new and the rejection reason. Promoted with `python -m pipeline.export golden`; exports rebuilt (version 3dd98c8d691b) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 300 approved; mandate_reliability 66, flexible_sip 38, redemption_speed 28, responsive_support 14, returns_clarity 7 |
+| after_count | 296 approved, 4 rejected; mandate_reliability 68, flexible_sip 40, redemption_speed 26, responsive_support 15, returns_clarity 8 |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 19 field values on 11 rows; 4 rows rejected |
+| known_limitations | Opportunity matching is rule-based, so 6 of these records still match an extra or different opportunity from the adjudicated theme. These 20 records can no longer re-test the original tags. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_ground_truth_template.md` §6; `docs/ai_eval_test_report.md` §11 |
+
+### 8.7 D-9: investor-group and frequency checks on answers
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | research assistant |
+| actor | human (project owner: "4. D-9 … Yes"); Claude Code (implementation) |
+| decision | `research/answer.py`: statements naming an investor group that neither the question nor the cited records mention are removed; frequency words are flagged in the limitations, not removed. Prompt unchanged (answer-v2) |
+| prompt_version | answer-v2 |
+| before_count | 165 tests |
+| after_count | 167 tests passing. Offline replay of the 4 saved live answers: 4 frequency flags, 0 removals |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | n/a |
+| known_limitations | Word lists, not meaning: a group mentioned by one cited record lets a general statement through; frequency words are only flagged |
+| evidence | `tests/test_ai_eval_edge_cases.py`; `docs/ai_eval_test_report.md` §11 |
+
+### 8.8 D-8: tagging of new-investor candidates (Groq, approved)
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | tagging |
+| actor | human (project owner: "3. D-8: tag the 123 possible new-investor records? Yes"; approval recorded here per AGENTS.md rule 6); Claude Code (run) |
+| decision | Selected cleaned Play Store and Reddit records matching explicit new-investor phrases (123; 5 already in the Golden Dataset, 8 already tagged). Tagged the 115 untagged ones with `pipeline.tag.run_tagger` (run "d8_new_investor"), appending to `data/processed/tag_results.jsonl`. Wrote 116 rows (all pending) to `data/review/new_investor_candidates_20261028.xlsx` |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 5 Golden rows tagged new_under_1y |
+| after_count | 115 newly tagged: tenure new_under_1y 89, unclear 21, over_three_years 4, one_to_three_years 1. Golden Dataset unchanged |
+| model_used | openai/gpt-oss-120b |
+| cost_estimate | $0.00 (free tier). 34,984 tokens, 6 requests, 0 failures (within the ~50k approved) |
+| human_correction | none yet; all 116 rows await the owner's review |
+| known_limitations | Most candidates are short app reviews with no SIP action or problem. 7 were marked not relevant by the filter, 100 were never filtered. Phrase selection misses new investors who do not say so in these words |
+| evidence | `data/review/new_investor_candidates_20261028.xlsx`; `data/processed/tag_usage.jsonl`; `docs/ai_eval_test_report.md` §11 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

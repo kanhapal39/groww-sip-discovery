@@ -363,3 +363,12 @@ The main error is under-tagging: pain and need are often `unclear` when the text
 ### 12.6 Tag corrections for §7 (2026-10-28)
 
 The records in §7 were corrected on the project owner's decision (D-3), along with other known mis-tagged records: 26 changes on 16 records in all. The AutoPay setup failure now has `unmet_need=easy_mandate_control`. The cancel-with-profit record now has a deliberate lapse, `in_app_pain=redemption_withdrawal` and no support trigger. Seven unsupported new-investor tags were removed and two stated ones added (10 → 5). Flexible SIP is now 38 records with priority 56.0. Details: `docs/ai_eval_test_report.md` §10.
+
+### 12.7 Further corrections and checks (2026-10-28)
+
+On the project owner's decisions the same day:
+- The adjudicated labels for the 20-record set were applied (19 changes on 11 records), and the 4 records judged not relevant were removed, leaving 296 rows. Mandate reliability is now 68 records and Flexible SIP 40.
+- Answers now drop statements about investor groups that neither the question nor the cited records mention, and flag frequency words such as "mainly" and "often".
+- 115 more records stating that the writer is a new investor were tagged and await review. They are not in the Golden Dataset.
+
+Details: `docs/ai_eval_test_report.md` §11.
