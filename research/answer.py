@@ -229,15 +229,16 @@ def answer_question(
         return {**base, "status": "error", "message": "The model reply could not be read. Matching evidence is shown below."}
     removed: list[dict[str, str]] = []
     points = validate_points(payload, len(evidence), evidence, removed)
+    usage = getattr(response, "usage", {}) or {}
     if not payload.get("sufficient", True) or not points:
         return {**base, "status": "insufficient", "message": INSUFFICIENT_MESSAGE, "removed": removed,
-                "detail": "The matching records do not directly address this question.", "gaps": payload.get("gaps")}
+                "detail": "The matching records do not directly address this question.", "gaps": payload.get("gaps"),
+                "tokens": usage.get("total_tokens")}
     summary = str(payload.get("summary") or "").strip()
     # The summary cites nothing, so it is checked against all evidence shown.
     reason = unsupported(summary, [r.get("text") or "" for r in evidence]) if summary else None
     if reason:
         removed.append({"text": summary, "reason": f"summary {reason}"})
         summary = ""
-    usage = getattr(response, "usage", {}) or {}
     return {**base, "status": "answered", "summary": summary, "points": points, "removed": removed,
             "gaps": payload.get("gaps"), "tokens": usage.get("total_tokens")}

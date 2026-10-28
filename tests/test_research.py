@@ -84,8 +84,9 @@ def test_answer_keeps_only_cited_points(db) -> None:
 
 
 def test_model_saying_insufficient_is_respected(db) -> None:
-    fake = lambda m: SimpleNamespace(content=json.dumps({"sufficient": False, "points": [], "gaps": "off topic"}), usage={})
-    assert answer_question("Why do AutoPay payments fail?", db, fake, SETTINGS, 4)["status"] == "insufficient"
+    fake = lambda m: SimpleNamespace(content=json.dumps({"sufficient": False, "points": [], "gaps": "off topic"}), usage={"total_tokens": 700})
+    result = answer_question("Why do AutoPay payments fail?", db, fake, SETTINGS, 4)
+    assert result["status"] == "insufficient" and result["tokens"] == 700  # quota use is still recorded
 
 
 def test_model_error_is_reported_with_evidence(db) -> None:
