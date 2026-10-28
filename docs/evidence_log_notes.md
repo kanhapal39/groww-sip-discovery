@@ -678,6 +678,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Future tagging runs will use the new value, but existing rows outside flexible_sip's 40 were not re-checked for stopping (all rows tagged sip_management were among those 40). `404cb625` had been adjudicated sip_management in the 20-record set before this split. About 8 of the remaining 32 look like payment or unrelated problems; not corrected. Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_test_report.md` §13; `docs/ai_eval_implementation_audit.md` D-4 |
 
+### 8.13 Flexible SIP: 14 records corrected after one-by-one reading
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | 25 field changes on 14 rows. AutoPay/payment → in_app_pain mandate_autopay, unmet_need easy_mandate_control: `93305fa1`, `4fbd9285`, `b5cc9a4d`, `7f942899`, `e369bd42`, `5e019da4`, `6b31505a`; `2a00363f` pain only. `e9921f8c` pain portfolio_display, need responsive_support. `20854996`, `d0fb4dbd` need reliable_app. `99a2b9e0` behavior continue_sip, pain app_bug, need reliable_app. `9355d0c4` need unclear. `eb353ebf` pain sip_cancellation, need responsive_support. Reviewer notes record old -> new; promoted and rebuilt (version f46cbc5ea95f) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | flexible_sip 32 (46.0); mandate_reliability 71 (112.0); app_reliability 41; responsive_support 29; portfolio_tracking 3 |
+| after_count | flexible_sip 18 (25.0); mandate_reliability 78 (120.0); app_reliability 42; responsive_support 30; portfolio_tracking 4. 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 25 field values on 14 rows |
+| known_limitations | Proposals were Claude Code's reading; `5e019da4` and `93305fa1` are mixed complaints. Four records about choosing to pause were kept. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §14 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

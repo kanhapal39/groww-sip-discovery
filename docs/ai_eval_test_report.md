@@ -285,4 +285,21 @@ The owner decided that asking to cancel or stop a SIP is not demand for pause, s
 | flexible_sip | 40 (priority 58.0) | 32 (46.0) |
 | responsive_support | 27 (16.0) | 29 (18.0) |
 
-flexible_sip keyword breakdown now: pausing or skipping 11, editing amount or date 9, cancelling or stopping only 3, none 9. The 3 left in the "cancelling" group are keyword matches, not cancellation requests ("stoploss", a SIP cancelled by a bank failure, a delayed order). Claude Code's reading is that about 8 of the 32 are payment, AutoPay or unrelated problems; they are not corrected. 169 tests pass.
+flexible_sip keyword breakdown now: pausing or skipping 11, editing amount or date 9, cancelling or stopping only 3, none 9. The 3 left in the "cancelling" group are keyword matches, not cancellation requests ("stoploss", a SIP cancelled by a bank failure, a delayed order). Claude Code's reading is that about 8 of the 32 are payment, AutoPay or unrelated problems; they are not corrected. 169 tests pass. *(Superseded: see §14.)*
+
+## 14. Flexible SIP records reviewed one by one (2026-10-28)
+
+Claude Code read all 32 flexible_sip records and proposed corrections to 14 that were not requests to pause, skip, edit or step up a SIP; the owner accepted all (25 field changes).
+- **AutoPay or payment (8):** `2a00363f`, `4fbd9285`, `b5cc9a4d`, `7f942899`, `e369bd42`, `5e019da4`, `6b31505a`, `93305fa1` → in_app_pain `mandate_autopay`, unmet_need `easy_mandate_control`.
+- **Other problems (5):** `e9921f8c` (wrong invested amount; support), `20854996` and `99a2b9e0` (orders stuck), `d0fb4dbd` (pay button lost), `9355d0c4` (advice reply, no problem stated).
+- **Missed cancellation (1):** `eb353ebf` → `sip_cancellation`.
+
+| Opportunity | Before | After |
+|---|---|---|
+| mandate_reliability | 71 (112.0) | 78 (120.0) |
+| flexible_sip | 32 (46.0) | 18 (25.0) |
+| app_reliability | 41 (26.5) | 42 (27.0) |
+| responsive_support | 29 (18.0) | 30 (19.0) |
+| portfolio_tracking | 3 | 4 (still below the 5-record minimum) |
+
+Ranking by priority is now mandate_reliability, app_reliability, flexible_sip, responsive_support, redemption_speed. flexible_sip breakdown: pausing or skipping 9, editing or step-up 5, cancelling only 1, none 3. Four borderline records about choosing to pause (three wedding posts, one election post) were left in. 169 tests pass.
