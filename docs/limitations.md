@@ -27,7 +27,7 @@ All rows are recorded as individually reviewed by the project owner (evidence lo
 
 94 rows carry the new-investor tenure tag: 5 from the original sample and 89 from the 116 bulk-approved D-8 rows, whose tags were not reviewed row by row. Most of those 89 are short app reviews with no SIP action or stated need.
 
-**Beginner guidance count is inflated.** The opportunity matches any record tagged `tenure=new_under_1y`, so it rose from 11 to 100 records when the D-8 rows were added. Only 7 of the 100 state a fund-choice need or pain. Its priority reflects how many people said they were new, not evidence of the problem (decision pending; `docs/ai_eval_implementation_audit.md` D-10). Questions about first-time investors therefore usually return the insufficient-evidence message.
+**Beginner guidance has little evidence.** Since 2026-10-28 (D-10) it counts only records tagged with a fund-choice need or pain, not every new investor: 7 records, of which only about 2–3 read as a fund-choice problem. Questions about first-time investors therefore usually return the insufficient-evidence message.
 
 ## Research assistant
 

@@ -122,6 +122,13 @@ def test_ec5_ec7_ec21_segment_questions_use_only_segment_tagged_records(tmp_path
     assert general["status"] == "no_model" and len(general["evidence"]) == 4
 
 
+def test_ec5_tenure_alone_is_not_evidence_for_beginner_guidance() -> None:
+    beginner = {d["id"]: d for d in load_definitions()["opportunities"]}["beginner_guidance"]
+    from research.opportunities import matches
+    assert not matches(golden("n1", "Great app. My first SIP app!", tenure="new_under_1y"), beginner)
+    assert matches(golden("n2", "Which fund should I choose?", unmet_need="fund_guidance"), beginner)
+
+
 def test_ec6_implied_tags_are_counted_separately(tmp_path) -> None:
     rows = read_rows(make_db(tmp_path, [
         golden("i1", "SIP pause missing", unmet_need="flexible_sip", is_hypothesis=True),

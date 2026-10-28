@@ -369,6 +369,6 @@ The records in §7 were corrected on the project owner's decision (D-3), along w
 On the project owner's decisions the same day:
 - The adjudicated labels for the 20-record set were applied (19 changes on 11 records), and the 4 records judged not relevant were removed, leaving 296 rows. Mandate reliability is now 68 records and Flexible SIP 40.
 - Answers now drop statements about investor groups that neither the question nor the cited records mention, and flag frequency words such as "mainly" and "often".
-- 115 more records stating that the writer is a new investor were tagged. *Later the same day* the owner bulk-approved all 116 candidates, so the Golden Dataset has 412 rows. Beginner guidance rose from 11 to 100 records because it counts any new-investor record; only 7 state a fund-choice problem (decision D-10 open).
+- 115 more records stating that the writer is a new investor were tagged. *Later the same day* the owner bulk-approved all 116 candidates, so the Golden Dataset has 412 rows. Beginner guidance rose from 11 to 100 records because it counts any new-investor record; only 7 state a fund-choice problem. On the owner's decision (D-10) tenure no longer counts, so it has 7 records.
 
 Details: `docs/ai_eval_test_report.md` §11.

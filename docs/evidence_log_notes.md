@@ -627,6 +627,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Bulk approval: these rows must not be used to measure tag accuracy. 7 were marked not relevant by the filter and 21 have tenure unclear. Rows were phrase-selected, so new investors are over-represented. beginner_guidance counts tenure alone (D-10 open). Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_test_report.md` §12; `docs/ai_eval_implementation_audit.md` D-8, D-10 |
 
+### 8.10 D-10: beginner_guidance no longer matches on tenure alone
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | research / opportunities |
+| actor | human (project owner: "A"); Claude Code (change) |
+| decision | `research/opportunities.yaml`: removed `tenure: [new_under_1y]` from beginner_guidance's match rule; it now needs `unmet_need=fund_guidance` or `in_app_pain=fund_selection` |
+| prompt_version | n/a |
+| before_count | beginner_guidance 100 records, priority 101.0, rank 2 |
+| after_count | 7 records, priority 7.0, rank 9 of 9 shown. 168 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | none |
+| known_limitations | Of the 7, Claude Code reads only `4f94b6b3`, `5d28becd` and partly `cc637ae7` as fund-choice problems; `503f23b3`, `d28335d3`, `5cd15142`, `cde6d3ef` look mis-tagged and were not corrected |
+| evidence | `docs/ai_eval_implementation_audit.md` D-10; `tests/test_ai_eval_edge_cases.py` |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

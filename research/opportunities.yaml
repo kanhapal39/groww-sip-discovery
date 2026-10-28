@@ -92,7 +92,8 @@ opportunities:
     match:
       unmet_need: [fund_guidance]
       in_app_pain: [fund_selection]
-      tenure: [new_under_1y]
+      # tenure removed 2026-10-28 (owner decision D-10): a record saying only that the
+      # writer is new is not evidence that new investors struggle to choose a fund.
     problem: New investors report not knowing which fund to choose or how to begin.
     business_metric: First-SIP conversion; first-year continuation
     intervention: Goal-based starter choices with plain explanations.
