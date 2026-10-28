@@ -36,10 +36,22 @@ COLUMNS = (
 
 
 def load_golden(path: Path) -> list[dict[str, Any]]:
+    """Rows of a JSONL file. A malformed line raises ValueError naming the file and line, rather than being skipped."""
     if not path.exists():
         return []
+    rows = []
     with path.open(encoding="utf-8") as fh:
-        return [json.loads(line) for line in fh if line.strip()]
+        for number, line in enumerate(fh, 1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except ValueError as exc:
+                raise ValueError(f"{path.name} line {number} is not valid JSON") from exc
+            if not isinstance(row, dict):
+                raise ValueError(f"{path.name} line {number} is not a JSON object")
+            rows.append(row)
+    return rows
 
 
 def golden_version(path: Path) -> str:
@@ -88,7 +100,7 @@ def public_view(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def build_database(rows: Iterable[dict[str, Any]], db_path: Path) -> int:
-    """(Re)create the SQLite index. Returns the number of rows stored."""
+    """(Re)create the SQLite index. Returns the number of rows stored; a repeated record ID keeps its first row."""
     db_path.parent.mkdir(parents=True, exist_ok=True)
     tmp = db_path.with_suffix(".tmp")
     tmp.unlink(missing_ok=True)
@@ -98,8 +110,12 @@ def build_database(rows: Iterable[dict[str, Any]], db_path: Path) -> int:
     # Tags are indexed as words ("pause sip mandate or payment") so plain-language queries match them.
     con.execute("CREATE VIRTUAL TABLE golden_fts USING fts5(record_id UNINDEXED, text, evidence_quote, reason, context, tags)")
     count = 0
+    seen: set[Any] = set()
     for row in map(normalise, rows):
-        con.execute(f"INSERT OR REPLACE INTO golden VALUES ({', '.join('?' for _ in COLUMNS)})",
+        if row["record_id"] in seen:
+            continue
+        seen.add(row["record_id"])
+        con.execute(f"INSERT INTO golden VALUES ({', '.join('?' for _ in COLUMNS)})",
                     [None if row[c] is None else int(row[c]) if c in BOOL_COLUMNS else row[c] if c in NUMBER_COLUMNS else str(row[c])
                      for c in COLUMNS])
         tags = " ".join(str(row[f]).replace("_", " ") for f in TAG_FIELDS if row[f] and row[f] not in ("unclear", "none", "no_lapse"))

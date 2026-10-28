@@ -82,7 +82,7 @@ Before Stage 3 (data collection) can begin, every candidate data source must be 
 
 ## Stage 7 — Human review and Golden Dataset
 
-**Status (2026-10-26):** 300-row stratified sample created and bulk-approved by the project owner without row-by-row review (evidence log §7.1). Individual review is outstanding.
+**Status (2026-10-28):** 300-row stratified sample created and bulk-approved on 2026-10-26 (evidence log §7.1). On 2026-10-27 all rows were recorded as individually reviewed by the project owner, with no tag corrections (§7.2). Proposed corrections from the AI evaluation audit await the owner's decision (§8.3).
 
 - Reviewers approve/reject/request revision per record.
 - Approved records enter Golden Dataset (`data/manual/`).

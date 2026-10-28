@@ -76,6 +76,10 @@ def render_answer(result: dict) -> None:
                         unsafe_allow_html=True)
         if result.get("gaps"):
             st.caption(f"Gaps: {result['gaps']}")
+    if result.get("removed"):
+        with st.expander(f"{len(result['removed'])} statement(s) removed because the evidence does not support them"):
+            for r in result["removed"]:
+                st.markdown(f"- {html.escape(r['text'])} — *{r['reason']}*")
 
     cov = result["coverage"]
     if cov["records"]:

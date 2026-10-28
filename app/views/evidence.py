@@ -50,7 +50,7 @@ def render() -> None:
     if query.strip():
         ranked = search(data.paths()["db"], query, limit=len(rows))
         keep = {r["record_id"] for r in filtered}
-        order = [r for r in ranked if r["record_id"] in keep and (r.get("term_coverage", 0) > 0 or r["matched_tags"])]
+        order = [r for r in ranked if r["record_id"] in keep and (r.get("term_coverage", 0) > 0 or r.get("context_hits") or r["matched_tags"])]
         by_id = {r["record_id"]: r for r in filtered}
         filtered = [by_id[r["record_id"]] for r in order]
         sort_note = "ranked by match to your search"

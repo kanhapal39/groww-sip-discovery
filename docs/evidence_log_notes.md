@@ -491,6 +491,244 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Retrieval check: the five suggested questions find 12–30 strongly matching records; off-topic controls ("crypto staking", "gold vs silver") fall below the 3-record minimum and get the insufficiency message. No HTTP API, scheduler or multi-user auth. Headless screenshots only captured Streamlit's loading skeleton, so the layout has not been visually reviewed. Opportunity definitions and codebook v3 are drafts by Claude Code |
 | evidence | `app/`, `research/`, `data/processed/research.db`, `data/processed/quality_metrics.json` |
 
+### 8.2 AI evaluation audit: retrieval, answer validation and opportunity counting
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | dashboard / evaluation |
+| actor | human (project owner supplied the AI Evaluation and Edge Cases documents and requested the audit and fixes on branch `ai-eval-audit`); Claude Code (audit, implementation, tests) |
+| decision | Committed both documents as Markdown. Audited 26 requirements against the code (`docs/ai_eval_implementation_audit.md`). Changed retrieval (generic stopwords, whole-word match for short terms, ≥ 2 matched words, thread titles excluded from relevance, segment filter for first-time/beginner questions, narrower question-to-tag rules), answer validation (quotes, percentages and impact predictions checked; removed statements listed; new limitation notes; prompt answer-v2) and opportunity counting (dedupe, `hold_out` for mandate/AutoPay records in flexible_sip, keyword breakdown, implied count, metric definitions). The insufficiency message wording was **not** changed (decision pending, audit D-1). No Golden Dataset or export file was modified |
+| prompt_version | answer-v2 (not yet run against a model) |
+| before_count | 138 tests passing; flexible_sip 43 records, priority 63.0; Case C question 9 strong matches; 12-month discontinuation probe 3 |
+| after_count | 162 tests passing; flexible_sip 39 records, priority 58.0 (4 held out); Case C question 2 (abstains); 12-month probe 1 (abstains). Other opportunities unchanged |
+| model_used | none (no LLM or Apify call; retrieval probe ran locally over `data/export/golden_public.jsonl`) |
+| cost_estimate | $0.00 |
+| human_correction | none; known mis-tags (`a140a1f6`, `a7c2a38b`, `5a343cb7`) left for reviewer decision |
+| known_limitations | No independently labelled ground truth, so no accuracy, precision or recall reported (template `docs/ai_eval_ground_truth_template.md`). Model-dependent behaviour untested. The suggested question on starting a SIP still shows records that describe no problem (tag-only matches). Opportunity rules remain drafts by Claude Code |
+| evidence | `docs/ai_eval_implementation_audit.md`, `docs/ai_eval_test_report.md`, `tests/test_ai_eval_edge_cases.py` |
+
+### 8.3 Owner decisions, live answer check, correction proposal and labelling sample
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | evaluation |
+| actor | human (project owner: "D-1 … In the code now", "D-7 … Then Tag them", "D-3 … Prepare the list and show me first", "Give the 20 records I will check", Groq run "Go ahead", stale docs "OK"); Claude Code (execution) |
+| decision | D-1: keep the code's insufficient-evidence wording. D-7: keep the segment filter. Approved Groq run: the 5 suggested questions, once each (approval recorded here per AGENTS.md rule 6). Proposed 26 tag corrections on 16 records (`data/review/proposed_tag_corrections_20261028.csv`), **not applied**. Drew the 20-record labelling sample (seed 20261028, 22 records excluded; `research/ground_truth.py`; `data/review/ground_truth_20.xlsx`). Updated stale review-status text in README, golden_dataset_policy, implementation_plan, limitations and evidence_validation |
+| prompt_version | answer-v2 |
+| before_count | 0 live answers with answer-v2 |
+| after_count | 5 questions: 4 answered (17 points, 31 citations), 1 abstained by the model |
+| model_used | openai/gpt-oss-120b (4 calls); openai/gpt-oss-20b (1 call, after a 120b rate limit) |
+| cost_estimate | $0.00 (free tier). 8,537 tokens recorded for 4 calls; 1 call's usage was not recorded (bug fixed in `research/answer.py`) |
+| human_correction | none yet; corrections await the owner's accept/reject |
+| known_limitations | Support of points was judged by Claude Code (9 supported, 7 partly, 1 not; 5 of 31 citations did not support their point; 2 of 4 summaries overgeneralised), not by a person. No labels exist yet for the 20-record set |
+| evidence | `data/processed/answer_eval_20261028.jsonl`, `docs/ai_eval_test_report.md` §8, `docs/ai_eval_ground_truth_template.md` |
+
+### 8.4 Labelled 20-record set: owner labels and adjudication
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | evaluation |
+| actor | human (project owner labelled 20 records blind, then adjudicated: "A. Record as a human revied each row and agree"); Claude Code (comparison, adjudication sheet with suggestions, scoring) |
+| decision | Owner labelled the 20 sampled records in `data/review/ground_truth_20.xlsx` with engine tags hidden. 66 disagreements on 19 records went to `data/review/ground_truth_20_adjudication.xlsx`; the owner chose a final value for each, accepting Claude Code's suggestion on all 66 (32 engine, 22 owner, 12 third value), and confirmed they reviewed each row. Final labels written to `data/review/ground_truth_20_final.csv`. The adjudication sheet on disk was replaced by an export of the owner's open, unsaved Numbers document |
+| prompt_version | tag-v4; codebook v3 (engine tags under test) |
+| before_count | 0 labelled records |
+| after_count | 20 labelled records (16 relevant, 4 not). Engine vs final: behavior 17, in_app_pain 10, unmet_need 9, tenure 20, theme 10. Engine vs owner's blind labels: 7, 3, 3, 17, 4 |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | None applied to the Golden Dataset. Confirmed engine errors on these records are listed in `docs/ai_eval_ground_truth_template.md` §6.2 for the owner's decision (D-3) |
+| known_limitations | n = 20; 22 known-problem records excluded from the sample; final labels follow Claude Code's suggestions, so they are not independent of AI judgement; retrieval and answer checks not done |
+| evidence | `docs/ai_eval_ground_truth_template.md` §2–§6; `docs/ai_eval_test_report.md` §9 |
+
+### 8.5 D-3 tag corrections applied to the Golden Dataset
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "A: accept all except 23 and do it as per you in 23"); Claude Code (applied the decision) |
+| decision | 25 of 26 proposed corrections accepted as proposed. #23 (`b302ef12`, tenure new_under_1y) set to `unclear` by Claude Code at the owner's request, not to the proposed `over_three_years`: "grinding for almost 8 years" may mean years of work. Changes written to `data/review/golden_sample_300.xlsx` (reviewer note on each of the 16 rows lists old -> new); copied to `data/manual/golden_dataset.xlsx`; promoted with `python -m pipeline.export golden`; exports rebuilt with `python -m research.build` (dataset version 09688fa131d3). Review status and reviewer unchanged |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 0 corrections; flexible_sip 39 (4 held out), beginner_guidance 16, redemption_speed 27, responsive_support 15; 10 new_under_1y |
+| after_count | 26 corrections on 16 rows; flexible_sip 38 (0 held out), beginner_guidance 11, redemption_speed 28, responsive_support 14; 5 new_under_1y. Public export differs in exactly 26 field values |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 26 field values on 16 rows, by the project owner's decision |
+| known_limitations | Corrections cover only the known mis-tagged records. Errors confirmed in the 20-record labelled set (`docs/ai_eval_ground_truth_template.md` §6.2) and the 4 records judged not relevant are not corrected; they await a decision. Pre-change workbook and exports kept outside the repo as a session backup. The rebuild also refreshed `quality_metrics.json` with filter and tagging results that finished on 2026-10-27 after its last build (filter labelled 4,150 → 4,175; tagged 1,189 → 1,377); no new job was run |
+| evidence | `data/review/proposed_tag_corrections_20261028.csv`; `docs/ai_eval_test_report.md` §10; `docs/ai_eval_implementation_audit.md` D-3 |
+
+### 8.6 Labelled-set corrections and 4 rows rejected
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "1. Part B … Yes", "2. … Revome them"); Claude Code (applied the decision) |
+| decision | Final labels of the 20-record set (`data/review/ground_truth_20_final.csv`) written over the engine's behavior, in_app_pain, unmet_need and tenure tags where they differed: 19 changes on 11 rows. `020df9f9`, `d2ff3587`, `009c1dbe`, `d3a3a2f7` set to review_status "rejected" (not relevant to SIP behaviour). Reviewer notes record old -> new and the rejection reason. Promoted with `python -m pipeline.export golden`; exports rebuilt (version 3dd98c8d691b) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 300 approved; mandate_reliability 66, flexible_sip 38, redemption_speed 28, responsive_support 14, returns_clarity 7 |
+| after_count | 296 approved, 4 rejected; mandate_reliability 68, flexible_sip 40, redemption_speed 26, responsive_support 15, returns_clarity 8 |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 19 field values on 11 rows; 4 rows rejected |
+| known_limitations | Opportunity matching is rule-based, so 6 of these records still match an extra or different opportunity from the adjudicated theme. These 20 records can no longer re-test the original tags. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_ground_truth_template.md` §6; `docs/ai_eval_test_report.md` §11 |
+
+### 8.7 D-9: investor-group and frequency checks on answers
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | research assistant |
+| actor | human (project owner: "4. D-9 … Yes"); Claude Code (implementation) |
+| decision | `research/answer.py`: statements naming an investor group that neither the question nor the cited records mention are removed; frequency words are flagged in the limitations, not removed. Prompt unchanged (answer-v2) |
+| prompt_version | answer-v2 |
+| before_count | 165 tests |
+| after_count | 167 tests passing. Offline replay of the 4 saved live answers: 4 frequency flags, 0 removals |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | n/a |
+| known_limitations | Word lists, not meaning: a group mentioned by one cited record lets a general statement through; frequency words are only flagged |
+| evidence | `tests/test_ai_eval_edge_cases.py`; `docs/ai_eval_test_report.md` §11 |
+
+### 8.8 D-8: tagging of new-investor candidates (Groq, approved)
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | tagging |
+| actor | human (project owner: "3. D-8: tag the 123 possible new-investor records? Yes"; approval recorded here per AGENTS.md rule 6); Claude Code (run) |
+| decision | Selected cleaned Play Store and Reddit records matching explicit new-investor phrases (123; 5 already in the Golden Dataset, 8 already tagged). Tagged the 115 untagged ones with `pipeline.tag.run_tagger` (run "d8_new_investor"), appending to `data/processed/tag_results.jsonl`. Wrote 116 rows (all pending) to `data/review/new_investor_candidates_20261028.xlsx` |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 5 Golden rows tagged new_under_1y |
+| after_count | 115 newly tagged: tenure new_under_1y 89, unclear 21, over_three_years 4, one_to_three_years 1. Golden Dataset unchanged |
+| model_used | openai/gpt-oss-120b |
+| cost_estimate | $0.00 (free tier). 34,984 tokens, 6 requests, 0 failures (within the ~50k approved) |
+| human_correction | none yet; all 116 rows await the owner's review |
+| known_limitations | Most candidates are short app reviews with no SIP action or problem. 7 were marked not relevant by the filter, 100 were never filtered. Phrase selection misses new investors who do not say so in these words |
+| evidence | `data/review/new_investor_candidates_20261028.xlsx`; `data/processed/tag_usage.jsonl`; `docs/ai_eval_test_report.md` §11 |
+
+### 8.9 D-8 candidates bulk-approved into the Golden Dataset
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner, replying to the request to review the 116 candidates: "Approve"; the workbook had not been edited); Claude Code (applied the instruction) |
+| decision | All 116 rows of `data/review/new_investor_candidates_20261028.xlsx` set to approved with reviewer "project owner (bulk)" and a note that they were not reviewed row by row; tags unchanged. Appended to `data/review/golden_sample_300.xlsx` (now 416 rows: 412 approved, 4 rejected); copied to `data/manual/golden_dataset.xlsx`; promoted with `python -m pipeline.export golden`; exports rebuilt (version 8cb9938292e6) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 296 approved; tenure new_under_1y 5; beginner_guidance 11 |
+| after_count | 412 approved; tenure new_under_1y 94; beginner_guidance 100 (priority 101.0, rank 2); mandate_reliability 72; app_reliability 41; responsive_support 25; redemption_speed 29; fee_transparency 11 |
+| model_used | none (tags from 8.8) |
+| cost_estimate | $0.00 |
+| human_correction | none; bulk approval |
+| known_limitations | Bulk approval: these rows must not be used to measure tag accuracy. 7 were marked not relevant by the filter and 21 have tenure unclear. Rows were phrase-selected, so new investors are over-represented. beginner_guidance counts tenure alone (D-10 open). Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §12; `docs/ai_eval_implementation_audit.md` D-8, D-10 |
+
+### 8.10 D-10: beginner_guidance no longer matches on tenure alone
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | research / opportunities |
+| actor | human (project owner: "A"); Claude Code (change) |
+| decision | `research/opportunities.yaml`: removed `tenure: [new_under_1y]` from beginner_guidance's match rule; it now needs `unmet_need=fund_guidance` or `in_app_pain=fund_selection` |
+| prompt_version | n/a |
+| before_count | beginner_guidance 100 records, priority 101.0, rank 2 |
+| after_count | 7 records, priority 7.0, rank 9 of 9 shown. 168 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | none |
+| known_limitations | Of the 7, Claude Code reads only `4f94b6b3`, `5d28becd` and partly `cc637ae7` as fund-choice problems; `503f23b3`, `d28335d3`, `5cd15142`, `cde6d3ef` look mis-tagged and were not corrected |
+| evidence | `docs/ai_eval_implementation_audit.md` D-10; `tests/test_ai_eval_edge_cases.py` |
+
+### 8.11 Corrections to 4 records mis-tagged as fund selection
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | `503f23b3` in_app_pain fund_selection -> sip_management. `d28335d3` in_app_pain fund_selection -> kyc_onboarding, unmet_need other -> responsive_support. `5cd15142` in_app_pain fund_selection -> redemption_withdrawal, unmet_need flexible_sip -> fast_redemption. `cde6d3ef` in_app_pain fund_selection -> sip_management, unmet_need easy_mandate_control -> responsive_support. Written to `data/review/golden_sample_300.xlsx` with reviewer notes; promoted and rebuilt (version a595cd2f1576) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | beginner_guidance 7; responsive_support 25; redemption_speed 29; mandate_reliability 72 |
+| after_count | beginner_guidance 3 (below the 5-record minimum, shown as insufficient); responsive_support 27; redemption_speed 30; mandate_reliability 71; flexible_sip 40 (unchanged) |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 7 field values on 4 rows |
+| known_limitations | Proposals were Claude Code's reading; #2 pain could be app_bug and #3 need could be other. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_implementation_audit.md` D-10 |
+
+### 8.12 D-4: cancellation split from flexible-SIP demand
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | codebook / Golden Dataset |
+| actor | human (project owner: D-4 "No", then "D-4 go ahead" after seeing the 8 records); Claude Code (proposal and application) |
+| decision | `codebook.yaml` (version kept at 3, change commented): added in_app_pain `sip_cancellation`; `sip_management` definition no longer includes stopping. Retagged 8 records: `e45241db`, `6652a87d`, `404cb625`, `cde6d3ef` pain -> sip_cancellation; `14d8cd4e` pain app_bug -> sip_cancellation, need flexible_sip -> responsive_support; `7ba7c141` pain app_bug -> sip_cancellation, need flexible_sip -> reliable_app; `c657e388` pain sip_management -> fees_charges, need flexible_sip -> lower_fees; `9e7d48f7` pain sip_management -> app_bug, need unclear -> responsive_support. Reviewer notes record each change; promoted and rebuilt (version 6a731d43e321) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | flexible_sip 40, priority 58.0; responsive_support 27 |
+| after_count | flexible_sip 32, priority 46.0; responsive_support 29. 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 12 field values on 8 rows |
+| known_limitations | Future tagging runs will use the new value, but existing rows outside flexible_sip's 40 were not re-checked for stopping (all rows tagged sip_management were among those 40). `404cb625` had been adjudicated sip_management in the 20-record set before this split. About 8 of the remaining 32 look like payment or unrelated problems; not corrected. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §13; `docs/ai_eval_implementation_audit.md` D-4 |
+
+### 8.13 Flexible SIP: 14 records corrected after one-by-one reading
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | 25 field changes on 14 rows. AutoPay/payment → in_app_pain mandate_autopay, unmet_need easy_mandate_control: `93305fa1`, `4fbd9285`, `b5cc9a4d`, `7f942899`, `e369bd42`, `5e019da4`, `6b31505a`; `2a00363f` pain only. `e9921f8c` pain portfolio_display, need responsive_support. `20854996`, `d0fb4dbd` need reliable_app. `99a2b9e0` behavior continue_sip, pain app_bug, need reliable_app. `9355d0c4` need unclear. `eb353ebf` pain sip_cancellation, need responsive_support. Reviewer notes record old -> new; promoted and rebuilt (version f46cbc5ea95f) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | flexible_sip 32 (46.0); mandate_reliability 71 (112.0); app_reliability 41; responsive_support 29; portfolio_tracking 3 |
+| after_count | flexible_sip 18 (25.0); mandate_reliability 78 (120.0); app_reliability 42; responsive_support 30; portfolio_tracking 4. 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 25 field values on 14 rows |
+| known_limitations | Proposals were Claude Code's reading; `5e019da4` and `93305fa1` are mixed complaints. Four records about choosing to pause were kept. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §14 |
+
+### 8.14 App reliability: 21 records corrected after one-by-one reading
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | 34 field changes on 21 rows, as listed in `docs/ai_eval_test_report.md` §15. Reviewer notes record old -> new; promoted and rebuilt (version 727af6426411) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | app_reliability 42; mandate_reliability 78; flexible_sip 18; responsive_support 30; fee_transparency 11; portfolio_tracking 4; market_fall_reassurance 6 |
+| after_count | app_reliability 26; mandate_reliability 77; flexible_sip 19; responsive_support 31; fee_transparency 12; portfolio_tracking 8 (now shown); market_fall_reassurance 3 (now insufficient). 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 34 field values on 21 rows |
+| known_limitations | Proposals were Claude Code's reading; kyc_onboarding fits `0b9bd218` and `3f9d416a` only loosely. Off-topic stock-trading rows remain in the Golden Dataset. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §15 |
+
+### 8.15 Mandate reliability: 21 records corrected after one-by-one reading
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | 67 field changes on 21 rows, as listed in `docs/ai_eval_test_report.md` §16. Reviewer notes record old -> new; promoted and rebuilt (version 01a87313d3a1) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | mandate_reliability 77; redemption_speed 30; flexible_sip 19; app_reliability 26; responsive_support 31; fee_transparency 12 |
+| after_count | mandate_reliability 56; redemption_speed 33; flexible_sip 21; app_reliability 28; responsive_support 32; fee_transparency 13. 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 67 field values on 21 rows |
+| known_limitations | Proposals were Claude Code's reading. IPO and membership mandate failures kept under mandate_reliability. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §16 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud
