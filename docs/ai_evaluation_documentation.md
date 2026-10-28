@@ -1,0 +1,304 @@
+# AI Evaluation Documentation
+
+## SIP Discovery Engine | Part 1: Evidence-Based Opportunity Discovery
+
+**Project:** SIP Discovery Engine  
+**Use case:** Identifying investor pain points that may affect SIP continuation  
+**Evaluation type:** Qualitative evaluation of AI-generated themes and evidence-backed answers  
+**Dataset:** Currently included Golden Dataset  
+**Evaluation status:** Preliminary evaluation based on observed engine outputs
+
+## 1. Objective
+
+The objective of this evaluation is to assess whether the SIP Discovery Engine can identify meaningful investor problems from its Golden Dataset, support its findings with source evidence, and generate insights that can inform product opportunities.
+
+The evaluation focuses on four questions:
+
+1. Does the engine identify problems relevant to SIP investors?
+2. Are the generated insights supported by the underlying records?
+3. Does the engine distinguish direct evidence from inferred conclusions?
+4. Can the outputs inform product opportunities linked to the North Star metric: 12-month SIP continuation for first-time investors?
+
+The evaluation also examines whether human review is necessary to identify irrelevant matches, incorrect tags, and unsupported business conclusions.
+
+## 2. System Under Evaluation
+
+The SIP Discovery Engine processes investor-related records and organises them into a Golden Dataset for evidence-based analysis.
+
+The observed workflow includes:
+
+1. Records from configured public-source platforms are included in the dataset.
+2. Records are tagged with investor behaviours, reported problems, emotions, and unmet needs.
+3. Relevant records are retrieved using matching rules.
+4. The engine groups evidence into themes and generates product-oriented summaries.
+5. The output includes source references, record counts, evidence coverage, and limitations.
+6. Human review is used to inspect records and evaluate whether they support the generated findings.
+
+**Evaluation boundary:** This document evaluates the outputs shared from the running engine. It does not independently verify the complete collection pipeline, every record in the dataset, or the implementation of every system component.
+
+## 3. Evaluation Method
+
+The evaluation uses qualitative review of two opportunity outputs and one question-answering output shared from the engine.
+
+### Evaluation dimensions
+
+| **Dimension** | **Evaluation question** |
+|---|---|
+| Relevance | Does the record substantively relate to the stated problem? |
+| Evidence fidelity | Does the displayed quote support the associated claim? |
+| Classification quality | Are behaviours, triggers, and unmet needs correctly tagged? |
+| Retrieval quality | Does the retrieval method include relevant evidence and exclude weak matches? |
+| Traceability | Can a reviewer locate the source record and inspect its context? |
+| Uncertainty handling | Does the output identify missing evidence and limitations? |
+| Business relevance | Is the proposed connection to SIP continuation supported or only hypothesised? |
+
+No formal accuracy, precision, recall, or agreement percentage is reported because an independently labelled evaluation set and complete item-level scoring results have not been provided.
+
+## 4. Evaluation Case A: SIP Mandate and AutoPay Reliability
+
+### AI-generated finding
+
+The engine identified a problem theme around making SIP mandates and AutoPay reliable and transparent.
+
+| **Output field** | **Observed result** |
+|---|---|
+| Priority score | 107.0 |
+| Relevant records | 66 |
+| Share of Golden Dataset | 22% |
+| Records marked as reporting a lapse | 62% |
+| Evidence strength | Strong |
+| Source distribution | Google Play: 51; Reddit: 15 |
+| Verbatim quotes | 59 |
+| Human-reviewed records | 66 of 66 |
+
+### Evaluation
+
+The theme identifies a plausible problem area: investors may experience failed SIP instalments, mandate problems, or unclear payment status.
+
+The output also identifies potential product interventions, including pre-debit checks, clearer failure explanations, and payment recovery options.
+
+However, the evaluation must distinguish the reported problem from the proposed business impact.
+
+**What the output supports:**
+
+- Payment and mandate problems appear in the retrieved records.
+- The theme has multiple supporting records across the two displayed source platforms.
+- The output provides a basis for investigating payment reliability.
+
+**What remains unverified:**
+
+- Whether the displayed records are representative of the overall investor population.
+- Whether payment failures cause investors to discontinue SIPs for 12 months.
+- Whether the proposed interventions would improve instalment success or retention.
+- Whether the reported-lapse percentage uses an appropriate and consistently applied denominator.
+
+### Evaluation verdict
+
+**Promising theme; business impact not yet established.**
+
+The theme is suitable for further investigation, but its priority score and evidence-strength label should not be treated as proof of retention impact.
+
+## 5. Evaluation Case B: Flexible SIP Controls
+
+### AI-generated finding
+
+The engine identified an opportunity to let investors pause, skip, or change a SIP instead of cancelling it.
+
+| **Output field** | **Observed result** |
+|---|---|
+| Priority score | 63.0 |
+| Relevant records | 43 |
+| Share of Golden Dataset | 14% |
+| Records marked as reporting a lapse | 47% |
+| Evidence strength | Strong |
+| Source distribution | Google Play: 37; Reddit: 6 |
+| Verbatim quotes | 35 |
+| Human-reviewed records | 43 of 43 |
+
+The matching rule included records tagged with flexible-SIP unmet needs or SIP-management pain.
+
+### Evidence reviewed
+
+The displayed records contain examples such as:
+
+“I want to pause my investment and suddenly app doesn't have sip pause options”
+
+This directly supports a complaint about missing pause functionality.
+
+Another record states:
+
+“Auto-pay for mutual fund sip not working. 2. Cannot edit mutual fund sip amount and date”
+
+This supports reported difficulty with AutoPay and changing SIP details, although it combines more than one problem.
+
+A further record states:
+
+“cancelling SIPs is really hard on this app”
+
+This supports a complaint about cancellation friction, but does not establish that the investor would have continued investing if a pause option were available.
+
+### Evaluation findings
+
+**Strengths**
+
+- The output identifies a plausible product usability problem.
+- Several displayed quotes directly describe difficulty with SIP controls.
+- The engine provides source references and item-level tags for further review.
+- The proposed intervention can be expressed as a testable product hypothesis.
+
+**Weaknesses identified during review**
+
+- Some records concern payment reliability rather than flexible SIP management.
+- Difficulty cancelling does not necessarily mean the investor wants to pause and continue later.
+- A desire to pause due to a life event does not establish that an app's missing functionality caused cancellation.
+- Some displayed quotes lack sufficient context to determine the user's underlying motivation.
+- Broad tag-based matching can include records that are only loosely related to the opportunity.
+
+### Evaluation verdict
+
+**Relevant opportunity, with evidence-quality and causal-inference limitations.**
+
+The displayed evidence supports the existence of complaints about SIP controls. It does not yet establish that adding pause, skip, or amount-change options will improve 12-month SIP continuation.
+
+## 6. Evaluation Case C: Question Answering on First-Time SIP Setup
+
+### Question asked
+
+What problems do first-time SIP investors experience when setting up their first SIP?
+
+### AI-generated answer
+
+The engine identified three potential problem areas:
+
+1. Uncertainty about selecting suitable mutual funds.
+2. Payment-mandate and UPI AutoPay failures.
+3. Limited flexibility to pause or edit SIPs after setup.
+
+The displayed output reported nine retrieved records: three from Reddit and six from Google Play.
+
+### Evaluation findings
+
+The answer was structured clearly and included evidence references and limitations. However, the retrieved records did not consistently support all three conclusions.
+
+| **Evidence issue** | **Example** | **Evaluation** |
+|---|---|---|
+| Weak relevance | A record simply says “You can start a SIP.” | Does not establish a setup problem. |
+| Incomplete context | A record says the investor wishes they could start SIPs in international index funds. | Does not independently establish difficulty selecting funds during initial setup. |
+| Potentially incorrect classification | A record about a failed AutoPay mandate is tagged as a flexible-SIP need. | Payment reliability and flexible controls should be distinguished. |
+| Insufficient support | A record discusses cancelling after a reported profit. | Does not establish that missing flexibility caused cancellation. |
+| Uncertain investor segment | Several records lack reliable evidence that the author is a first-time investor. | Findings cannot automatically be attributed to first-time investors. |
+
+### Evaluation verdict
+
+**Partially useful answer; retrieval relevance and segment attribution require improvement.**
+
+The answer identifies plausible issues, but the small retrieved sample and weakly relevant records limit the reliability of its conclusions about first-time SIP setup.
+
+The result should be treated as exploratory rather than as a validated description of first-time investors' experiences.
+
+## 7. Human Review and Correction Requirements
+
+Human review is essential because a record can match a retrieval rule without substantively supporting the generated conclusion.
+
+The following cases illustrate why individual review is necessary.
+
+### Case 1: Payment failure classified as a flexibility problem
+
+**Observed record:** “not able to set up auto pay”
+
+**Potential classification issue:** The record directly describes an AutoPay setup problem, but it does not establish a need to pause, skip, or modify a SIP.
+
+**Required human action:** Review the full record and classify it under payment or mandate reliability unless additional context supports the flexible-controls theme.
+
+### Case 2: Cancellation treated as evidence for a pause alternative
+
+**Observed record:** “cancelling SIPs is really hard on this app”
+
+**Potential inference error:** The complaint establishes cancellation friction, but not that the investor would prefer to pause rather than cancel.
+
+**Required human action:** Retain it as evidence of cancellation friction. Do not treat it as direct evidence that a pause option would prevent cancellation.
+
+### Case 3: A reported investment outcome interpreted as a flexibility problem
+
+**Observed record:** “I started sip and then cancel it with profit of 9 percent”
+
+**Potential inference error:** The record mentions cancellation, but does not establish why the investor cancelled or whether missing SIP controls were involved.
+
+**Required human action:** Exclude it from direct evidence for the flexible-controls opportunity unless the full context supports that connection.
+
+**Reporting note:** These are illustrative evaluation cases based on the displayed records. They should not be reported as completed AI corrections unless a reviewer actually changed the labels or removed the records and that action was recorded.
+
+## 8. Relationship to the North Star Metric
+
+### North Star
+
+**12-month SIP continuation rate for first-time investors.**
+
+The evaluation identifies two opportunities that could plausibly relate to this metric.
+
+| **Opportunity** | **Potential mechanism** | **Current evidence status** |
+|---|---|---|
+| Improve mandate and AutoPay reliability | Reduce failed instalments and make payment recovery easier. | Reported payment problems are visible; retention impact is unproven. |
+| Offer flexible SIP controls | Allow investors to adjust contributions or pause temporarily instead of cancelling. | Reported control problems are visible; effect on cancellation and retention is unproven. |
+
+These opportunities should not be prioritised solely by their AI-generated scores.
+
+A more reliable prioritisation process would consider:
+
+- Relevance and quality of the underlying evidence.
+- Strength of the connection to the North Star.
+- Number of unique, substantively relevant records.
+- Product analytics available to validate the problem.
+- Implementation effort and potential unintended consequences.
+
+## 9. Recommended Next Evaluation
+
+The next evaluation should test whether the flexible-controls theme is genuinely connected to cancellation and continuation.
+
+The engine should distinguish:
+
+1. Explicit statements that an investor cancelled because a pause or modification option was unavailable.
+2. Statements about wanting to pause or reduce contributions due to temporary financial constraints.
+3. Complaints about editing SIP amounts or dates.
+4. Cancellation and AutoPay problems without evidence of a flexible-controls need.
+
+For each category, the reviewer should verify the source context, count unique relevant records, and distinguish explicitly stated behaviour from inferred motivation.
+
+### Suggested product analytics
+
+If available, investigate:
+
+- SIP cancellation rate.
+- Cancellation attempts preceded by pause or modification attempts.
+- Pause-to-resume rate.
+- Successful subsequent instalments after a pause or amount change.
+- 90-day continuation among comparable investor cohorts.
+- 12-month continuation among first-time investor cohorts.
+
+These measures can help test whether flexible controls are associated with continued investing. A controlled experiment would be needed to estimate the intervention's causal effect.
+
+## 10. Limitations
+
+This evaluation has several limitations:
+
+- It reviews selected outputs rather than the entire Golden Dataset.
+- The displayed record counts do not establish population-level prevalence.
+- Public reviews and discussions may overrepresent people experiencing problems.
+- Some records have incomplete quotes or uncertain context.
+- Investor tenure is missing or uncertain for many records.
+- Tag-based matching may retrieve records that do not substantively support a theme.
+- The reported priority scores have not been independently validated against business outcomes.
+- No independently labelled test set, formal model-agreement score, or measured intervention outcome has been supplied.
+- This document does not independently verify source permissions, retention compliance, or whether all included source material is approved for the intended processing.
+
+## 11. Conclusion
+
+The preliminary evaluation shows that the SIP Discovery Engine can surface plausible product problems and organise them into actionable themes. Its outputs provide a useful starting point for product discovery.
+
+However, the evaluation also reveals risks from weak retrieval matches, uncertain classifications, and unsupported links between reported problems and business outcomes.
+
+The main improvement needed is to ensure that **every record counted as evidence substantively supports the specific problem being investigated**.
+
+For the next iteration, the evaluation should use an independently labelled set of 20 records, compare the engine's classifications with human judgements, record disagreements and corrections, and report measured results rather than assumed accuracy.
+
+Until that evaluation is completed, the identified opportunities should be treated as hypotheses for further investigation, not as proven drivers of 12-month SIP continuation.
