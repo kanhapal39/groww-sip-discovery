@@ -729,6 +729,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Proposals were Claude Code's reading. IPO and membership mandate failures kept under mandate_reliability. Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_test_report.md` §16 |
 
+### 8.16 First-SIP blocker candidates for review
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review (candidate selection) |
+| actor | human (project owner asked "What prevents investors from completing their first SIP instalment after creating a SIP?", then "Yes, add them to a review workbook"); Claude Code (search and workbook) |
+| decision | Keyword search over `data/processed/clean.jsonl` (62,878 records) for first-SIP, pending/undebited SIP, mandate setup, KYC, bank verification and payment-failure phrases; Claude Code read the matches and kept 48 that describe something blocking a SIP from starting or an instalment from going through. 4 are already in the Golden Dataset; the other 44 were written (all pending) to `data/review/first_sip_blockers_20261028.xlsx`, grouped in the stratum column: KYC / eSign / account 17, first instalment stuck or failed 10, AutoPay / mandate setup 10, bank verification 4, failed payment with no retry 3 |
+| prompt_version | tag-v4 for the 8 rows with earlier tags; none for the rest |
+| before_count | Golden Dataset 412 approved rows; unchanged |
+| after_count | 44 pending candidates. 8 carry tags from earlier runs (5 openai/gpt-oss-120b, 3 qwen/qwen3.8-27b); 36 untagged |
+| model_used | none (no API calls) |
+| cost_estimate | $0.00 |
+| human_correction | none yet |
+| known_limitations | Keyword selection misses reviews that describe the problem in other words, and the groups are Claude Code's reading. Only about 10 records clearly concern the first instalment; the rest are adjacent blockers. Reviews are self-selected, so the counts show that a problem occurs, not how often. Two Reddit posts with matching titles have no body text and were left out |
+| evidence | `data/review/first_sip_blockers_20261028.xlsx` (sheet "about") |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud
