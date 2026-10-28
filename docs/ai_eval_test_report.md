@@ -273,3 +273,16 @@ The project owner approved all 116 tagged candidates with one instruction ("Appr
 Retrieval probe (no model): the Case C question ("first-time SIP investors … setting up their first SIP") now has **6** strong matches, above the 3-record threshold, so it would be answered instead of abstaining. "Why do first-time investors discontinue SIPs after 12 months?" still has 0. All 167 tests pass.
 
 **HIGH: beginner_guidance is inflated by its matching rule.** 89 of its 100 records match only on the tenure tag; only 7 state a fund-choice need or pain, and none of those 7 is a new row. It now ranks second by a measure of how many writers said they were new, not by evidence that new investors struggle to choose a fund. *Resolved the same day (D-10, option a):* tenure was removed from the rule, so beginner_guidance has 7 records, priority 7.0. After the owner accepted corrections to 4 mis-tagged records, it has 3 and is listed as insufficient evidence; responsive_support 25 → 27, redemption_speed 29 → 30, mandate_reliability 72 → 71. The rows also skew the dataset: 116 of 412 were selected by phrase, not sampled.
+
+## 13. Cancellation separated from flexible-SIP demand (D-4, 2026-10-28)
+
+The owner decided that asking to cancel or stop a SIP is not demand for pause, skip or edit controls. Changes:
+- `codebook.yaml`: new in_app_pain value `sip_cancellation`; `sip_management` now means pausing, skipping, modifying or stepping up only.
+- 8 flexible_sip records that only asked to stop or cancel were retagged (12 field changes): `e45241db`, `14d8cd4e`, `c657e388`, `7ba7c141`, `6652a87d`, `9e7d48f7`, `404cb625`, `cde6d3ef`.
+
+| Opportunity | Before | After |
+|---|---|---|
+| flexible_sip | 40 (priority 58.0) | 32 (46.0) |
+| responsive_support | 27 (16.0) | 29 (18.0) |
+
+flexible_sip keyword breakdown now: pausing or skipping 11, editing amount or date 9, cancelling or stopping only 3, none 9. The 3 left in the "cancelling" group are keyword matches, not cancellation requests ("stoploss", a SIP cancelled by a bank failure, a delayed order). Claude Code's reading is that about 8 of the 32 are payment, AutoPay or unrelated problems; they are not corrected. 169 tests pass.

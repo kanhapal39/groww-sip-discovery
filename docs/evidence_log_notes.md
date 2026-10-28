@@ -661,6 +661,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Proposals were Claude Code's reading; #2 pain could be app_bug and #3 need could be other. Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_implementation_audit.md` D-10 |
 
+### 8.12 D-4: cancellation split from flexible-SIP demand
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | codebook / Golden Dataset |
+| actor | human (project owner: D-4 "No", then "D-4 go ahead" after seeing the 8 records); Claude Code (proposal and application) |
+| decision | `codebook.yaml` (version kept at 3, change commented): added in_app_pain `sip_cancellation`; `sip_management` definition no longer includes stopping. Retagged 8 records: `e45241db`, `6652a87d`, `404cb625`, `cde6d3ef` pain -> sip_cancellation; `14d8cd4e` pain app_bug -> sip_cancellation, need flexible_sip -> responsive_support; `7ba7c141` pain app_bug -> sip_cancellation, need flexible_sip -> reliable_app; `c657e388` pain sip_management -> fees_charges, need flexible_sip -> lower_fees; `9e7d48f7` pain sip_management -> app_bug, need unclear -> responsive_support. Reviewer notes record each change; promoted and rebuilt (version 6a731d43e321) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | flexible_sip 40, priority 58.0; responsive_support 27 |
+| after_count | flexible_sip 32, priority 46.0; responsive_support 29. 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 12 field values on 8 rows |
+| known_limitations | Future tagging runs will use the new value, but existing rows outside flexible_sip's 40 were not re-checked for stopping (all rows tagged sip_management were among those 40). `404cb625` had been adjudicated sip_management in the 20-record set before this split. About 8 of the remaining 32 look like payment or unrelated problems; not corrected. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §13; `docs/ai_eval_implementation_audit.md` D-4 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

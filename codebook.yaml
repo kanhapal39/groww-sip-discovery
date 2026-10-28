@@ -129,7 +129,10 @@ fields:
       - {id: fees_charges, code: fe, definition: "Unclear or unexpected fees and charges."}
       - {id: kyc_onboarding, code: ko, definition: "KYC, sign-up, bank linking, nominee."}
       - {id: fund_selection, code: fs, definition: "Does not know which fund to pick."}
-      - {id: sip_management, code: sm, definition: "Pausing, modifying, stepping up or stopping a SIP in the app."}
+      # 2026-10-28 (owner decision D-4): stopping/cancelling split out of sip_management, so
+      # cancellation friction is not counted as demand for pause/skip/modify controls.
+      - {id: sip_management, code: sm, definition: "Pausing, skipping, modifying or stepping up a SIP in the app."}
+      - {id: sip_cancellation, code: sx, definition: "Stopping or cancelling a SIP is hard or does not work."}
       - {id: app_bug, code: bg, definition: "Crash, login, loading or other app failure."}
       # Not "no": the model returned it as the boolean False (pilot 2026-10-26).
       - {id: none, code: nn, definition: "Text reports no confusion or worry."}

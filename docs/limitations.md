@@ -23,7 +23,7 @@
 
 ## Golden Dataset
 
-All rows are recorded as individually reviewed by the project owner (evidence log §7.2). That review corrected no tags; 52 corrections on 31 records were applied later (D-3 and the 20-record labelled set, 2026-10-28). The other tags are the model's output, and the 20-record check suggests pain and need tags are often wrong (`docs/ai_eval_test_report.md` §9). The dataset is not independent ground truth.
+All rows are recorded as individually reviewed by the project owner (evidence log §7.2). That review corrected no tags; 64 corrections on 39 records were applied later (D-3 and the 20-record labelled set, 2026-10-28). The other tags are the model's output, and the 20-record check suggests pain and need tags are often wrong (`docs/ai_eval_test_report.md` §9). The dataset is not independent ground truth.
 
 94 rows carry the new-investor tenure tag: 5 from the original sample and 89 from the 116 bulk-approved D-8 rows, whose tags were not reviewed row by row. Most of those 89 are short app reviews with no SIP action or stated need.
 

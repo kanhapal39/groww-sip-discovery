@@ -122,6 +122,16 @@ def test_ec5_ec7_ec21_segment_questions_use_only_segment_tagged_records(tmp_path
     assert general["status"] == "no_model" and len(general["evidence"]) == 4
 
 
+def test_ec3_cancellation_pain_is_not_flexible_sip_demand() -> None:
+    import yaml
+    from research.opportunities import matches
+    flexible = {d["id"]: d for d in load_definitions()["opportunities"]}["flexible_sip"]
+    assert not matches(golden("x1", "cancelling SIPs is really hard", in_app_pain="sip_cancellation"), flexible)
+    assert matches(golden("x2", "no option to pause my SIP", in_app_pain="sip_management"), flexible)
+    pains = next(f for f in yaml.safe_load((ROOT / "codebook.yaml").read_text())["fields"] if f["id"] == "in_app_pain")
+    assert "sip_cancellation" in [v["id"] for v in pains["values"]]
+
+
 def test_ec5_tenure_alone_is_not_evidence_for_beginner_guidance() -> None:
     beginner = {d["id"]: d for d in load_definitions()["opportunities"]}["beginner_guidance"]
     from research.opportunities import matches
