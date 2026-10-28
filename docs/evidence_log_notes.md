@@ -712,6 +712,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Proposals were Claude Code's reading; kyc_onboarding fits `0b9bd218` and `3f9d416a` only loosely. Off-topic stock-trading rows remain in the Golden Dataset. Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_test_report.md` §15 |
 
+### 8.15 Mandate reliability: 21 records corrected after one-by-one reading
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | 67 field changes on 21 rows, as listed in `docs/ai_eval_test_report.md` §16. Reviewer notes record old -> new; promoted and rebuilt (version 01a87313d3a1) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | mandate_reliability 77; redemption_speed 30; flexible_sip 19; app_reliability 26; responsive_support 31; fee_transparency 12 |
+| after_count | mandate_reliability 56; redemption_speed 33; flexible_sip 21; app_reliability 28; responsive_support 32; fee_transparency 13. 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 67 field values on 21 rows |
+| known_limitations | Proposals were Claude Code's reading. IPO and membership mandate failures kept under mandate_reliability. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §16 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

@@ -321,3 +321,23 @@ Claude Code read all 42 app_reliability records; the owner accepted corrections 
 | market_fall_reassurance | 6 (12.0) | 3, now insufficient evidence |
 
 Of the 3 market_fall_reassurance records left, only `55c5855a` reports a SIP stopped because of the market; `b4f3a443` is a bounce charge and `b445c5f5` the overseas-investment limit (not corrected). Several app_reliability records are stock-trading complaints from the bulk-approved D-8 rows; they were retagged, not removed. 169 tests pass.
+
+## 16. Mandate reliability records reviewed one by one (2026-10-28)
+
+Claude Code read all 77 mandate_reliability records; 56 describe SIP payment, AutoPay or mandate failures. The owner accepted corrections to the other 21 (67 field changes):
+- **Reddit advice replies with no problem of the writer's own (6):** `c9b8605c`, `a87ddf24`, `b4f4797b`, `8662c3db`, `adaad672`, `3c93c865` → tags cleared to `unclear` (`3c93c865` trigger `money_need_or_income`).
+- **Redemption or redemption bank account (5):** `41545b22`, `e05e8741`, `42b84ee0` → pain `redemption_withdrawal`, need `responsive_support`; `22d971c0`, `21b7b7de` → trigger `unclear`.
+- **Account opening, login or bank linking (6):** `ec5feee4`, `4f60b05f`, `185a9daf`, `c0d850a6`, `304eff95`, `aea846bc`.
+- **Paused SIP debited anyway (2):** `30f8a956`, `562535c5` → pain `sip_management`, need `flexible_sip`.
+- **Other (2):** `5a4f8348` (UPI fee concern) → `fees_charges`; `99a2b9e0` trigger `app_bug_or_ux`.
+
+| Opportunity | Before | After |
+|---|---|---|
+| mandate_reliability | 77 (117.0) | 56 (86.0) |
+| redemption_speed | 30 (18.0) | 33 (19.5) |
+| flexible_sip | 19 (27.0) | 21 (31.0) |
+| app_reliability | 26 (16.0) | 28 (17.0) |
+| responsive_support | 31 (19.5) | 32 (20.0) |
+| fee_transparency | 12 (8.0) | 13 (17.0; now 2 source platforms) |
+
+Kept, with correct tags but outside the SIP scope of the title: IPO mandate failures (`6ecc671f`, `1f63bed6`, `884ee4e0`) and a membership mandate (`bb891921`). Bounce-charge complaints (`7dfbf09e`, `c43684df`) were kept under mandate. 169 tests pass.

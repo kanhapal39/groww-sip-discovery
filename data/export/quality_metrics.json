@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-28T15:09:18.775486+00:00",
+  "built_at": "2026-10-28T15:11:59.303463+00:00",
   "raw": {
     "play_store": {
       "records": 151000,
@@ -684,5 +684,5 @@
     },
     "small_sample": 30
   },
-  "golden_version": "727af6426411"
+  "golden_version": "01a87313d3a1"
 }
