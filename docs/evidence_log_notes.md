@@ -491,6 +491,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Retrieval check: the five suggested questions find 12–30 strongly matching records; off-topic controls ("crypto staking", "gold vs silver") fall below the 3-record minimum and get the insufficiency message. No HTTP API, scheduler or multi-user auth. Headless screenshots only captured Streamlit's loading skeleton, so the layout has not been visually reviewed. Opportunity definitions and codebook v3 are drafts by Claude Code |
 | evidence | `app/`, `research/`, `data/processed/research.db`, `data/processed/quality_metrics.json` |
 
+### 8.2 AI evaluation audit: retrieval, answer validation and opportunity counting
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | dashboard / evaluation |
+| actor | human (project owner supplied the AI Evaluation and Edge Cases documents and requested the audit and fixes on branch `ai-eval-audit`); Claude Code (audit, implementation, tests) |
+| decision | Committed both documents as Markdown. Audited 26 requirements against the code (`docs/ai_eval_implementation_audit.md`). Changed retrieval (generic stopwords, whole-word match for short terms, ≥ 2 matched words, thread titles excluded from relevance, segment filter for first-time/beginner questions, narrower question-to-tag rules), answer validation (quotes, percentages and impact predictions checked; removed statements listed; new limitation notes; prompt answer-v2) and opportunity counting (dedupe, `hold_out` for mandate/AutoPay records in flexible_sip, keyword breakdown, implied count, metric definitions). The insufficiency message wording was **not** changed (decision pending, audit D-1). No Golden Dataset or export file was modified |
+| prompt_version | answer-v2 (not yet run against a model) |
+| before_count | 138 tests passing; flexible_sip 43 records, priority 63.0; Case C question 9 strong matches; 12-month discontinuation probe 3 |
+| after_count | 162 tests passing; flexible_sip 39 records, priority 58.0 (4 held out); Case C question 2 (abstains); 12-month probe 1 (abstains). Other opportunities unchanged |
+| model_used | none (no LLM or Apify call; retrieval probe ran locally over `data/export/golden_public.jsonl`) |
+| cost_estimate | $0.00 |
+| human_correction | none; known mis-tags (`a140a1f6`, `a7c2a38b`, `5a343cb7`) left for reviewer decision |
+| known_limitations | No independently labelled ground truth, so no accuracy, precision or recall reported (template `docs/ai_eval_ground_truth_template.md`). Model-dependent behaviour untested. The suggested question on starting a SIP still shows records that describe no problem (tag-only matches). Opportunity rules remain drafts by Claude Code |
+| evidence | `docs/ai_eval_implementation_audit.md`, `docs/ai_eval_test_report.md`, `tests/test_ai_eval_edge_cases.py` |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

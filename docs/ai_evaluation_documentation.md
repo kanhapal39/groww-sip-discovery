@@ -302,3 +302,46 @@ The main improvement needed is to ensure that **every record counted as evidence
 For the next iteration, the evaluation should use an independently labelled set of 20 records, compare the engine's classifications with human judgements, record disagreements and corrections, and report measured results rather than assumed accuracy.
 
 Until that evaluation is completed, the identified opportunities should be treated as hypotheses for further investigation, not as proven drivers of 12-month SIP continuation.
+
+---
+
+## 12. Addendum: Implementation Audit (2026-10-28)
+
+*Added after the original document, which is the project owner's Word file converted to Markdown. Sections 1–11 above are unchanged and describe the engine as observed before this audit. Details are in `docs/ai_eval_implementation_audit.md` and `docs/ai_eval_test_report.md`.*
+
+### 12.1 What was verified, and how
+
+- The figures in Cases A and B were reproduced exactly from `data/export/golden_public.jsonl` by running the engine's own deterministic code, with no model call:
+  - Mandate/AutoPay: 66 records, 22%, 62% lapse (41 ÷ 66), priority 107.0, Google Play 51 / Reddit 15, 59 verbatim quotes.
+  - Flexible SIP: 43 records, 47% lapse, priority 63.0, Google Play 37 / Reddit 6.
+- Case C's retrieval was reproduced: 9 records, 6 from Google Play and 3 from Reddit.
+  - 6 of the 9 matched only on the question words "time", "experience", "setting" and "up". "Up" also matched "upi" and "upstox".
+  - The other 3 matched because "first" was mapped to the `start_sip` tag.
+  - This explains the weak relevance reported in the Case C table.
+- The records cited in §7 carry the tags described there. "not able to set up auto pay" is tagged `in_app_pain=mandate_autopay` and `unmet_need=flexible_sip`.
+
+### 12.2 Code changes and their effect (new results, not historical)
+
+| Finding in this document | Change | Effect on current data | Test |
+|---|---|---|---|
+| §7 Case 1: payment failure counted as flexibility | Flexible-SIP opportunity holds out records tagged `in_app_pain=mandate_autopay` and lists them for review | Flexible SIP: **43 → 39 records, priority 63.0 → 58.0**. The tags themselves were not changed | `test_ec2_*` |
+| §7 Case 2 and §9: cancellation vs pause | Keyword breakdown shown on the opportunity | Of 39 records: 10 mention pausing/skipping, 10 editing amount or date, 10 only cancelling/stopping, 9 none of these | `test_ec3_*` |
+| §7 Case 3: cancel-with-profit | Not excluded: the record is tagged `in_app_pain=sip_management` | Still counted in Flexible SIP, in the "cancelling or stopping only" group. Needs a reviewer's tag correction | — |
+| Case C: weak relevance and first-time attribution | Generic words ignored; short words match whole words only; ≥ 2 matched words for text-only matches; "first-time"/"beginner" questions use only records tagged as new investors | The Case C question now finds 2 records and **abstains**. No model was run, so there is no new answer to compare | `test_ec1_*`, `test_ec5_*` |
+| §8: link to 12-month continuation | Answer points or summaries that predict a product change's effect are removed and listed as removed | Not run against the live model | `test_ec18_*` |
+
+### 12.3 Claims in this document that need careful wording
+
+| Where | Current wording | Suggested accurate wording |
+|---|---|---|
+| Case A and B tables | "Human-reviewed records: 66 of 66" / "43 of 43" | "Approved by the project owner: 66 of 66. No tag corrections were recorded (evidence log §7.2); these are not independent labels." |
+| Case A and B tables | "Evidence strength: Strong" | "Evidence strength: Strong by the engine's fixed rule (≥ 30 records, ≥ 2 platforms, ≥ 10 exact quotes); not a measure of relevance or impact." |
+| Case B table | 43 records, priority 63.0 | Keep as the historical observation. Add: "39 records and priority 58.0 after mandate/AutoPay records were held out (2026-10-28)." |
+| §2, item 6 | "Human review is used to inspect records…" | Accurate as a process. No correction from that review has been recorded yet |
+
+### 12.4 Still not done
+
+- **The 20-record independently labelled set (§11) does not exist.** A template with every row PENDING is in `docs/ai_eval_ground_truth_template.md`. No accuracy, precision, recall or agreement figure has been computed, and none should be quoted.
+- No answer from the live model was generated or re-evaluated during this audit. The answer prompt changed to `answer-v2` and has not been run.
+- The three records in §7 remain in the Golden Dataset with their original tags. Correcting them is a reviewer's decision.
+- The opportunities in §8 remain hypotheses; nothing measured their effect on 12-month SIP continuation.

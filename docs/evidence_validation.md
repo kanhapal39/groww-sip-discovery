@@ -15,7 +15,14 @@ Checks that run in code, where they run, and what they do.
 | Public eligibility | `research/store.py is_public` | Only approved, publishable, fully-provenanced rows are shown publicly |
 | Insufficient evidence | `research/answer.py` | Fewer than `research.min_records` strongly matching records → insufficiency message, no model call |
 | Citation check | `research/answer.py validate_points` | Answer points without a valid record citation are dropped; quotes shown come from stored records, not model text |
-| Stated vs inferred | tags `is_hypothesis`; answer points `basis` | Displayed separately on Investor Behaviour and in answers |
+| Stated vs inferred | tags `is_hypothesis`; answer points `basis` | Displayed separately on Investor Behaviour and in answers; implied-tag count shown per opportunity |
+| Strong match | `research/answer.py strong_matches`, `research/retrieval.py search` | A record is evidence only if it matches a question tag, or ≥ 60% and ≥ 2 of the question's content words appear in its own text, quote, reason or tags (thread titles excluded). Generic words such as "experience" and "time" are ignored |
+| Segment attribution | `research/retrieval.py SEGMENT_RULES`, `research/answer.py strong_matches` | Questions naming first-time, new or beginner investors use only records tagged `tenure=new_under_1y`, with a limitation note |
+| Verbatim quotes and numbers in answers | `research/answer.py unsupported` | A point or summary quoting ≥ 3 words not found in its cited records, or giving a percentage they do not contain, is removed and listed as removed |
+| Impact predictions | `research/answer.py unsupported` (`IMPACT_CLAIM`) | Statements that a change will improve or reduce retention, continuation or cancellation are removed and listed as removed |
+| Duplicates in counts | `research/analysis.py dedupe`; `research/store.py build_database` | Same record ID or same text counted once in answers and opportunities; the index keeps the first row per ID |
+| Mis-tagged opportunity evidence | `research/opportunities.py held_out`; `opportunities.yaml hold_out` | Flexible-SIP records tagged `in_app_pain=mandate_autopay` are not counted and are listed for review |
+| Malformed Golden file | `research/store.py load_golden` | A malformed line stops the build with its line number; it is never skipped |
 
 ## What is not validated
 
