@@ -25,6 +25,9 @@ def render() -> None:
         st.markdown(f"An opportunity needs at least **{result['min_records']}** matching records to be listed. "
                     "Evidence strength: Strong = ≥30 records, ≥2 platforms, ≥10 exact quotes; Moderate = ≥10 records and ≥3 exact quotes; "
                     "otherwise Limited. \"(unverified)\" means some matching records were not individually reviewed by a human.")
+        st.markdown("\n".join(f"- {d}" for d in result["definitions"].values()))
+        if result.get("duplicates_removed"):
+            st.markdown(f"{result['duplicates_removed']} duplicate record(s) with the same ID or text were counted once.")
     if not result["opportunities"]:
         ui.insufficient("no opportunity has enough matching records yet.")
     for rank, o in enumerate(result["opportunities"], 1):
@@ -39,7 +42,10 @@ def render() -> None:
             c[3].metric("Evidence strength", o["strength"].split(" (")[0], help=o["strength_reason"])
             st.markdown(f"**Problem (evidence-based):** {o['problem']}")
             st.markdown(f"**Sources:** " + ", ".join(f"{ui.SOURCE_LABELS.get(k, k)} {v}" for k, v in o["sources"].items())
-                        + f" · {o['exact_quotes']} verbatim quotes · {o['strength_reason']}")
+                        + f" · {o['exact_quotes']} verbatim quotes · {o['implied']} with implied (not stated) tags · {o['strength_reason']}")
+            if o.get("breakdown"):
+                st.markdown("**What the record text mentions** (keyword rules, not a verified classification): "
+                            + "; ".join(f"{label} {count}" for label, count in o["breakdown"]))
             seg = ", ".join(f"{ui.nice(k)} {v}" for k, v in (o["segment"] or {}).items()) or "unknown for all matching records"
             st.markdown(f"**Investor segment (tenure, where stated):** {seg}")
             st.markdown("**Qualitative judgements:**")
@@ -48,12 +54,19 @@ def render() -> None:
             rules = "; ".join(f"{f} ∈ {{{', '.join(v)}}}" for f, v in (o["match"] or {}).items())
             if o.get("restrict_behavior"):
                 rules += f"; and behaviour ∈ {{{', '.join(o['restrict_behavior'])}}}"
+            if o.get("hold_out"):
+                rules += "; not counted if " + "; ".join(f"{f} ∈ {{{', '.join(v)}}}" for f, v in o["hold_out"].items())
             st.caption(f"Matching rule: any of {rules}")
             with st.expander(f"Inspect the {o['n']} supporting records"):
                 pages = max(1, -(-o["n"] // PAGE_SIZE))
                 page = st.number_input("Page", 1, pages, 1, key=f"pg_{o['id']}") if pages > 1 else 1
                 for i, r in enumerate(o["records"][(page - 1) * PAGE_SIZE: page * PAGE_SIZE], (page - 1) * PAGE_SIZE + 1):
                     ui.record_card(r, index=i, full_text=False, show_internal=data.is_admin())
+            if o.get("held_out"):
+                with st.expander(f"{len(o['held_out'])} record(s) held out for review (not counted)"):
+                    st.caption("These matched the rule, but their tags point to a different problem. A reviewer should decide where they belong.")
+                    for i, r in enumerate(o["held_out"], 1):
+                        ui.record_card(r, index=i, full_text=False, show_internal=data.is_admin())
     if result["insufficient"]:
         st.markdown("#### Not enough evidence yet")
         for o in result["insufficient"]:

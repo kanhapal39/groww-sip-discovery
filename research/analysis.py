@@ -30,6 +30,32 @@ JOURNEY_DEFINITION = (
 )
 
 
+def text_key(text: Any) -> str:
+    """Case-, punctuation- and whitespace-insensitive form of a record's text, used to spot duplicates."""
+    return " ".join("".join(ch if ch.isalnum() else " " for ch in str(text or "").lower()).split())
+
+
+def dedupe(rows: Iterable[dict[str, Any]]) -> tuple[list[dict[str, Any]], int]:
+    """(rows without repeated record IDs or identical text, number removed). Keeps the first occurrence.
+
+    Cleaning already removes duplicates before tagging; this guards counts against duplicates that reach the
+    Golden Dataset another way (repeated promotion, re-collection under a new ID).
+    """
+    rows = list(rows)
+    seen_ids: set[Any] = set()
+    seen_text: set[str] = set()
+    unique = []
+    for r in rows:
+        key = text_key(r.get("text"))
+        if r.get("record_id") in seen_ids or (key and key in seen_text):
+            continue
+        seen_ids.add(r.get("record_id"))
+        if key:
+            seen_text.add(key)
+        unique.append(r)
+    return unique, len(rows) - len(unique)
+
+
 def label(value: Any) -> str:
     return str(value).replace("_", " ").capitalize() if value is not None else "Unknown"
 

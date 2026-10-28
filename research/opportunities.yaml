@@ -5,6 +5,12 @@
 # It is only displayed when enough Golden Dataset records match its `match`
 # rules; the evidence counts, shares, sources and quotes are computed from data.
 # A record matches if ANY listed field has ANY listed value.
+# Optional `hold_out`: a matching record whose tags hit ANY of these field values
+# is not counted; it is listed as "held out for review" because its tags point
+# to a different problem (AI Eval Case 1 / Edge Case 2).
+# Optional `breakdown`: keyword groups applied to the record text in order; each
+# record is counted in the first group it matches. Rules, not a verified
+# classification; they show what the evidence actually asks for.
 #
 # Draft written by Claude Code on 2026-10-26 from codebook v3; needs review by
 # the product team before it is used for prioritisation.
@@ -28,6 +34,14 @@ opportunities:
     match:
       unmet_need: [flexible_sip]
       in_app_pain: [sip_management]
+    # Payment and mandate problems (e.g. "not able to set up auto pay") belong to mandate_reliability.
+    hold_out:
+      in_app_pain: [mandate_autopay]
+    # Separates explicit requests for SIP controls from cancellation friction (AI Eval §9).
+    breakdown:
+      - {label: "mentions pausing or skipping", pattern: "\\bpaus\\w*|\\bskip\\w*|\\btemporar\\w*"}
+      - {label: "mentions editing amount or date, or step-up", pattern: "\\bedit\\w*|\\bmodif\\w*|\\bchang\\w*|\\bstep.?up|\\bamount\\b|\\bdate\\b"}
+      - {label: "mentions cancelling or stopping only", pattern: "\\bcancel\\w*|\\bstop\\w*|\\bclos\\w*"}
     problem: Investors report being unable to pause, skip, modify or step up a SIP in the app, or finding it hard to do.
     business_metric: Cancellation rate; share of cancellations that used pause first; 90-day SIP retention
     intervention: Offer pause, skip and amount change at the start of the cancellation flow.
