@@ -644,6 +644,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Of the 7, Claude Code reads only `4f94b6b3`, `5d28becd` and partly `cc637ae7` as fund-choice problems; `503f23b3`, `d28335d3`, `5cd15142`, `cde6d3ef` look mis-tagged and were not corrected |
 | evidence | `docs/ai_eval_implementation_audit.md` D-10; `tests/test_ai_eval_edge_cases.py` |
 
+### 8.11 Corrections to 4 records mis-tagged as fund selection
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | `503f23b3` in_app_pain fund_selection -> sip_management. `d28335d3` in_app_pain fund_selection -> kyc_onboarding, unmet_need other -> responsive_support. `5cd15142` in_app_pain fund_selection -> redemption_withdrawal, unmet_need flexible_sip -> fast_redemption. `cde6d3ef` in_app_pain fund_selection -> sip_management, unmet_need easy_mandate_control -> responsive_support. Written to `data/review/golden_sample_300.xlsx` with reviewer notes; promoted and rebuilt (version a595cd2f1576) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | beginner_guidance 7; responsive_support 25; redemption_speed 29; mandate_reliability 72 |
+| after_count | beginner_guidance 3 (below the 5-record minimum, shown as insufficient); responsive_support 27; redemption_speed 30; mandate_reliability 71; flexible_sip 40 (unchanged) |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 7 field values on 4 rows |
+| known_limitations | Proposals were Claude Code's reading; #2 pain could be app_bug and #3 need could be other. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_implementation_audit.md` D-10 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud
