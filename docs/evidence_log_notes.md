@@ -542,6 +542,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | n = 20; 22 known-problem records excluded from the sample; final labels follow Claude Code's suggestions, so they are not independent of AI judgement; retrieval and answer checks not done |
 | evidence | `docs/ai_eval_ground_truth_template.md` §2–§6; `docs/ai_eval_test_report.md` §9 |
 
+### 8.5 D-3 tag corrections applied to the Golden Dataset
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "A: accept all except 23 and do it as per you in 23"); Claude Code (applied the decision) |
+| decision | 25 of 26 proposed corrections accepted as proposed. #23 (`b302ef12`, tenure new_under_1y) set to `unclear` by Claude Code at the owner's request, not to the proposed `over_three_years`: "grinding for almost 8 years" may mean years of work. Changes written to `data/review/golden_sample_300.xlsx` (reviewer note on each of the 16 rows lists old -> new); copied to `data/manual/golden_dataset.xlsx`; promoted with `python -m pipeline.export golden`; exports rebuilt with `python -m research.build` (dataset version 09688fa131d3). Review status and reviewer unchanged |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 0 corrections; flexible_sip 39 (4 held out), beginner_guidance 16, redemption_speed 27, responsive_support 15; 10 new_under_1y |
+| after_count | 26 corrections on 16 rows; flexible_sip 38 (0 held out), beginner_guidance 11, redemption_speed 28, responsive_support 14; 5 new_under_1y. Public export differs in exactly 26 field values |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 26 field values on 16 rows, by the project owner's decision |
+| known_limitations | Corrections cover only the known mis-tagged records. Errors confirmed in the 20-record labelled set (`docs/ai_eval_ground_truth_template.md` §6.2) and the 4 records judged not relevant are not corrected; they await a decision. Pre-change workbook and exports kept outside the repo as a session backup. The rebuild also refreshed `quality_metrics.json` with filter and tagging results that finished on 2026-10-27 after its last build (filter labelled 4,150 → 4,175; tagged 1,189 → 1,377); no new job was run |
+| evidence | `data/review/proposed_tag_corrections_20261028.csv`; `docs/ai_eval_test_report.md` §10; `docs/ai_eval_implementation_audit.md` D-3 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

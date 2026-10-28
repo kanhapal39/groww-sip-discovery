@@ -23,9 +23,9 @@
 
 ## Golden Dataset
 
-All 300 rows are recorded as individually reviewed by the project owner (evidence log §7.2), but no tag was corrected. Known mis-tags remain (`docs/ai_eval_implementation_audit.md` D-3). The dataset is not independent ground truth.
+All 300 rows are recorded as individually reviewed by the project owner (evidence log §7.2). That review corrected no tags; 26 corrections on 16 known mis-tagged records were applied later (D-3, 2026-10-28). The other tags are the model's output, and the 20-record check suggests pain and need tags are often wrong (`docs/ai_eval_test_report.md` §9). The dataset is not independent ground truth.
 
-Only 5 to 10 rows carry the new-investor tenure tag, depending on the pending corrections. Questions about first-time investors therefore usually return the insufficient-evidence message.
+Only 5 rows carry the new-investor tenure tag (after the D-3 corrections). Questions about first-time investors therefore usually return the insufficient-evidence message.
 
 ## Research assistant
 

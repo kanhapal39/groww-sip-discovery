@@ -336,7 +336,7 @@ Until that evaluation is completed, the identified opportunities should be treat
 |---|---|---|
 | Case A and B tables | "Human-reviewed records: 66 of 66" / "43 of 43" | "Approved by the project owner: 66 of 66. No tag corrections were recorded (evidence log §7.2); these are not independent labels." |
 | Case A and B tables | "Evidence strength: Strong" | "Evidence strength: Strong by the engine's fixed rule (≥ 30 records, ≥ 2 platforms, ≥ 10 exact quotes); not a measure of relevance or impact." |
-| Case B table | 43 records, priority 63.0 | Keep as the historical observation. Add: "39 records and priority 58.0 after mandate/AutoPay records were held out (2026-10-28)." |
+| Case B table | 43 records, priority 63.0 | Keep as the historical observation. Add: "39 records and priority 58.0 after mandate/AutoPay records were held out (2026-10-28); 38 records and priority 56.0 after the D-3 tag corrections the same day." |
 | §2, item 6 | "Human review is used to inspect records…" | Accurate as a process. No correction from that review has been recorded yet |
 
 ### 12.4 Still not done
@@ -359,3 +359,7 @@ The project owner labelled 20 random records with the engine's tags hidden, then
 | Opportunity theme | 10 |
 
 The main error is under-tagging: pain and need are often `unclear` when the text states them, so those records match no opportunity. The set is small, excludes the known problem records, and its final labels were not independent of AI judgement. The figures describe these 20 records only. Retrieval and answer quality were not part of this check. Details: `docs/ai_eval_ground_truth_template.md` §6 and `docs/ai_eval_test_report.md` §9.
+
+### 12.6 Tag corrections for §7 (2026-10-28)
+
+The records in §7 were corrected on the project owner's decision (D-3), along with other known mis-tagged records: 26 changes on 16 records in all. The AutoPay setup failure now has `unmet_need=easy_mandate_control`. The cancel-with-profit record now has a deliberate lapse, `in_app_pain=redemption_withdrawal` and no support trigger. Seven unsupported new-investor tags were removed and two stated ones added (10 → 5). Flexible SIP is now 38 records with priority 56.0. Details: `docs/ai_eval_test_report.md` §10.

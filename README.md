@@ -12,7 +12,7 @@ The project distinguishes observed evidence from hypotheses and must not invent 
 | Cleaning | Done: 62,878 clean records |
 | Relevance filter | Running in the background (partial) |
 | Tagging | Running in the background (gpt-oss-120b and qwen3.8-27b, Reddit first) |
-| Golden Dataset | 300 rows, recorded as individually reviewed by the project owner on 2026-10-27 (evidence log §7.2). No tag corrections recorded yet; 26 proposed corrections await the owner's decision |
+| Golden Dataset | 300 rows, recorded as individually reviewed by the project owner on 2026-10-27 (evidence log §7.2). 26 tag corrections on 16 records applied on 2026-10-28 on the owner's decision (D-3, evidence log §8.5) |
 | AI evaluation | Audit and edge-case tests done (`docs/ai_eval_test_report.md`). 20-record labelled set drawn, **not yet labelled**, so no accuracy figures exist |
 | Dashboard | Five pages implemented; tested locally |
 

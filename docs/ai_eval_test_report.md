@@ -121,7 +121,7 @@ Tag-only matches still count as strong, so **EC1/EC12 is only partly solved for 
 | Opportunity | n before | n after | Priority before | Priority after | Change |
 |---|---|---|---|---|---|
 | mandate_reliability | 66 | 66 | 107.0 | 107.0 | none |
-| flexible_sip | 43 | 39 | 63.0 | 58.0 | 4 mandate/AutoPay records held out for review |
+| flexible_sip | 43 | 39 | 63.0 | 58.0 | 4 mandate/AutoPay records held out for review (see §10 for the figures after tag corrections) |
 | all others | — | — | — | — | none |
 
 Duplicates removed: 0.
@@ -141,7 +141,7 @@ Duplicates removed: 0.
 1. **Little ground truth.** *Updated 2026-10-28:* 20 records now carry owner-adjudicated labels (§9), so classification accuracy has a first, small measurement. Retrieval recall and precision and answer support are still unmeasured (§4 of `docs/ai_eval_ground_truth_template.md`).
 2. **Answer quality is untested.** No live LLM calls were made, so prompt answer-v2 has not been run. Model-dependent behaviour (EC4, EC13 and EC23 model side; EC17 paraphrase support; EC27 wording stability) is untested.
 3. **Dashboard visuals unchecked.** The Opportunities and Overview changes are covered by the existing smoke tests (`tests/test_app.py`), but a person has not checked the layout.
-4. **Tag errors remain in the data.** The known mis-tags are approved and uncorrected (decision D-3). The hold-out rule limits their effect on one opportunity only.
+4. **Tag errors remain in the data.** *Updated 2026-10-28:* the 16 known mis-tagged records were corrected (D-3, §10). The 20-record check (§9) shows other tag errors remain; they are not corrected.
 5. **Rule heuristics.** The impact-claim and quote checks are regular expressions. They can miss paraphrased predictions, and they could remove a legitimate statement that uses "would reduce … stop". Removed statements are shown on the page, so this is visible rather than silent.
 6. **Retrieval is still keyword and tag based** (no semantic search). Tag-only matches still count as strong.
 
@@ -206,3 +206,19 @@ Against the owner's step-1 labels, before adjudication, agreement was 7, 3, 3, 1
 - **MEDIUM: 4 of 20 records were judged not relevant** to SIP behaviour by the owner, yet they are in the approved Golden Dataset.
 
 **Limits:** n = 20; the final labels were not independent of AI judgement; known problem records were excluded from the sample; no figure here generalises to the 300 rows or to the opportunity counts. Nothing in the dataset was changed.
+
+## 10. Tag corrections applied (D-3, 2026-10-28)
+
+The project owner accepted 25 of the 26 proposed corrections. #23 (`b302ef12`, tenure) was left to Claude Code and set to `unclear` rather than `over_three_years`. The changes were written to `data/review/golden_sample_300.xlsx` with old → new values in each reviewer note, then promoted with `python -m pipeline.export golden` and `python -m research.build`. The public export changed in exactly 26 field values; record IDs and row count (300) are unchanged.
+
+| Opportunity | n before | n after | Priority before | Priority after |
+|---|---|---|---|---|
+| flexible_sip | 39 (4 held out) | 38 (0 held out) | 58.0 | 56.0 |
+| beginner_guidance | 16 | 11 | 22.0 | 12.0 |
+| redemption_speed | 27 | 28 | 16.5 | 17.5 |
+| responsive_support | 15 | 14 | 10.0 | 9.0 |
+| all others | — | — | — | — (unchanged) |
+
+New-investor tenure tags: 10 → 5. Retrieval probe (no model): "returns in the first year" 32 → 26 strong matches; "first-time investors discontinue after 12 months" 1 → 0. Other probe questions kept the same counts. All 165 tests pass.
+
+The 20 labelled records (§9) were not touched by these corrections; they were excluded from the D-3 list.

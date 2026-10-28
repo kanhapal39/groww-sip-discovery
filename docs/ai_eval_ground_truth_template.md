@@ -69,29 +69,29 @@ Allowed values for the labelled columns are in `codebook.yaml` (v3). Use `unclea
 
 ## 3. Engine output compared with the final labels
 
-No correction has been made to the Golden Dataset. Confirmed engine errors on these records are listed for decision D-3 (§6.4).
+These records were not part of the D-3 corrections, so their Golden Dataset tags are unchanged. Applying the confirmed errors below is a separate decision (§6.4).
 
 | # | record_id | Engine behavior | Engine in_app_pain | Engine unmet_need | Engine tenure | Engine opportunities matched | Fields agreeing / 5 | Engine wrong on | Correction made? |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | `195c9e77` | `pause_sip` | `mandate_autopay` | `easy_mandate_control` | `unclear` | `mandate_reliability` | 3 | unmet_need, theme | No (pending D-3) |
-| 2 | `61403f24` | `unclear` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
-| 3 | `13c617d3` | `unclear` | `unclear` | `unclear` | `unclear` | none | 4 | behavior | No (pending D-3) |
-| 4 | `e64dc6f5` | `unclear` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
-| 5 | `fa76a587` | `unclear` | `none` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
-| 6 | `404cb625` | `stop_sip` | `redemption_withdrawal` | `responsive_support` | `unclear` | `redemption_speed`, `responsive_support` | 4 | in_app_pain | No (pending D-3) |
-| 7 | `7082789b` | `unclear` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
-| 8 | `020df9f9` | `other` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
-| 9 | `d2ff3587` | `other` | `app_bug` | `fast_redemption` | `unclear` | `redemption_speed`, `app_reliability` | 4 | in_app_pain | No (pending D-3) |
-| 10 | `6652a87d` | `stop_sip` | `sip_management` | `flexible_sip` | `unclear` | `flexible_sip` | 3 | behavior, unmet_need | No (pending D-3) |
+| 1 | `195c9e77` | `pause_sip` | `mandate_autopay` | `easy_mandate_control` | `unclear` | `mandate_reliability` | 3 | unmet_need, theme | No (decision pending) |
+| 2 | `61403f24` | `unclear` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
+| 3 | `13c617d3` | `unclear` | `unclear` | `unclear` | `unclear` | none | 4 | behavior | No (decision pending) |
+| 4 | `e64dc6f5` | `unclear` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
+| 5 | `fa76a587` | `unclear` | `none` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
+| 6 | `404cb625` | `stop_sip` | `redemption_withdrawal` | `responsive_support` | `unclear` | `redemption_speed`, `responsive_support` | 4 | in_app_pain | No (decision pending) |
+| 7 | `7082789b` | `unclear` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
+| 8 | `020df9f9` | `other` | `unclear` | `unclear` | `unclear` | none | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
+| 9 | `d2ff3587` | `other` | `app_bug` | `fast_redemption` | `unclear` | `redemption_speed`, `app_reliability` | 4 | in_app_pain | No (decision pending) |
+| 10 | `6652a87d` | `stop_sip` | `sip_management` | `flexible_sip` | `unclear` | `flexible_sip` | 3 | behavior, unmet_need | No (decision pending) |
 | 11 | `61962818` | `continue_sip` | `none` | `unclear` | `one_to_three_years` | none | 5 | — | — |
 | 12 | `111e7d0b` | `continue_sip` | `none` | `unclear` | `unclear` | none | 5 | — | — |
 | 13 | `009c1dbe` | `unclear` | `unclear` | `unclear` | `unclear` | none | 5 | — | — |
 | 14 | `be63c39c` | `unclear` | `unclear` | `unclear` | `unclear` | none | 5 | — | — |
 | 15 | `a0ad7656` | `unclear` | `unclear` | `unclear` | `unclear` | none | 5 | — | — |
-| 16 | `5d5fe1e4` | `pause_sip` | `mandate_autopay` | `easy_mandate_control` | `unclear` | `mandate_reliability` | 3 | unmet_need, theme | No (pending D-3) |
-| 17 | `61795856` | `pause_sip` | `mandate_autopay` | `unclear` | `unclear` | `mandate_reliability` | 1 | behavior, in_app_pain, unmet_need, theme | No (pending D-3) |
-| 18 | `d3a3a2f7` | `unclear` | `app_bug` | `reliable_app` | `unclear` | `app_reliability` | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
-| 19 | `278362ef` | `continue_sip` | `sip_management` | `flexible_sip` | `unclear` | `flexible_sip` | 2 | in_app_pain, unmet_need, theme | No (pending D-3) |
+| 16 | `5d5fe1e4` | `pause_sip` | `mandate_autopay` | `easy_mandate_control` | `unclear` | `mandate_reliability` | 3 | unmet_need, theme | No (decision pending) |
+| 17 | `61795856` | `pause_sip` | `mandate_autopay` | `unclear` | `unclear` | `mandate_reliability` | 1 | behavior, in_app_pain, unmet_need, theme | No (decision pending) |
+| 18 | `d3a3a2f7` | `unclear` | `app_bug` | `reliable_app` | `unclear` | `app_reliability` | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
+| 19 | `278362ef` | `continue_sip` | `sip_management` | `flexible_sip` | `unclear` | `flexible_sip` | 2 | in_app_pain, unmet_need, theme | No (decision pending) |
 | 20 | `5ff1c271` | `unclear` | `unclear` | `unclear` | `unclear` | none | 5 | — | — |
 
 ## 4. Retrieval and answer checks (filled after labelling)
@@ -155,5 +155,5 @@ This shows that errors exist in both directions. It does not estimate how many o
 ### 6.4 Not done
 
 - **§4 retrieval and answer checks:** not started. They need 5 questions written before running the engine, plus approval for the model calls.
-- **Corrections:** the confirmed errors above are not in the D-3 proposal (those records were excluded from this sample). Correcting them is the owner's decision; nothing in the Golden Dataset was changed.
+- **Corrections:** the confirmed errors above are not in the D-3 proposal (those records were excluded from this sample). Correcting them is the owner's decision; none of these 20 records was changed.
 - **Generalising:** with n = 20 and a sample that excluded 22 known problem records, these figures describe these 20 records only.

@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-27T03:16:30.163778+00:00",
+  "built_at": "2026-10-28T14:13:51.122782+00:00",
   "raw": {
     "play_store": {
       "records": 151000,
@@ -57,34 +57,34 @@
   },
   "clean_total": 62878,
   "filter": {
-    "labelled": 4150,
+    "labelled": 4175,
     "labels": {
-      "no": 2922,
-      "yes": 993,
+      "no": 2943,
+      "yes": 997,
       "unsure": 235
     },
     "errors": 0,
     "rescued": 230,
     "by_source": {
-      "play_store": 4135,
+      "play_store": 4160,
       "reddit": 15
     }
   },
   "tagging": {
-    "tagged": 1189,
-    "ok": 1181,
+    "tagged": 1377,
+    "ok": 1369,
     "failed": 8,
     "by_model": {
-      "openai/gpt-oss-120b": 705,
+      "openai/gpt-oss-120b": 893,
       "qwen/qwen3.8-27b": 484
     },
     "quote_status": {
-      "exact": 928,
-      "repaired": 37,
-      "none": 194,
-      "hidden": 22
+      "exact": 1080,
+      "repaired": 47,
+      "none": 209,
+      "hidden": 33
     },
-    "reason_flags": 99,
+    "reason_flags": 106,
     "failures": [
       {
         "record_id": "4a04c0c8-2586-5129-8d9c-270d5fab8e1c",
@@ -384,6 +384,111 @@
         "score": 100.0
       },
       {
+        "record_id": "eda17957-8d35-5643-b4da-daa093751567",
+        "status": "repaired",
+        "score": 95.6
+      },
+      {
+        "record_id": "df1688b8-b655-50d1-940b-0a425d9fab5b",
+        "status": "repaired",
+        "score": 92.7
+      },
+      {
+        "record_id": "0a279a65-7ee6-55b0-bacc-001001576e6b",
+        "status": "hidden",
+        "score": 69.8
+      },
+      {
+        "record_id": "e8e76812-8e93-57cc-b2f2-0a8e5cdea45f",
+        "status": "repaired",
+        "score": 97.4
+      },
+      {
+        "record_id": "e23cf1b4-7f02-5ccc-b76d-1d666681ca5e",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "528f8d8c-6dc8-5eee-a9af-b7c20ac90914",
+        "status": "hidden",
+        "score": 73.8
+      },
+      {
+        "record_id": "f0be1354-57d7-5bdb-8c17-4acbf496cbdb",
+        "status": "hidden",
+        "score": 77.4
+      },
+      {
+        "record_id": "cdac828d-8066-5271-b07c-c820b8f15a92",
+        "status": "hidden",
+        "score": 64.0
+      },
+      {
+        "record_id": "f29fd8e7-74c1-5862-8496-8888a8025951",
+        "status": "hidden",
+        "score": 70.8
+      },
+      {
+        "record_id": "6e97bde4-3401-5a62-9162-032c8c61211f",
+        "status": "hidden",
+        "score": 68.1
+      },
+      {
+        "record_id": "75952eaa-2eb5-57ff-90c1-565713149680",
+        "status": "repaired",
+        "score": 81.4
+      },
+      {
+        "record_id": "6016fe96-4176-5ec0-b77e-48bb572e2870",
+        "status": "repaired",
+        "score": 93.3
+      },
+      {
+        "record_id": "69672171-9fbf-578c-b761-4d0594b94b58",
+        "status": "repaired",
+        "score": 92.3
+      },
+      {
+        "record_id": "0d89fee1-60cb-54be-ad45-9ac0a52419f7",
+        "status": "hidden",
+        "score": 69.4
+      },
+      {
+        "record_id": "44d3d07b-fd39-50f2-bade-e58759e702fd",
+        "status": "repaired",
+        "score": 95.1
+      },
+      {
+        "record_id": "da75f050-9525-5569-a665-595e9842f73c",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "ba283341-23da-5495-ae03-5bc9d513be8a",
+        "status": "hidden",
+        "score": 71.2
+      },
+      {
+        "record_id": "55502ab1-8616-558b-80f7-5b3ffe03f733",
+        "status": "hidden",
+        "score": 64.4
+      },
+      {
+        "record_id": "02ea451d-a702-5973-a693-4c3095e2b365",
+        "status": "repaired",
+        "score": 94.6
+      },
+      {
+        "record_id": "35d07125-d4dc-5162-9ce3-0d641440f8f8",
+        "status": "hidden",
+        "score": 79.4
+      },
+      {
+        "record_id": "673d6f14-b9d9-5e0d-aeb7-79f231e89c41",
+        "status": "hidden",
+        "score": 79.3
+      },
+      {
         "record_id": "5a3469de-ca06-57c3-b2fb-18dde76c8ef1",
         "status": "repaired",
         "score": 97.3
@@ -558,5 +663,5 @@
     },
     "small_sample": 30
   },
-  "golden_version": "ff2f8baeafdf"
+  "golden_version": "09688fa131d3"
 }
