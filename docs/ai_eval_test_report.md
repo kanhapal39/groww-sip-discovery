@@ -303,3 +303,21 @@ Claude Code read all 32 flexible_sip records and proposed corrections to 14 that
 | portfolio_tracking | 3 | 4 (still below the 5-record minimum) |
 
 Ranking by priority is now mandate_reliability, app_reliability, flexible_sip, responsive_support, redemption_speed. flexible_sip breakdown: pausing or skipping 9, editing or step-up 5, cancelling only 1, none 3. Four borderline records about choosing to pause (three wedding posts, one election post) were left in. 169 tests pass.
+
+## 15. App reliability records reviewed one by one (2026-10-28)
+
+Claude Code read all 42 app_reliability records; the owner accepted corrections to 21 (34 field changes).
+- **Not app failures (16):** account opening or KYC (`0b9bd218`, `ca6d9b31`, `eaeca20c`, `3f9d416a`) → `kyc_onboarding`; a pause request (`5f80c604`) → flexible SIP; an AutoPay setup stuck "in progress" (`7f0f5b58`) → mandate; portfolio or holdings data (`9c5eb9e3`, `84a76cd6`, `fcd2f743`, `68d384f0`) → `portfolio_display`; auto square-off charges (`5edab3ff`) → `fees_charges`; support-only or no real problem (`25d8c72d`, `0d1a5e14`, `cbe93040`, `fd9eeead`, `8991e942`) → pain `unclear`.
+- **Late unit allotment tagged as a pause (5):** `0579bc2e`, `4b393128`, `8b10e05c`, `2660ce06`, `2bb4e87c` → behavior `continue_sip`, lapse `no_lapse`, trigger `app_bug_or_ux`. Three had trigger `market_or_returns` and were counted as market-driven pauses.
+
+| Opportunity | Before | After |
+|---|---|---|
+| app_reliability | 42 (27.0) | 26 (16.0) |
+| mandate_reliability | 78 (120.0) | 77 (117.0) |
+| flexible_sip | 18 (25.0) | 19 (27.0) |
+| responsive_support | 30 (19.0) | 31 (19.5) |
+| fee_transparency | 11 (7.5) | 12 (8.0) |
+| portfolio_tracking | 4 (not shown) | 8 (9.0), now shown |
+| market_fall_reassurance | 6 (12.0) | 3, now insufficient evidence |
+
+Of the 3 market_fall_reassurance records left, only `55c5855a` reports a SIP stopped because of the market; `b4f3a443` is a bounce charge and `b445c5f5` the overseas-investment limit (not corrected). Several app_reliability records are stock-trading complaints from the bulk-approved D-8 rows; they were retagged, not removed. 169 tests pass.

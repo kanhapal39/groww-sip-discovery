@@ -695,6 +695,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Proposals were Claude Code's reading; `5e019da4` and `93305fa1` are mixed complaints. Four records about choosing to pause were kept. Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_test_report.md` §14 |
 
+### 8.14 App reliability: 21 records corrected after one-by-one reading
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "accept all"); Claude Code (proposal and application) |
+| decision | 34 field changes on 21 rows, as listed in `docs/ai_eval_test_report.md` §15. Reviewer notes record old -> new; promoted and rebuilt (version 727af6426411) |
+| prompt_version | tag-v4; codebook v3 (+ sip_cancellation) |
+| before_count | app_reliability 42; mandate_reliability 78; flexible_sip 18; responsive_support 30; fee_transparency 11; portfolio_tracking 4; market_fall_reassurance 6 |
+| after_count | app_reliability 26; mandate_reliability 77; flexible_sip 19; responsive_support 31; fee_transparency 12; portfolio_tracking 8 (now shown); market_fall_reassurance 3 (now insufficient). 169 tests passing |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | 34 field values on 21 rows |
+| known_limitations | Proposals were Claude Code's reading; kyc_onboarding fits `0b9bd218` and `3f9d416a` only loosely. Off-topic stock-trading rows remain in the Golden Dataset. Pre-change files kept outside the repo as a session backup |
+| evidence | `docs/ai_eval_test_report.md` §15 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud
