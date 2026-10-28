@@ -138,7 +138,7 @@ Duplicates removed: 0.
 
 ## 7. Remaining blockers and limitations
 
-1. **No ground truth.** No independently labelled records exist, so retrieval recall and precision, classification accuracy and answer support cannot be measured. Template: `docs/ai_eval_ground_truth_template.md`.
+1. **Little ground truth.** *Updated 2026-10-28:* 20 records now carry owner-adjudicated labels (§9), so classification accuracy has a first, small measurement. Retrieval recall and precision and answer support are still unmeasured (§4 of `docs/ai_eval_ground_truth_template.md`).
 2. **Answer quality is untested.** No live LLM calls were made, so prompt answer-v2 has not been run. Model-dependent behaviour (EC4, EC13 and EC23 model side; EC17 paraphrase support; EC27 wording stability) is untested.
 3. **Dashboard visuals unchecked.** The Opportunities and Overview changes are covered by the existing smoke tests (`tests/test_app.py`), but a person has not checked the layout.
 4. **Tag errors remain in the data.** The known mis-tags are approved and uncorrected (decision D-3). The hold-out rule limits their effect on one opportunity only.
@@ -185,3 +185,24 @@ Two candidate fixes; neither is implemented, and both need the owner's go-ahead 
 - **Frequency check:** flag frequency words in summaries.
 
 **Bug found and fixed.** When the model judged the evidence insufficient, its token usage was dropped from the result, so quota use was under-reported. It is now returned (`test_model_saying_insufficient_is_respected`).
+
+## 9. Classification accuracy on 20 labelled records (2026-10-28)
+
+**What was done.** 20 random public records (seed 20261028; 22 known-problem records excluded) were labelled by the project owner with the engine's tags hidden. Disagreements were then adjudicated by the owner, who chose a final value for all 66 disputed field values. The owner accepted Claude Code's suggestion on every one and states they reviewed each row and agree. Method, per-record labels and caveats: `docs/ai_eval_ground_truth_template.md` §2–§6.
+
+| Field | Engine correct vs final labels (n = 20) | 95% interval | Severity |
+|---|---|---|---|
+| behavior | 17 | 64–95% | LOW |
+| in_app_pain | 10 | 30–70% | HIGH |
+| unmet_need | 9 | 26–66% | HIGH |
+| tenure | 20 | 84–100% | LOW (but only 1 record in the sample states a tenure) |
+| Theme (opportunity matched) | 10 | 30–70% | HIGH |
+
+Against the owner's step-1 labels, before adjudication, agreement was 7, 3, 3, 17 and 4. That gap is mostly labelling-rule differences (thread context, missed instalments), not engine errors.
+
+**Findings:**
+- **HIGH: pain and need are under-tagged.** In 5 of 10 pain errors and 6 of 11 need errors the engine said `unclear` (or `none`) although the text states the problem or need. Opportunity matching uses these tags, so those records drop out of every opportunity.
+- **HIGH: theme errors run in both directions.** Flexible SIP misses `7082789b` and `e64dc6f5` and counts `278362ef`, an AutoPay setup failure tagged `sip_management` that the mandate hold-out rule does not catch. Mandate reliability misses `61403f24` and `278362ef` and counts 3 records whose final theme is fees, support or app reliability.
+- **MEDIUM: 4 of 20 records were judged not relevant** to SIP behaviour by the owner, yet they are in the approved Golden Dataset.
+
+**Limits:** n = 20; the final labels were not independent of AI judgement; known problem records were excluded from the sample; no figure here generalises to the 300 rows or to the opportunity counts. Nothing in the dataset was changed.

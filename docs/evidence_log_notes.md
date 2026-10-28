@@ -525,6 +525,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Support of points was judged by Claude Code (9 supported, 7 partly, 1 not; 5 of 31 citations did not support their point; 2 of 4 summaries overgeneralised), not by a person. No labels exist yet for the 20-record set |
 | evidence | `data/processed/answer_eval_20261028.jsonl`, `docs/ai_eval_test_report.md` §8, `docs/ai_eval_ground_truth_template.md` |
 
+### 8.4 Labelled 20-record set: owner labels and adjudication
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | evaluation |
+| actor | human (project owner labelled 20 records blind, then adjudicated: "A. Record as a human revied each row and agree"); Claude Code (comparison, adjudication sheet with suggestions, scoring) |
+| decision | Owner labelled the 20 sampled records in `data/review/ground_truth_20.xlsx` with engine tags hidden. 66 disagreements on 19 records went to `data/review/ground_truth_20_adjudication.xlsx`; the owner chose a final value for each, accepting Claude Code's suggestion on all 66 (32 engine, 22 owner, 12 third value), and confirmed they reviewed each row. Final labels written to `data/review/ground_truth_20_final.csv`. The adjudication sheet on disk was replaced by an export of the owner's open, unsaved Numbers document |
+| prompt_version | tag-v4; codebook v3 (engine tags under test) |
+| before_count | 0 labelled records |
+| after_count | 20 labelled records (16 relevant, 4 not). Engine vs final: behavior 17, in_app_pain 10, unmet_need 9, tenure 20, theme 10. Engine vs owner's blind labels: 7, 3, 3, 17, 4 |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | None applied to the Golden Dataset. Confirmed engine errors on these records are listed in `docs/ai_eval_ground_truth_template.md` §6.2 for the owner's decision (D-3) |
+| known_limitations | n = 20; 22 known-problem records excluded from the sample; final labels follow Claude Code's suggestions, so they are not independent of AI judgement; retrieval and answer checks not done |
+| evidence | `docs/ai_eval_ground_truth_template.md` §2–§6; `docs/ai_eval_test_report.md` §9 |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

@@ -26,6 +26,6 @@ Checks that run in code, where they run, and what they do.
 
 ## What is not validated
 
-- Tag accuracy against human labels: rows are recorded as reviewed, but no tag was corrected and no independent labels exist yet (`docs/ai_eval_ground_truth_template.md`).
+- Tag accuracy beyond a 20-record sample. On 20 owner-adjudicated records the engine was right on behavior 17, in_app_pain 10, unmet_need 9, tenure 20, theme 10 (`docs/ai_eval_ground_truth_template.md` §6). Golden rows are recorded as reviewed, but no tag has been corrected.
 - Whether a cited record supports a paraphrased point is not checked in code. Answer summaries can still overgeneralise ("mainly", "new investors often"; observed 2026-10-28). Counts shown next to answers are computed in code.
 - Language detection and date estimates for Reddit (ID-based windows) are rules, not verified labels.

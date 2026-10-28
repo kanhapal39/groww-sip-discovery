@@ -7,7 +7,7 @@ This audit compares the expectations in the two evaluation documents against the
 - `docs/ai_evaluation_documentation.md` — the AI Evaluation document (Cases A–C, human-review Cases 1–3). Cited below as **Eval**.
 - `docs/edge_cases_and_failure_modes.md` — 20 edge cases and the scorecard. Cited below as **Edge**.
 - `docs/ai_eval_test_report.md` — per-edge-case test results, severities and retests.
-- `docs/ai_eval_ground_truth_template.md` — template for the 20-record labelled set (not yet labelled).
+- `docs/ai_eval_ground_truth_template.md` — the 20-record labelled set (labelled and adjudicated 2026-10-28; retrieval checks not started).
 
 ## 1. Sources read and method
 
@@ -68,7 +68,7 @@ Result columns: **Before** = state of `main` at `0d11e77`; **After** = state on 
 | R-22 | Reproducible counts and citations | EC27; Edge 20 | `research/retrieval.py:search` (sorted by score, record_id); `app/data.py:answer` cache per question and dataset version | none → `test_ec27_*` | IMPLEMENTED BUT NOT VERIFIED | IMPLEMENTED AND VERIFIED (retrieval); generation not tested | Answer text from the LLM can vary; evidence set cannot | — |
 | R-23 | Empty, malformed, duplicated, incomplete data handled | EC28 | `research/store.py:load_golden`, `build_database`; `research/opportunities.py:build` | none → `test_ec28_*` | PARTIALLY IMPLEMENTED (malformed line → raw `JSONDecodeError`) | IMPLEMENTED AND VERIFIED | Malformed line now raises `ValueError` naming the line; it is not skipped silently | — |
 | R-24 | Secrets not exposed in UI, logs or errors | EC30 | `research/answer.py` (error shows exception type only); `.gitignore`; `app/data.py:_secret` | none → `test_ec30_*` | IMPLEMENTED BUT NOT VERIFIED | IMPLEMENTED AND VERIFIED | Tracked-file scan for Groq, Apify and Google key patterns: none found | — |
-| R-25 | 20-record independently labelled evaluation | Eval §11; Edge §3 | — | — | NOT IMPLEMENTED | NOT IMPLEMENTED (template created) | No labelled set exists anywhere in the repo or data | `docs/ai_eval_ground_truth_template.md` |
+| R-25 | 20-record independently labelled evaluation | Eval §11; Edge §3 | `research/ground_truth.py` (sample, compare) | — → `tests/test_ground_truth.py` | NOT IMPLEMENTED | PARTIALLY IMPLEMENTED (classification VERIFIED on 20; retrieval and answers not started) | *Updated 2026-10-28:* owner labelled 20 records blind, then adjudicated 66 disagreements, accepting Claude Code's suggestion on each. Engine vs final: behavior 17/20, in_app_pain 10/20, unmet_need 9/20, tenure 20/20, theme 10/20 | `docs/ai_eval_ground_truth_template.md` §6; retrieval checks (§4) need questions and model approval |
 | R-26 | Human corrections recorded | Eval §7 | `data/review/golden_sample_300.xlsx` notes; evidence log §7.2 | — | NOT IMPLEMENTED | NOT IMPLEMENTED | Evidence log §7.2: "no tag values were changed in the workbook, so no corrections are recorded" | D-3 |
 
 ## 4. Documentation versus code: inconsistencies found
@@ -110,10 +110,13 @@ Result columns: **Before** = state of `main` at `0d11e77`; **After** = state on 
 | Automated tests executed / passed / failed (final) | 162 / 162 / 0 | `pytest tests/`; 24 of them new in `tests/test_ai_eval_edge_cases.py` |
 | Tests blocked | Every check of LLM answer quality: live calls are not allowed | §7 of the test report |
 | Human-reviewed (approved) Golden rows | 300 (status by owner statement, §7.2) | `data/export/golden_public.jsonl` |
-| Independently labelled ground-truth records | **0** | — |
+| Independently labelled ground-truth records | **20** (owner-labelled blind, then adjudicated with Claude Code's suggestions; *updated 2026-10-28*) | `docs/ai_eval_ground_truth_template.md` |
+| Classification accuracy vs final labels (n = 20) | behavior 17, in_app_pain 10, unmet_need 9, tenure 20, theme 10 | `docs/ai_eval_test_report.md` §9 |
 | Human corrections recorded | **0** | Evidence log §7.2 |
 | AI-generated classifications | 300 rows × 15 fields (gpt-oss-120b, tag-v4) | — |
 | Inter-model agreement (existing, not ground truth) | 30 items: behaviour 80%, lapse type 90%, trigger 57% | `docs/limitations.md`; evidence log |
 | Unverified hypotheses | 10 opportunity definitions; the Eval document's causal links to 12-month continuation | `opportunities.yaml`; Eval §8 |
 
-No accuracy, precision, recall or agreement-with-human figure is reported. There is no labelled ground truth to compute them against.
+*Original text:* No accuracy, precision, recall or agreement-with-human figure is reported. There is no labelled ground truth to compute them against.
+
+*Updated 2026-10-28:* per-field classification accuracy on 20 records is now reported (above). Retrieval precision and recall and answer support are still not measured.

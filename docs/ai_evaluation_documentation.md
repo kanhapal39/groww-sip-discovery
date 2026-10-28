@@ -341,7 +341,21 @@ Until that evaluation is completed, the identified opportunities should be treat
 
 ### 12.4 Still not done
 
-- **The 20-record independently labelled set (§11) does not exist.** A template with every row PENDING is in `docs/ai_eval_ground_truth_template.md`. No accuracy, precision, recall or agreement figure has been computed, and none should be quoted.
+- **The 20-record independently labelled set (§11) does not exist.** A template with every row PENDING is in `docs/ai_eval_ground_truth_template.md`. No accuracy, precision, recall or agreement figure has been computed, and none should be quoted. *(Superseded later the same day for classification; see §12.5.)*
 - No answer from the live model was generated or re-evaluated during this audit. The answer prompt changed to `answer-v2` and has not been run.
 - The three records in §7 remain in the Golden Dataset with their original tags. Correcting them is a reviewer's decision.
 - The opportunities in §8 remain hypotheses; nothing measured their effect on 12-month SIP continuation.
+
+### 12.5 Labelled 20-record set (2026-10-28)
+
+The project owner labelled 20 random records with the engine's tags hidden, then adjudicated the 66 field values where they and the engine differed. They accepted Claude Code's suggested value on every one, after reviewing each row. Against the final labels the engine was correct on:
+
+| Field | Correct (n = 20) |
+|---|---|
+| behavior | 17 |
+| in_app_pain | 10 |
+| unmet_need | 9 |
+| tenure | 20 |
+| Opportunity theme | 10 |
+
+The main error is under-tagging: pain and need are often `unclear` when the text states them, so those records match no opportunity. The set is small, excludes the known problem records, and its final labels were not independent of AI judgement. The figures describe these 20 records only. Retrieval and answer quality were not part of this check. Details: `docs/ai_eval_ground_truth_template.md` §6 and `docs/ai_eval_test_report.md` §9.

@@ -16,6 +16,7 @@
 ## Classification
 
 - Tags are LLM output against a draft codebook (v3) that has not been reviewed by a human.
+- On 20 owner-adjudicated records the engine's pain and need tags were right only 10 and 9 times; it often returns `unclear` when the text states the problem. Opportunity counts inherit these errors in both directions (`docs/ai_eval_test_report.md` §9).
 - In the 30-item inter-model check (tag-v4) the models agreed 80% on behaviour, 90% on lapse type and 57% on trigger.
 - Segment fields (income, age, money source, influencer) are almost always unclear in public posts; segments will use proxies validated through interviews.
 - The relevance filter has processed only part of the Play Store data; many records are not yet labelled.
