@@ -746,6 +746,23 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Keyword selection misses reviews that describe the problem in other words, and the groups are Claude Code's reading. Only about 10 records clearly concern the first instalment; the rest are adjacent blockers. Reviews are self-selected, so the counts show that a problem occurs, not how often. Two Reddit posts with matching titles have no body text and were left out |
 | evidence | `data/review/first_sip_blockers_20261028.xlsx` (sheet "about") |
 
+### 8.17 First-SIP blocker candidates bulk-approved into the Golden Dataset
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "approve all 44", after being told the saved workbook was unchanged and that this would be recorded as a bulk approval); Claude Code (applied the instruction) |
+| decision | All 44 rows of `data/review/first_sip_blockers_20261028.xlsx` set to approved with reviewer "project owner (bulk)" and a note that they were not reviewed row by row; tags unchanged. Appended to `data/review/golden_sample_300.xlsx` (now 460 rows: 456 approved, 4 rejected); copied to `data/manual/golden_dataset.xlsx`; promoted with `python -m pipeline.export golden`; exports rebuilt (version e8f0245e6ff5) |
+| prompt_version | tag-v4 for the 8 tagged rows; none for the 36 untagged |
+| before_count | 412 approved (bulk 116); mandate_reliability 56, flexible_sip 21, responsive_support 32; tenure new_under_1y 94 |
+| after_count | 456 approved (bulk 160); mandate_reliability 63, flexible_sip 22, responsive_support 33; tenure new_under_1y 97; other opportunities unchanged. Exact quotes 296 → 303 |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | none |
+| known_limitations | 36 rows have no tags, so they are left out of tag counts and opportunities (shares still use all 456 rows as the denominator) but can be found by text search and cited in answers. The 8 earlier tags were never checked by a person; 3 come from qwen/qwen3.8-27b. Rows were selected by keyword for one question, which further skews the dataset away from a balanced sample |
+| evidence | `data/review/first_sip_blockers_20261028.xlsx`; `data/export/quality_metrics.json` |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud

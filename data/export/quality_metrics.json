@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-28T15:11:59.303463+00:00",
+  "built_at": "2026-10-28T17:33:33.636385+00:00",
   "raw": {
     "play_store": {
       "records": 151000,
@@ -551,18 +551,18 @@
     ]
   },
   "golden": {
-    "records": 412,
+    "records": 456,
     "by_source": {
-      "play_store": 306,
-      "reddit": 106
+      "play_store": 349,
+      "reddit": 107
     },
     "individually_reviewed": 296,
-    "bulk_approved": 116,
+    "bulk_approved": 160,
     "missing_provenance": 0,
-    "exact_quotes": 296,
+    "exact_quotes": 303,
     "review_workbook": "golden_sample_300.xlsx",
     "review_statuses": {
-      "approved": 412,
+      "approved": 456,
       "rejected": 4
     }
   },
@@ -684,5 +684,5 @@
     },
     "small_sample": 30
   },
-  "golden_version": "01a87313d3a1"
+  "golden_version": "e8f0245e6ff5"
 }
