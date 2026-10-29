@@ -729,6 +729,57 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | known_limitations | Proposals were Claude Code's reading. IPO and membership mandate failures kept under mandate_reliability. Pre-change files kept outside the repo as a session backup |
 | evidence | `docs/ai_eval_test_report.md` §16 |
 
+### 8.16 First-SIP blocker candidates for review
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review (candidate selection) |
+| actor | human (project owner asked "What prevents investors from completing their first SIP instalment after creating a SIP?", then "Yes, add them to a review workbook"); Claude Code (search and workbook) |
+| decision | Keyword search over `data/processed/clean.jsonl` (62,878 records) for first-SIP, pending/undebited SIP, mandate setup, KYC, bank verification and payment-failure phrases; Claude Code read the matches and kept 48 that describe something blocking a SIP from starting or an instalment from going through. 4 are already in the Golden Dataset; the other 44 were written (all pending) to `data/review/first_sip_blockers_20261028.xlsx`, grouped in the stratum column: KYC / eSign / account 17, first instalment stuck or failed 10, AutoPay / mandate setup 10, bank verification 4, failed payment with no retry 3 |
+| prompt_version | tag-v4 for the 8 rows with earlier tags; none for the rest |
+| before_count | Golden Dataset 412 approved rows; unchanged |
+| after_count | 44 pending candidates. 8 carry tags from earlier runs (5 openai/gpt-oss-120b, 3 qwen/qwen3.8-27b); 36 untagged |
+| model_used | none (no API calls) |
+| cost_estimate | $0.00 |
+| human_correction | none yet |
+| known_limitations | Keyword selection misses reviews that describe the problem in other words, and the groups are Claude Code's reading. Only about 10 records clearly concern the first instalment; the rest are adjacent blockers. Reviews are self-selected, so the counts show that a problem occurs, not how often. Two Reddit posts with matching titles have no body text and were left out |
+| evidence | `data/review/first_sip_blockers_20261028.xlsx` (sheet "about") |
+
+### 8.17 First-SIP blocker candidates bulk-approved into the Golden Dataset
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 |
+| stage | human review / Golden Dataset |
+| actor | human (project owner: "approve all 44", after being told the saved workbook was unchanged and that this would be recorded as a bulk approval); Claude Code (applied the instruction) |
+| decision | All 44 rows of `data/review/first_sip_blockers_20261028.xlsx` set to approved with reviewer "project owner (bulk)" and a note that they were not reviewed row by row; tags unchanged. Appended to `data/review/golden_sample_300.xlsx` (now 460 rows: 456 approved, 4 rejected); copied to `data/manual/golden_dataset.xlsx`; promoted with `python -m pipeline.export golden`; exports rebuilt (version e8f0245e6ff5) |
+| prompt_version | tag-v4 for the 8 tagged rows; none for the 36 untagged |
+| before_count | 412 approved (bulk 116); mandate_reliability 56, flexible_sip 21, responsive_support 32; tenure new_under_1y 94 |
+| after_count | 456 approved (bulk 160); mandate_reliability 63, flexible_sip 22, responsive_support 33; tenure new_under_1y 97; other opportunities unchanged. Exact quotes 296 → 303 |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | none |
+| known_limitations | 36 rows have no tags, so they are left out of tag counts and opportunities (shares still use all 456 rows as the denominator) but can be found by text search and cited in answers. The 8 earlier tags were never checked by a person; 3 come from qwen/qwen3.8-27b. Rows were selected by keyword for one question, which further skews the dataset away from a balanced sample |
+| evidence | `data/review/first_sip_blockers_20261028.xlsx`; `data/export/quality_metrics.json` |
+
+### 8.18 Tagging and correction of the 36 untagged first-SIP rows (Groq, approved)
+
+| Field | Value |
+|-------|-------|
+| date | 2026-10-28 (run), 2026-10-29 (corrections) |
+| stage | tagging / human review |
+| actor | human (project owner: "yes, tag the 36 with Groq", approval recorded here per AGENTS.md rule 6; then "accept all" to Claude Code's proposed corrections); Claude Code (run, proposals, applied) |
+| decision | Tagged the 36 untagged rows of §8.17 with `pipeline.tag.run_tagger` (run "first_sip_blockers"), appending to `data/processed/tag_results.jsonl`. Claude Code proposed corrections to 31 rows (91 fields), shown to the owner with quotes and simulated counts before applying. Main errors: KYC blockers tagged as mandate problems; "can't start" or autopay-setup complaints tagged pause_sip; easy_mandate_control given to nearly every row. Judgement calls accepted: a first SIP whose first instalment never went through is start_sip, not pause_sip; tenure new_under_1y only where the text says first SIP or a just-opened account (2 rows). Tags written to `data/review/first_sip_blockers_20261028.xlsx` and `golden_sample_300.xlsx` with reviewer notes listing each change; promoted; exports rebuilt (version ee63ab0f1429) |
+| prompt_version | tag-v4; codebook v3 |
+| before_count | 36 rows untagged; mandate_reliability 63, responsive_support 33; tenure new_under_1y 97 |
+| after_count | AI tags as returned would have given mandate_reliability 92, app_reliability 31, portfolio_tracking 9. After corrections: mandate_reliability 74 (priority 111.0), responsive_support 34; others unchanged; tenure new_under_1y 99 |
+| model_used | openai/gpt-oss-120b |
+| cost_estimate | $0.00 (free tier). 16,299 tokens, 3 requests, 0 failures; above Claude Code's ~11k estimate given at approval |
+| human_correction | 31 of 36 rows corrected (owner accepted all proposals); 5 kept as tagged |
+| known_limitations | About 16 of the 44 rows are KYC or onboarding blockers, and no opportunity in `research/opportunities.yaml` covers them, so they are absent from the ranking (raised for D-2). Several first-SIP causes (same-fund-house order rule, SIP registration timing) have no codebook value and are tagged unclear/other. Corrections are Claude Code's reading accepted in bulk, not independent labels |
+| evidence | `data/review/first_sip_blockers_20261028.xlsx`; `data/processed/tag_usage.jsonl` (run "first_sip_blockers") |
+
 ## Stage 9 — Deployment (decision records)
 
 ### 9.1 Public GitHub repository for Streamlit Community Cloud
