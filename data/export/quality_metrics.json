@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-28T17:33:33.636385+00:00",
+  "built_at": "2026-10-29T01:28:34.990351+00:00",
   "raw": {
     "play_store": {
       "records": 151000,
@@ -71,20 +71,20 @@
     }
   },
   "tagging": {
-    "tagged": 1492,
-    "ok": 1484,
+    "tagged": 1528,
+    "ok": 1520,
     "failed": 8,
     "by_model": {
-      "openai/gpt-oss-120b": 1008,
+      "openai/gpt-oss-120b": 1044,
       "qwen/qwen3.8-27b": 484
     },
     "quote_status": {
-      "exact": 1165,
-      "repaired": 49,
+      "exact": 1196,
+      "repaired": 52,
       "none": 235,
-      "hidden": 35
+      "hidden": 37
     },
-    "reason_flags": 109,
+    "reason_flags": 114,
     "failures": [
       {
         "record_id": "4a04c0c8-2586-5129-8d9c-270d5fab8e1c",
@@ -509,6 +509,31 @@
         "score": 96.8
       },
       {
+        "record_id": "96adcdb1-3638-5404-8022-bc6337f0b80e",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
+        "record_id": "7b05b34d-8ee3-521b-bd28-47d416602ec8",
+        "status": "hidden",
+        "score": 78.8
+      },
+      {
+        "record_id": "89af744a-71a6-5fb8-89fe-3fdd3bda1cb2",
+        "status": "repaired",
+        "score": 80.9
+      },
+      {
+        "record_id": "8d6232e8-ea75-5e10-8988-7a9a74a06db9",
+        "status": "hidden",
+        "score": 71.2
+      },
+      {
+        "record_id": "a519b3ef-6956-5b4d-a0d6-ffd67c8f6743",
+        "status": "repaired",
+        "score": 100.0
+      },
+      {
         "record_id": "5a3469de-ca06-57c3-b2fb-18dde76c8ef1",
         "status": "repaired",
         "score": 97.3
@@ -559,7 +584,7 @@
     "individually_reviewed": 296,
     "bulk_approved": 160,
     "missing_provenance": 0,
-    "exact_quotes": 303,
+    "exact_quotes": 334,
     "review_workbook": "golden_sample_300.xlsx",
     "review_statuses": {
       "approved": 456,
@@ -684,5 +709,5 @@
     },
     "small_sample": 30
   },
-  "golden_version": "e8f0245e6ff5"
+  "golden_version": "ee63ab0f1429"
 }
