@@ -1,0 +1,19 @@
+# Render Blueprint for the dashboard. Reference: https://render.com/docs/blueprint-spec
+# Secret values are entered in the Render dashboard, never in this file.
+services:
+  - type: web
+    name: groww-sip-discovery
+    runtime: python
+    plan: free
+    branch: main
+    autoDeployTrigger: commit
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app/streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.15
+      - key: GROQ_API_KEY
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

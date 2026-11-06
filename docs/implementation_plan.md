@@ -103,7 +103,7 @@ Before Stage 3 (data collection) can begin, every candidate data source must be 
 
 - Add unit and integration tests.
 - Run full test suite.
-- Document deployment target (TBD).
+- Document deployment target (`docs/deployment.md`).
 
 **Approval gate:** `pytest tests/` passes; deployment target documented.
 
@@ -118,4 +118,4 @@ Before Stage 3 (data collection) can begin, every candidate data source must be 
 - Specific collection sources.
 - NVIDIA model ID and endpoint.
 - Relevance threshold.
-- Production deployment target.
+- Whether production stays on Streamlit Community Cloud or moves to Render.

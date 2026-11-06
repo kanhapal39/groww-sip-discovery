@@ -64,11 +64,11 @@ Build an AI-powered investor research platform that helps understand why people 
 ## Deployment target
 
 - Local Streamlit app for initial review.
-- Unresolved: production deployment target (cloud/platform TBD).
+- Live on Streamlit Community Cloud. A Render configuration is prepared but not deployed (`docs/deployment.md`).
 
 ## Unresolved decisions
 
 - Which source(s) to approve for pilot collection (see `docs/source_access_plan.md` for assessment).
 - NVIDIA model ID and endpoint (to be verified against NVIDIA documentation; model access not yet verified).
 - Relevance score threshold.
-- Production deployment target.
+- Whether production stays on Streamlit Community Cloud or moves to Render.
