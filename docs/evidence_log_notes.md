@@ -797,3 +797,19 @@ Stage 3 pilot collection has started for Google Play only (see Stage 3 entries b
 | human_correction | none |
 | known_limitations | Clean-clone test (fresh `git clone`, no `.env`, Python 3.12.15, only requirements.txt): all five pages render; clicking a suggested question shows evidence and "answer model is not configured"; peak memory 166 MB in Streamlit's test runner (a live server adds its own overhead). Secrets check over tracked files, full history and all git objects: YOUTUBE_API_KEY, GROQ_API_KEY, APIFY_TOKEN all pass. The public repo exposes the 300 exported rows (Play Store review and Reddit text, tags, source links; no usernames or reviewer names) and all project documentation, including the accepted terms-of-service risks |
 | evidence | `.gitignore`, `requirements.txt`, `app/data.py`, `research/build.py` |
+
+### 9.2 Render configuration and creator badge checks
+
+| Field | Value |
+|-------|-------|
+| date | 2026-11-06 |
+| stage | deployment |
+| actor | human (user asked to remove the "Created by" photo and name, then instructed Claude Code to start the hosting branch); Claude Code |
+| decision | Added `render.yaml` (free web service, Python 3.12.15, secrets as `sync: false`), `client.toolbarMode = "minimal"` and `tests/test_hosting.py`. No application code changed. Choosing between Community Cloud and Render remains the owner's decision |
+| before_count | 169 tests |
+| after_count | 173 tests pass. Clean copy (no `.env`, `requirements.txt` only, Python 3.12.15, exact `render.yaml` start command, local server): all five pages rendered in Chrome with no exceptions; a suggested question showed evidence and "not configured"; no Fork, Deploy or repository link in the page. Live inner address `/~/+/`: no creator avatar or Streamlit badge; all five pages, reload and a direct page link work |
+| model_used | none |
+| cost_estimate | $0.00 |
+| human_correction | none |
+| known_limitations | Not run on Render. Memory fit in 512 MB is unconfirmed: the highest reading was 131 MB, but macOS readings were inconsistent (26 MB with six sessions open) and are not reliable. `/~/+/` is undocumented, and its behaviour while the app is asleep is untested. The public repository still shows the owner's GitHub username |
+| evidence | `render.yaml`, `.streamlit/config.toml`, `tests/test_hosting.py`, `docs/deployment.md` |
